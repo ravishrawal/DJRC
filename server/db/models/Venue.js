@@ -8,7 +8,7 @@ const Venue = db.define('venue', {
     address: {
         type: Sequelize.STRING
     },
-    desciption: {
+    description: {
         type: Sequelize.TEXT
     },
     type: {

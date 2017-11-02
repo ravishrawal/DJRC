@@ -14,7 +14,7 @@ const User = db.define('user', {
     password: {
         type: Sequelize.STRING
     },
-    buesiness: {
+    isBusiness: {
         type: Sequelize.BOOLEAN
     },
     vibe: {

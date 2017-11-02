@@ -4,8 +4,6 @@ const Venue = require('./Venue');
 const Genre = require('./Genre');
 const Promo = require('./Promo');
 
-
-
 Venue.belongsToMany(Genre, { through: 'genreVenue' })
 Genre.belongsToMany(Venue, { through: 'genreVenue' });
 
