@@ -7,9 +7,9 @@ const Promo = require('./Promo');
 
 
 Venue.belongsToMany(Genre, { through: 'genreVenue' })
-Venue.belongsToMany(Genre, { through: 'genreVenue' });
+Genre.belongsToMany(Venue, { through: 'genreVenue' });
 
-Venue.belongsToMany(User, {through: 'favorite'})
-User.belongsToMany(Venue, {through: 'favorite'})
+Venue.belongsToMany(User, { through: 'favorite' })
+User.belongsToMany(Venue, { through: 'favorite' })
 
 module.exports = db;
