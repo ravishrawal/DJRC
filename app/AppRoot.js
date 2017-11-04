@@ -13,7 +13,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <FlatList
           data={genres}
-          renderItem={({ item }) => <Button title={item.key} style={styles.item} />}
+          renderItem={({ item }) => <Button title={item.key} color="#fff" style={styles.item} />}
         />
       </View>
     );
@@ -23,13 +23,13 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: height / 3
+    backgroundColor: 'steelblue',
+    marginVertical: height / 3
   },
   item: {
     fontSize: 18,
-    height: height / 3
+    height: height / 3,
   },
 });
