@@ -7,7 +7,7 @@ import Genre from './Genre';
 
 export default AppRoot = StackNavigator({
   Home: { screen: GenreTiles },
-  Genre: {screen: Genre}
+  Genre: { screen: Genre }
 })
 
 
