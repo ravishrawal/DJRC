@@ -1,13 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions, Button } from 'react-native';
+let { width, height } = Dimensions.get('window')
 
-export default class AppRoot extends React.Component {
+export default class App extends React.Component {
   render() {
+    const genres = [
+      { key: 'Rock' },
+      { key: 'Rap' },
+      { key: 'Pop' }
+    ];
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <FlatList
+          data={genres}
+          renderItem={({ item }) => <Button title={item.key} style={styles.item} />}
+        />
       </View>
     );
   }
@@ -19,5 +26,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: height / 3
+  },
+  item: {
+    fontSize: 18,
+    height: height / 3
   },
 });
