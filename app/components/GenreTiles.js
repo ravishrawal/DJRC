@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from '
 let { width, height } = Dimensions.get('window')
 
 export default class GenreTiles extends React.Component {
+  static navigationOptions = {
+    title: 'Barcast',
+  };
   render() {
     const genres = [
       { key: 'Rock' },
@@ -11,15 +14,23 @@ export default class GenreTiles extends React.Component {
       { key: 'Country' },
       { key: 'EDM' }
     ];
+
+    const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <View style={styles.center}>
           <FlatList
             data={genres}
             renderItem={({ item }) =>
-              <TouchableOpacity>
-                <View style={[{ width: width, height: height / 9, backgroundColor: 'orange', marginBottom: 10}]}>
-                  <Text style={{ margin: 30, alignSelf: 'center', fontSize: 30, color: 'white' }}>{item.key}</Text>
+              <TouchableOpacity 
+              onPress={() => 
+                navigate('Genre', {genre: item.key})
+              }>
+                <View
+                  style={styles.row}
+                >
+                  <Text style={styles.item}>{item.key}</Text>
                 </View>
               </TouchableOpacity>}
           />
@@ -34,13 +45,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'steelblue',
+    backgroundColor: 'white',
   },
   center: {
-    marginTop: height / 6
+    marginTop: height / 8
   },
-  item: {
-    fontSize: 18,
-    height: height / 3,
-  },
+  row: { width: width, height: height / 9, backgroundColor: 'orange', marginBottom: 10 },
+  item: { margin: 30, alignSelf: 'center', fontSize: 30, color: 'white' }
 });
