@@ -11,8 +11,6 @@ export default AppRoot = TabNavigator({
   Map: { screen: GenreMap },
   SampleProfile: { screen: BarProfile },
 }, {
-
     tabBarPosition: 'bottom'
   }
 )
-
