@@ -4,20 +4,14 @@ import { StackNavigator, TabNavigator } from 'react-navigation';
 
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
-
-const tabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap }
-}, {
-    tabBarPosition: 'bottom'
-  }
-)
+import BarProfile from './BarProfile';
 
 export default AppRoot = TabNavigator({
-  
+  Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
-  Home: { screen: GenreTiles }
+  SampleProfile: { screen: BarProfile },
 }, {
+
     tabBarPosition: 'bottom'
   }
 )

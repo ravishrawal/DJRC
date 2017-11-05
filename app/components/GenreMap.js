@@ -4,8 +4,6 @@ import { MapView } from 'expo';
 import { SearchBar } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
 
-import SearchBars from './SearchBars';
-
 export default class GenreMap extends React.Component {
 
 
