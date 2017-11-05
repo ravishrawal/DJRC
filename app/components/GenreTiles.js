@@ -4,7 +4,7 @@ let { width, height } = Dimensions.get('window')
 
 export default class GenreTiles extends React.Component {
   static navigationOptions = {
-    title: 'Barcast',
+    title: 'Home',
   };
   render() {
     const genres = [

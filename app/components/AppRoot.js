@@ -14,8 +14,9 @@ const tabs = TabNavigator({
 )
 
 export default AppRoot = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap }
+  
+  Map: { screen: GenreMap },
+  Home: { screen: GenreTiles }
 }, {
     tabBarPosition: 'bottom'
   }
