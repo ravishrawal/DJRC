@@ -1,13 +1,23 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
 
 import GenreTiles from './GenreTiles';
-import Genre from './Genre';
+import GenreMap from './GenreMap';
 
-export default AppRoot = StackNavigator({
+const tabs = TabNavigator({
   Home: { screen: GenreTiles },
-  Genre: { screen: Genre }
-})
+  Map: { screen: GenreMap }
+}, {
+    tabBarPosition: 'bottom'
+  }
+)
 
+export default AppRoot = TabNavigator({
+  Home: { screen: GenreTiles },
+  Map: { screen: GenreMap }
+}, {
+    tabBarPosition: 'bottom'
+  }
+)
 

@@ -2,13 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MapView } from 'expo';
 
-export default class Genre extends React.Component {
-    static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.genre,
-    });
+export default class GenreMap extends React.Component {
+   
 
     render() {
-        const { genre } = this.props.navigation.state.params;
         return (
             <MapView
             style={{ flex: 1 }}

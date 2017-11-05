@@ -12,7 +12,8 @@ export default class GenreTiles extends React.Component {
       { key: 'Rap' },
       { key: 'Pop' },
       { key: 'Country' },
-      { key: 'EDM' }
+      { key: 'EDM' },
+      { key: 'Jazz' }
     ];
 
     const { navigate } = this.props.navigation;
@@ -23,10 +24,10 @@ export default class GenreTiles extends React.Component {
           <FlatList
             data={genres}
             renderItem={({ item }) =>
-              <TouchableOpacity 
-              onPress={() => 
-                navigate('Genre', {genre: item.key})
-              }>
+              <TouchableOpacity
+                onPress={() =>
+                  navigate('Map', { genre: item.key })
+                }>
                 <View
                   style={styles.row}
                 >
@@ -46,10 +47,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
+    marginTop: 50
   },
   center: {
-    marginTop: height / 8
   },
-  row: { width: width, height: height / 9, backgroundColor: 'orange', marginBottom: 10 },
-  item: { margin: 30, alignSelf: 'center', fontSize: 30, color: 'white' }
+  row: {
+    flex: 1,
+    width: width,
+    backgroundColor: 'orange',
+    marginBottom: 10
+  },
+  item: {
+    margin: 30,
+    alignSelf: 'center',
+    fontSize: 30,
+    color: 'white'
+  }
 });
