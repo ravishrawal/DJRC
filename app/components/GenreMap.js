@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ bars }) => bars;
+const mapState = ({ bars }) => {
+    return { bars };
+};
 
 const mapDispatch = (dispatch) => {
     return {

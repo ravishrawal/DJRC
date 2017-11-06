@@ -25,7 +25,7 @@ export default class GenreMap extends Component {
                         backgroundColor='#03A9F4'
                         fontFamily='Lato'
                         buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        onPress={() => console.log('asdfas')}
+                        onPress={() => console.log('assadfd')}
                         title='Directions' />
 
                     <List containerStyle={{ marginBottom: 20 }}>
