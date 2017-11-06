@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-native';
 import { Card, ListItem, List } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
 
-export default class GenreMap extends React.Component {
+export default class GenreMap extends Component {
 
 
     render() {
