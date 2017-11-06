@@ -1,51 +1,67 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import { MapView } from 'expo';
 import { SearchBar } from 'react-native-elements'
+
+import { fetchBarsFromServer } from '../redux/bars';
+
 let { width, height } = Dimensions.get('window')
 
-export default class GenreMap extends React.Component {
-    constructor(){
-      super()
-      this.state = {
-        currentLocation: {},
-        regionSize: {
-          latitudeDelta: 0.008,
-          longitudeDelta: 0.008
-        }
-      };
-      this.onRegionChange = this.onRegionChange.bind(this)
+class GenreMap extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            currentLocation: {},
+            regionSize: {
+                latitudeDelta: 0.008,
+                longitudeDelta: 0.008
+            }
+        };
+        this.onRegionChange = this.onRegionChange.bind(this)
     }
-    componentDidMount(){
-      navigator.geolocation.getCurrentPosition((res, rej)=>{
-        res ? this.setState({currentLocation: {latitude: res.coords.latitude, longitude: res.coords.longitude} }) : console.log(rej);
-      });
+    componentDidMount() {
+        this.props.fetchBarsFromServer();
+        navigator.geolocation.getCurrentPosition((res, rej) => {
+            res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
+        });
     }
-    onRegionChange(region){
-      let { latitude, longitude, latitudeDelta, longitudeDelta } = region;
-      this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta} })
+    onRegionChange(region) {
+        let { latitude, longitude, latitudeDelta, longitudeDelta } = region;
+        this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta } })
     }
     render() {
-        let {currentLocation, regionSize} = this.state;
+        const { bars } = this.props;
+        let { currentLocation, regionSize } = this.state;
+
         const coordinate = {
             latitude: 37.78825,
             longitude: -122.4324,
         };
+
         return (
             <View style={styles.container}>
-              {currentLocation.latitude &&
-                <MapView
-                    style={styles.map}
-                    initialRegion={Object.assign({}, currentLocation, regionSize)}
-                    onRegionChange={this.onRegionChange}
-                    showsUserLocation={true}>
+                {currentLocation.latitude &&
+                    <MapView
+                        style={styles.map}
+                        initialRegion={Object.assign({}, currentLocation, regionSize)}
+                        onRegionChange={this.onRegionChange}
+                        showsUserLocation={true}>
+                        {bars.map(marker => (
 
-                    <MapView.Marker
-                        coordinate={coordinate}
-                        title='Airbnb'
-                    />
-                </MapView>
-              }
+                            <MapView.Marker
+                                coordinate={{
+                                    latitude: marker.lat,
+                                    longitude: marker.lon
+                                }}
+                                title={marker.name}
+                                description=
+                                {`Address: ${marker.address}`}
+                                key={marker.id}
+                            />
+                        ))}
+                    </MapView>
+                }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
@@ -78,3 +94,17 @@ const styles = StyleSheet.create({
 
     }
 })
+
+const mapState = ({ bars }) => {
+    return { bars };
+};
+
+const mapDispatch = (dispatch) => {
+    return {
+        fetchBarsFromServer: () => {
+            dispatch(fetchBarsFromServer());
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(GenreMap);
