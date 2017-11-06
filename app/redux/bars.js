@@ -14,7 +14,7 @@ export const fetchBarsFromServer = () => {
         axios.get('http://192.168.0.14:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
-                dispatch(dispatch(getBars(bars)));
+                dispatch(getBars(bars));
             }).catch(console.log);
 
     }
