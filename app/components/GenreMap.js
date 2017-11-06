@@ -1,11 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import { MapView } from 'expo';
 import { SearchBar } from 'react-native-elements'
-import axios from 'axios';
+
+import { fetchBarsFromServer } from '../redux/bars';
+
 let { width, height } = Dimensions.get('window')
 
-export default class GenreMap extends React.Component {
+class GenreMap extends React.Component {
     constructor() {
         super()
         this.state = {
@@ -13,21 +16,12 @@ export default class GenreMap extends React.Component {
             regionSize: {
                 latitudeDelta: 0.008,
                 longitudeDelta: 0.008
-            },
-            bars: []
+            }
         };
         this.onRegionChange = this.onRegionChange.bind(this)
     }
     componentDidMount() {
-        axios.get('http://192.168.0.14:3002/api/venues')
-            .then(res => res.data)
-            .then(bars => {
-                this.setState({ bars });
-            })
-            .catch(err => {
-                console.log('error', err.message)
-            })
-
+        this.props.fetchBarsFromServer();
         navigator.geolocation.getCurrentPosition((res, rej) => {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
         });
@@ -37,7 +31,9 @@ export default class GenreMap extends React.Component {
         this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta } })
     }
     render() {
+        const { bars } = this.props;
         let { currentLocation, regionSize } = this.state;
+
         const coordinate = {
             latitude: 37.78825,
             longitude: -122.4324,
@@ -51,7 +47,7 @@ export default class GenreMap extends React.Component {
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
                         onRegionChange={this.onRegionChange}
                         showsUserLocation={true}>
-                        {this.state.bars.map(marker => (
+                        {bars.map(marker => (
 
                             <MapView.Marker
                                 coordinate={{
@@ -59,9 +55,9 @@ export default class GenreMap extends React.Component {
                                     longitude: marker.lon
                                 }}
                                 title={marker.name}
-                                description = 
+                                description=
                                 {`Address: ${marker.address}`}
-                                key = {marker.id}
+                                key={marker.id}
                             />
                         ))}
                     </MapView>
@@ -98,3 +94,15 @@ const styles = StyleSheet.create({
 
     }
 })
+
+const mapState = ({ bars }) => bars;
+
+const mapDispatch = (dispatch) => {
+    return {
+        fetchBarsFromServer: () => {
+            dispatch(fetchBarsFromServer());
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(GenreMap);
