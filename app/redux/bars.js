@@ -14,6 +14,21 @@ export const fetchBarsFromServer = () => {
         axios.get('http://192.168.0.14:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
+                bars = bars.map(bar => {
+                    let genres = [];
+                    bar.genres.forEach(genre => {
+                        // console.log(genre.id)
+                        genres.push(genre.id)
+                    })
+                    return {
+                        id: bar.id,
+                        lat: bar.lat,
+                        lon: bar.lon,
+                        name: bar.name,
+                        address: bar.address,
+                        genres: genres
+                    }
+                })
                 dispatch(getBars(bars));
             }).catch(console.log);
 
@@ -21,7 +36,7 @@ export const fetchBarsFromServer = () => {
 }
 export default (state = [], action) => {
     switch (action.type) {
-        case GET_BARS: 
+        case GET_BARS:
             return action.bars
         default:
             return state;
