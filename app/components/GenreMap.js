@@ -30,10 +30,15 @@ class GenreMap extends React.Component {
         let { latitude, longitude, latitudeDelta, longitudeDelta } = region;
         this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta } })
     }
-    render() {
-        const { bars } = this.props;
-        let { currentLocation, regionSize } = this.state;
 
+    render() {
+        let { bars } = this.props;
+        let { currentLocation, regionSize } = this.state;
+        const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
+        bars = genre ? bars.filter(bar => {
+            return bar.genres.indexOf(genre) > 0;
+        }) : bars;
+        
         const coordinate = {
             latitude: 37.78825,
             longitude: -122.4324,

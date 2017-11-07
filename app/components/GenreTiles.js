@@ -1,21 +1,17 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+
+import {fetchGenres} from '../redux/genres'
+
 let { width, height } = Dimensions.get('window')
 
-export default class GenreTiles extends React.Component {
-  static navigationOptions = {
-    title: 'Home',
-  };
+class GenreTiles extends React.Component {
+  componentDidMount(){
+    this.props.fetchGenres();
+  }
   render() {
-    const genres = [
-      { key: 'Rock' },
-      { key: 'Rap' },
-      { key: 'Pop' },
-      { key: 'Country' },
-      { key: 'EDM' },
-      { key: 'Jazz' }
-    ];
-
+    const genres = this.props.genres.length && this.props.genres;
     const { navigate } = this.props.navigation;
 
     return (
@@ -31,7 +27,7 @@ export default class GenreTiles extends React.Component {
                 <View
                   style={styles.row}
                 >
-                  <Text style={styles.item}>{item.key}</Text>
+                  <Text style={styles.item}>{item.name}</Text>
                 </View>
               </TouchableOpacity>}
           />
@@ -64,3 +60,19 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
+
+
+const mapState = ({ genres }) => {
+    return { genres };
+};
+
+const mapDispatch = (dispatch) => {
+    return {
+        fetchGenres: () => {
+            dispatch(fetchGenres());
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(GenreTiles);
+
