@@ -11,13 +11,13 @@ const getGenres = (genres) => {
 
 export const fetchGenres = () => {
     return (dispatch) => {
-        axios.get('http://192.168.0.14:3002/api/genres')
+        axios.get('http://172.16.25.173:3002/api/genres')
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {
                     return { key: genre.id, name: genre.name };
                 })
-                // console.log(genres);
+
                 dispatch(getGenres(genres));
             }).catch(console.log);
 
