@@ -1,3 +1,5 @@
+//approot
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
@@ -8,14 +10,23 @@ import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
 
-const AppRoot = TabNavigator({
+
+
+const Tabs = TabNavigator({
   Home: { screen: GenreTiles },
-  Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile },
+  Map: { screen: GenreMap }
 }, {
     tabBarPosition: 'bottom'
   }
 )
+
+const AppRoot =  StackNavigator({
+  Home: { screen: Tabs },
+  Map: { screen: GenreMap },
+  SampleProfile: { screen: BarProfile }
+}, {
+  headerMode: 'none'
+});
 
 const ReduxApp = () => {
   return (
@@ -26,5 +37,3 @@ const ReduxApp = () => {
 }
 
 export default ReduxApp;
-
-
