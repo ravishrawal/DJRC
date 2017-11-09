@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-nati
 import { Card, ListItem, List } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
 
-export default class GenreMap extends Component {
+export default class BarProfile extends Component {
 
 
     render() {
@@ -12,10 +12,12 @@ export default class GenreMap extends Component {
             { title: 'Song2' },
             { title: 'Song3' },
         ];
+        const bar = this.props.navigation.state.params;
+
         return (
             <View style={styles.container}>
                 <Card
-                    title='Kilarney Rose'
+                    title={bar.name}
                     image={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHcLzVure3ON14O3siJ4qcBRGiIel7RUCxBxlUIk6QzJIIxzsx4A' }} >
                     <Text style={{ marginBottom: 10 }}>
                         Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
