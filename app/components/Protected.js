@@ -9,6 +9,7 @@ export default class Protected extends Component {
             secret: ''
         }
         this.logout = this.logout.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
     }
 
     handleAdd() {
@@ -20,11 +21,12 @@ export default class Protected extends Component {
                 }
             }).then((response) => response.json())
                 .then((json) => {
-                    this.setState({
-                        secret: json.secret
-                    })
+                    console.log('secret', json.secret);
+                    this.setState({ secret: json.secret })
+
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err);
                     alert('There was an error fetching the secret info.')
                 })
         })
@@ -36,7 +38,7 @@ export default class Protected extends Component {
     }
 
     render() {
-        const { handleAdd} = this;
+        const { handleAdd } = this;
         return (
             <View style={styles.container}>
                 <TouchableHighlight onPress={handleAdd}>

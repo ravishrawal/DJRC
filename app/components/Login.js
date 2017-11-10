@@ -36,6 +36,7 @@ export default class Login extends Component {
                     alert(res.error)
                 } else {
                     AsyncStorage.setItem('jwt', res.token)
+                    console.log(res.token)
                     alert(`Success! You may now access protected content.`)
                 }
             })
