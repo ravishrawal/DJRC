@@ -1,26 +1,21 @@
-import React, {
-    Component
-} from 'react';
-import { View, StyleSheet, TouchableHighlight, Text} from 'react-native'
-
+import React, { Component } from 'react';
+import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
 import axios from 'axios';
-
 import { FormLabel, FormInput } from 'react-native-elements'
 
 export default class SignUp extends Component {
     constructor() {
         super()
         this.state = {
-
             email: '',
             password: ''
-
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
 
+    //value returned onChange is just string, not sure how to get full object
     onChangeEmail(email) {
         this.setState({ email: email })
     }
@@ -34,16 +29,12 @@ export default class SignUp extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-        // const json = JSON.stringify(data);
-        console.log(data);
         axios.post('http://192.168.0.14:3002/passportAuth/signup', data)
-            .then((response) => response.data)
+            .then((res) => res.data)
             .then(() => {
                 alert('Success! You may now log in.');
-                // this.props.navigator.pop();
             })
             .catch((error) => {
-
                 console.log(error);
             })
 

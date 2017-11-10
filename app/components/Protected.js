@@ -1,45 +1,24 @@
-import React, {
-    Component
-} from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
-
 import axios from 'axios';
-
-import { FormLabel, FormInput } from 'react-native-elements'
 
 export default class Protected extends Component {
     constructor() {
         super()
         this.state = {
-
             secret: ''
         }
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
         this.logout = this.logout.bind(this);
     }
 
-    onChangeEmail(email) {
-        this.setState({ email: email })
-    }
-
-    onChangePassword(password) {
-        this.setState({ password: password })
-    }
-
     handleAdd() {
-        // const json = JSON.stringify(data);
-        // axios.get('http://192.168.0.14:3002/auth/protected')
         AsyncStorage.getItem('jwt', (err, token) => {
-            console.log(token)
             fetch('http://192.168.0.14:3002/auth/protected', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `JWT ${token}`
                 }
-            })
-                .then((response) => response.json())
+            }).then((response) => response.json())
                 .then((json) => {
                     this.setState({
                         secret: json.secret
@@ -48,18 +27,16 @@ export default class Protected extends Component {
                 .catch(() => {
                     alert('There was an error fetching the secret info.')
                 })
-                .done()
         })
     }
 
     logout() {
         AsyncStorage.removeItem('jwt')
-        this.setState({secret:''})
+        this.setState({ secret: '' })
     }
 
-
     render() {
-        const { handleAdd, onChangeEmail, onChangePassword } = this;
+        const { handleAdd} = this;
         return (
             <View style={styles.container}>
                 <TouchableHighlight onPress={handleAdd}>

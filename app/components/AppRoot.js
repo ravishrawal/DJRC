@@ -16,8 +16,8 @@ import Protected from './Protected';
 
 
 const Tabs = TabNavigator({
-  // Home: { screen: GenreTiles },
-  // Map: { screen: GenreMap },
+  Home: { screen: GenreTiles },
+  Map: { screen: GenreMap },
   Protected: { screen: Protected },
   Login: { screen: Login },
   SignUp: { screen: SignUp },

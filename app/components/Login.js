@@ -1,24 +1,18 @@
-import React, {
-    Component
-} from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
-
 import axios from 'axios';
-
 import { FormLabel, FormInput } from 'react-native-elements'
 
 export default class Login extends Component {
     constructor() {
         super()
         this.state = {
-
             email: '',
             password: ''
-
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
+        this.login = this.login.bind(this);
     }
 
     onChangeEmail(email) {
@@ -29,12 +23,11 @@ export default class Login extends Component {
         this.setState({ password: password })
     }
 
-    handleAdd() {
+    login() {
         const data = {
             email: this.state.email,
             password: this.state.password,
         }
-        // const json = JSON.stringify(data);
         console.log(data);
         axios.post('http://192.168.0.14:3002/passportAuth/login', data)
             .then((res) => res.data)
@@ -43,10 +36,7 @@ export default class Login extends Component {
                     alert(res.error)
                 } else {
                     AsyncStorage.setItem('jwt', res.token)
-                    console.log(res.token);
                     alert(`Success! You may now access protected content.`)
-                    // Redirect to home screen
-                    // this.props.navigator.pop()
                 }
             })
             .catch(() => {
@@ -55,14 +45,14 @@ export default class Login extends Component {
     }
 
     render() {
-        const { handleAdd, onChangeEmail, onChangePassword } = this;
+        const { login, onChangeEmail, onChangePassword } = this;
         return (
             <View style={styles.container}>
                 <FormLabel>Email</FormLabel>
                 <FormInput onChangeText={onChangeEmail} ></FormInput>
                 <FormLabel>Password</FormLabel>
                 <FormInput name='password' onChangeText={onChangePassword} ></FormInput>
-                <TouchableHighlight onPress={handleAdd}>
+                <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
                 </TouchableHighlight>
             </View>
