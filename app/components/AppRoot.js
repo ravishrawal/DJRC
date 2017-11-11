@@ -10,7 +10,7 @@ import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
 import SignUpOrIn from './SignUpOrIn';
-import Protected from './Protected';
+import Profile from './Profile';
 import Nav from './Nav'
 
 

@@ -1,54 +1,28 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
+import { Card, ListItem, List } from 'react-native-elements'
 import { connect } from 'react-redux';
-import {logoutUser} from '../redux/user';
+import { logoutUser } from '../redux/user';
 
-class Protected extends Component {
+class Profile extends Component {
     constructor() {
         super()
-        this.state = {
-            secret: ''
-        }
+       
         this.logout = this.logout.bind(this);
-        this.handleAdd = this.handleAdd.bind(this);
-    }
-
-    handleAdd() {
-        AsyncStorage.getItem('jwt', (err, token) => {
-            fetch('http://192.168.0.14:3002/auth/protected', {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `JWT ${token}`
-                }
-            }).then((response) => response.json())
-                .then((json) => {
-
-                    this.setState({ secret: json.secret })
-
-                })
-                .catch((err) => {
-                    console.log(err);
-                    alert('There was an error fetching the secret info.')
-                })
-        })
     }
 
     logout() {
         const { navigate } = this.props.navigation;
         this.props.logoutUser(navigate);
-        this.setState({ secret: '' })
     }
 
     render() {
-
-        const { handleAdd } = this;
+        const { user } = this.props;
         return (
             <View style={styles.container}>
-                <TouchableHighlight onPress={handleAdd}>
-                    <Text style={[styles.button, styles.greenButton]}>Secret</Text>
-                </TouchableHighlight>
-                <Text>Secret: {this.state.secret}</Text>
-
+                <Card title={user.email}>
+                    <Text style={{ marginBottom: 10 }}>I love music</Text>
+                </Card>
                 <TouchableHighlight onPress={this.logout}>
                     <Text style={[styles.button, styles.greenButton]}>Logout</Text>
                 </TouchableHighlight>
@@ -94,4 +68,4 @@ const mapDispatch = (dispatch) => {
     }
 }
 
-export default connect(mapState, mapDispatch)(Protected);
+export default connect(mapState, mapDispatch)(Profile);

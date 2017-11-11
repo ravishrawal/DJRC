@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import SignUpOrIn from './SignUpOrIn';
-import Protected from './Protected';
+import Profile from './Profile';
 
 const Tabs = TabNavigator({
   Home: { screen: GenreTiles },
@@ -19,7 +19,7 @@ const Tabs = TabNavigator({
 const UserTabs = TabNavigator({
   Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
-  Protected: { screen: Protected }
+  Profile: { screen: Profile }
 }, {
     tabBarPosition: 'bottom'
   }
