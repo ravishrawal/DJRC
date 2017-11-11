@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
-import axios from 'axios';
+import { connect } from 'react-redux';
+import {logoutUser} from '../redux/user';
 
-export default class Protected extends Component {
+class Protected extends Component {
     constructor() {
         super()
         this.state = {
@@ -21,7 +22,7 @@ export default class Protected extends Component {
                 }
             }).then((response) => response.json())
                 .then((json) => {
-                    console.log('secret', json.secret);
+
                     this.setState({ secret: json.secret })
 
                 })
@@ -33,11 +34,13 @@ export default class Protected extends Component {
     }
 
     logout() {
-        AsyncStorage.removeItem('jwt')
+        const { navigate } = this.props.navigation;
+        this.props.logoutUser(navigate);
         this.setState({ secret: '' })
     }
 
     render() {
+
         const { handleAdd } = this;
         return (
             <View style={styles.container}>
@@ -76,3 +79,19 @@ const styles = StyleSheet.create({
     }
 })
 
+
+const mapState = ({ user }) => {
+    return {
+        user
+    }
+}
+
+const mapDispatch = (dispatch) => {
+    return {
+        logoutUser: (navigate) => {
+            dispatch(logoutUser(navigate));
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(Protected);

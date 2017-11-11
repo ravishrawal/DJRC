@@ -12,7 +12,7 @@ export default class Login extends Component {
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.login = this.login.bind(this);
+        // this.login = this.login.bind(this);
     }
 
     onChangeEmail(email) {

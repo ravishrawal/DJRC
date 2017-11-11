@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
+import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage, Dimensions } from 'react-native'
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
+import { connect } from 'react-redux';
+import { getUser } from '../redux/user';
 
-export default class SignUp extends Component {
+let { width } = Dimensions.get('window')
+
+class SignUpOrIn extends Component {
     constructor() {
         super()
         this.state = {
@@ -13,6 +17,7 @@ export default class SignUp extends Component {
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.login = this.login.bind(this);
     }
 
     //value returned onChange is just string, not sure how to get full object
@@ -41,8 +46,20 @@ export default class SignUp extends Component {
 
     }
 
+    login() {
+        const { navigate } = this.props.navigation;
+        const credentials = {
+            email: this.state.email,
+            password: this.state.password,
+        }
+
+
+        this.props.getUser(credentials, navigate)
+    }
+
     render() {
-        const { handleAdd, onChangeEmail, onChangePassword } = this;
+        const { handleAdd, onChangeEmail, onChangePassword, login } = this;
+        // console.log(this.props);
         return (
             <View style={styles.container}>
                 <FormLabel>Email</FormLabel>
@@ -52,6 +69,10 @@ export default class SignUp extends Component {
                 <TouchableHighlight onPress={handleAdd}>
                     <Text style={[styles.button, styles.greenButton]}>Create account</Text>
                 </TouchableHighlight>
+                <TouchableHighlight onPress={login}>
+                    <Text style={[styles.button, styles.greenButton]}>Login</Text>
+                </TouchableHighlight>
+                <Text>User: {this.props.user.email}</Text>
             </View>
         )
     }
@@ -79,3 +100,18 @@ const styles = StyleSheet.create({
     }
 })
 
+const mapState = ({ user }) => {
+    return {
+        user
+    }
+}
+
+const mapDispatch = (dispatch) => {
+    return {
+        getUser: (credentials, navigate) => {
+            dispatch(getUser(credentials, navigate));
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(SignUpOrIn);

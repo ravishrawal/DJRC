@@ -9,25 +9,14 @@ import store from '../redux';
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
-import SignUp from './SignUp';
-import Login from './Login';
+import SignUpOrIn from './SignUpOrIn';
 import Protected from './Protected';
+import Nav from './Nav'
 
 
-
-const Tabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap },
-  Protected: { screen: Protected },
-  Login: { screen: Login },
-  SignUp: { screen: SignUp },
-}, {
-    tabBarPosition: 'bottom'
-  }
-)
 
 const AppRoot = StackNavigator({
-  Home: { screen: Tabs },
+  Home: { screen: Nav },
   Map: { screen: GenreMap },
   SampleProfile: { screen: BarProfile }
 }, {
