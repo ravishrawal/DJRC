@@ -28,7 +28,6 @@ export default class Login extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-        console.log(data);
         axios.post('http://192.168.0.14:3002/passportAuth/login', data)
             .then((res) => res.data)
             .then((res) => {
@@ -36,7 +35,6 @@ export default class Login extends Component {
                     alert(res.error)
                 } else {
                     AsyncStorage.setItem('jwt', res.token)
-                    console.log(res.token)
                     alert(`Success! You may now access protected content.`)
                 }
             })

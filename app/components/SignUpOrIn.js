@@ -59,7 +59,6 @@ class SignUpOrIn extends Component {
 
     render() {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
-        // console.log(this.props);
         return (
             <View style={styles.container}>
                 <FormLabel>Email</FormLabel>

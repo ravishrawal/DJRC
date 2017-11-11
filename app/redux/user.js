@@ -18,7 +18,6 @@ const removeUser = () => {
 }
 
 export const logoutUser = (navigate) => {
-    console.log('hello');
     return (dispatch) => {
         AsyncStorage.removeItem('jwt')
             .then(() => {
