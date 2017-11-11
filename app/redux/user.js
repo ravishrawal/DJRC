@@ -39,7 +39,7 @@ export const tokenUser = (navigate) => {
                 .then(res => res.data)
                 .then(user => {
                     dispatch(setUser(user))
-                    alert(`Loggedin`);c
+                    alert(`Loggedin`);
                 })
 
         }).catch(err => {

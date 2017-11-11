@@ -30,7 +30,6 @@ class Nav extends Component{
   render(){
     
     const {user} = this.props;
-    console.log('user', user)
     const Tab = user.id ? UserTabs : Tabs;
     return (
       <Tab />
