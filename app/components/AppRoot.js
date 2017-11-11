@@ -9,24 +9,19 @@ import store from '../redux';
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
+import SignUpOrIn from './SignUpOrIn';
+import Profile from './Profile';
+import Nav from './Nav'
 
 
 
-const Tabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap }
-}, {
-    tabBarPosition: 'bottom'
-  }
-)
-
-const AppRoot =  StackNavigator({
-  Home: { screen: Tabs },
+const AppRoot = StackNavigator({
+  Home: { screen: Nav },
   Map: { screen: GenreMap },
   SampleProfile: { screen: BarProfile }
 }, {
-  headerMode: 'none'
-});
+    headerMode: 'none'
+  });
 
 const ReduxApp = () => {
   return (
