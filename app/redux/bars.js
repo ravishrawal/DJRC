@@ -15,11 +15,12 @@ export const fetchBarsFromServer = () => {
         axios.get('https://djrc-api.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
-
                 bars = bars.map(bar => {
                     let genres = [];
+                    let genreNames = [];
                     bar.genres.forEach(genre => {
                         genres.push(genre.id)
+                        genreNames.push(genre.name)
                     })
                     return {
                         id: bar.id,
@@ -27,7 +28,8 @@ export const fetchBarsFromServer = () => {
                         lon: bar.lon,
                         name: bar.name,
                         address: bar.address,
-                        genres: genres
+                        genres: genres,
+                        genreNames
                     }
                 })
                 dispatch(getBars(bars));
