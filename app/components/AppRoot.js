@@ -1,3 +1,5 @@
+//approot
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
@@ -8,15 +10,17 @@ import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
 import GetDirections from './GetDirections'
+import SignUpOrIn from './SignUpOrIn';
+import Profile from './Profile';
+import Nav from './Nav'
 
-const AppRoot = TabNavigator({
-  Home: { screen: GenreTiles },
+const AppRoot = StackNavigator({
+  Home: { screen: Nav },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile },
+  SampleProfile: { screen: BarProfile }
 }, {
-    tabBarPosition: 'bottom'
-  }
-)
+    headerMode: 'none'
+  });
 
 const ReduxApp = () => {
   return (

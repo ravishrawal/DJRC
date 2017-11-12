@@ -5,9 +5,10 @@ import thunkMiddleware from 'redux-thunk'
 
 import bars from './bars'
 import genres from './genres'
-import directions from './directions'
+import user from './user'
 
-const reducer = combineReducers({ bars, genres, directions });
+const reducer = combineReducers({ bars, genres, user });
+
 
 const middleware = applyMiddleware(thunkMiddleware);
 

@@ -19,7 +19,6 @@ export const fetchBarsFromServer = () => {
                 bars = bars.map(bar => {
                     let genres = [];
                     bar.genres.forEach(genre => {
-                        // console.log(genre.id)
                         genres.push(genre.id)
                     })
                     return {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
 import { MapView } from 'expo';
-import { SearchBar } from 'react-native-elements';
 import GetDirections from './GetDirections.js';
-import { fetchBarsFromServer } from '../redux';
-
+import { SearchBar, Card, ListItem, List } from 'react-native-elements'
+import { fetchBarsFromServer } from '../redux/bars';
+import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
 
 class GenreMap extends Component {
@@ -37,6 +37,7 @@ class GenreMap extends Component {
       }
     }
     render() {
+        const { navigate } = this.props.navigation;
         let { bars } = this.props;
         let { currentLocation, regionSize, markerSelected } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
@@ -59,12 +60,31 @@ class GenreMap extends Component {
                                     latitude: marker.lat,
                                     longitude: marker.lon
                                 }}
-                                title={marker.name}
-                                description=
-                                {`Address: ${marker.address}`}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
                             />
+                            >
+                                <MapView.Callout style={styles.callout} onPress={() =>
+                                    navigate('SampleProfile', { name: marker.name })
+                                  } >
+                                    <View style={styles.card}>
+                                        <Text style={{ fontWeight: 'bold', 'fontSize': 25 }}>{marker.name}</Text>
+                                        <Text style={{ marginBottom: 10 }}>
+                                            Address: {marker.address}</Text>
+                                        <Button
+                                            icon={{ name: 'code' }}
+                                            backgroundColor='#03A9F4'
+                                            fontFamily='Lato'
+                                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                            onPress={() => console.log('assadfd')}
+                                            title='Profile' />
+                                        <View style={styles.currentPlaying}>
+                                            <Text>Currently Playing: </Text>
+                                            <Text> Great Song! </Text>
+                                        </View>
+                                    </View>
+                                </MapView.Callout>
+                            </MapView.Marker>
                         ))}
                     </MapView>
                 }
@@ -102,18 +122,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
     search: {
-        width: width,
-        marginTop: 20
+        width: width
     },
-    touchable: {
-        flex:1,
-        flexDirection:'row',
-        alignItems:'flex-end',
-        justifyContent:'center',
-        width: 200,
-        height: 80,
-        padding: 20,
-        borderRadius: 10
+    callout: {
+        alignItems: 'center',
+    },
+    currentPlaying: {
+        marginTop: 25,
+    },
+    card: {
+        flex: 10,
+        alignItems: 'center'
     }
 })
 
