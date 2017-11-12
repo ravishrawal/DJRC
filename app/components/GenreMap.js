@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
 import { MapView } from 'expo';
+import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
 import { fetchBarsFromServer } from '../redux/bars';
-
 import BarProfile from './BarProfile';
+let { width, height } = Dimensions.get('window');
 
-let { width, height } = Dimensions.get('window')
-
-class GenreMap extends React.Component {
-    constructor() {
-        super()
+class GenreMap extends Component {
+    constructor(props) {
+        super(props)
         this.state = {
             currentLocation: {},
             regionSize: {
                 latitudeDelta: 0.008,
                 longitudeDelta: 0.008
-            }
+            },
+            markerSelected: {}
         };
-        this.onRegionChange = this.onRegionChange.bind(this)
+        this.onMarkerClick = this.onMarkerClick.bind(this)
+        this.onMapPress = this.onMapPress.bind(this)
     }
     componentDidMount() {
         this.props.fetchBarsFromServer();
@@ -27,24 +28,22 @@ class GenreMap extends React.Component {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
         });
     }
-    onRegionChange(region) {
-        let { latitude, longitude, latitudeDelta, longitudeDelta } = region;
-        this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta } })
+    onMarkerClick(ev){
+      this.setState({markerSelected:ev})
     }
-
+    onMapPress(){
+      if(Object.keys(this.state.markerSelected).length>0){
+        this.setState({markerSelected:{}})
+      }
+    }
     render() {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
-        let { currentLocation, regionSize } = this.state;
+        let { currentLocation, regionSize, markerSelected } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
-
-        const coordinate = {
-            latitude: 37.78825,
-            longitude: -122.4324,
-        };
 
         return (
             <View style={styles.container}>
@@ -52,8 +51,8 @@ class GenreMap extends React.Component {
                     <MapView
                         style={styles.map}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
-                        onRegionChange={this.onRegionChange}
-                        showsUserLocation={true}>
+                        showsUserLocation={true}
+                        onPress={this.onMapPress}>
                         {bars.map(marker => (
 
                             <MapView.Marker
@@ -62,6 +61,8 @@ class GenreMap extends React.Component {
                                     longitude: marker.lon
                                 }}
                                 key={marker.id}
+                                onPress={this.onMarkerClick.bind(this, marker)}
+                            />
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
                                     navigate('SampleProfile', { name: marker.name })
@@ -93,7 +94,14 @@ class GenreMap extends React.Component {
                         round
                         placeholder='Type Here...' />
                 </View>
-
+                { Object.keys(markerSelected).length>0 &&
+                  <View>
+                    <GetDirections
+                      currentLocation={ currentLocation }
+                      destLocation={{latitude: markerSelected.lat, longitude: markerSelected.lon}}
+                    />
+                  </View>
+                }
             </View>
 
         );
@@ -115,7 +123,6 @@ const styles = StyleSheet.create({
     },
     search: {
         width: width
-
     },
     callout: {
         alignItems: 'center',
@@ -129,8 +136,8 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ bars }) => {
-    return { bars };
+const mapState = ({ bars, directions }) => {
+    return { bars, directions };
 };
 
 const mapDispatch = (dispatch) => {

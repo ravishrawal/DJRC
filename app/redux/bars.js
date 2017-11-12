@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const GET_BARS = 'GET_BARS';
 
+
 const getBars = (bars) => {
     return {
         type: GET_BARS,
@@ -14,7 +15,7 @@ export const fetchBarsFromServer = () => {
         axios.get('https://djrc-api.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
-                
+
                 bars = bars.map(bar => {
                     let genres = [];
                     bar.genres.forEach(genre => {
@@ -34,6 +35,8 @@ export const fetchBarsFromServer = () => {
 
     }
 }
+
+
 export default (state = [], action) => {
     switch (action.type) {
         case GET_BARS:
