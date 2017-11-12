@@ -25,7 +25,7 @@ export default class gmapsDirections extends Component {
   }
   render() {
     return (
-      <View >
+      <View>
         <Button onPress={this.handleGetDirections} title="Get Directions" />
       </View>
     );

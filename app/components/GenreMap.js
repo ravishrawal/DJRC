@@ -62,7 +62,6 @@ class GenreMap extends Component {
                                 }}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
-                            />
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
                                     navigate('SampleProfile', { name: marker.name })
