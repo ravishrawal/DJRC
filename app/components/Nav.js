@@ -26,8 +26,9 @@ const UserTabs = TabNavigator({
 )
 
 class Nav extends Component{
-
+  
   render(){
+    
     const {user} = this.props;
     const Tab = user.id ? UserTabs : Tabs;
     return (
