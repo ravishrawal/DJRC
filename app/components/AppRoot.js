@@ -7,6 +7,7 @@ import store from '../redux';
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
 import BarProfile from './BarProfile';
+import GetDirections from './GetDirections'
 
 const AppRoot = TabNavigator({
   Home: { screen: GenreTiles },
@@ -26,5 +27,3 @@ const ReduxApp = () => {
 }
 
 export default ReduxApp;
-
-

@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import { MapView } from 'expo';
-import { SearchBar } from 'react-native-elements'
+import { SearchBar } from 'react-native-elements';
+import GetDirections from './GetDirections.js';
+import { fetchBarsFromServer } from '../redux';
 
-import { fetchBarsFromServer, getDirectionsToBar } from '../redux';
+let { width, height } = Dimensions.get('window');
 
-let { width, height } = Dimensions.get('window')
-
-class GenreMap extends React.Component {
+class GenreMap extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,11 +17,10 @@ class GenreMap extends React.Component {
                 latitudeDelta: 0.008,
                 longitudeDelta: 0.008
             },
-            markerSelected: {},
-            directionPressed: false
+            markerSelected: {}
         };
         this.onMarkerClick = this.onMarkerClick.bind(this)
-        this.onDirectionPress = this.onDirectionPress.bind(this)
+        this.onMapPress = this.onMapPress.bind(this)
     }
     componentDidMount() {
         this.props.fetchBarsFromServer();
@@ -29,29 +28,21 @@ class GenreMap extends React.Component {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
         });
     }
-    // onRegionChange(region) {
-    //     let { latitude, longitude, latitudeDelta, longitudeDelta } = region;
-    //     this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta } })
-    // }
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
     }
-    onDirectionPress(){
-      this.setState({directionPressed:!this.state.directionPressed})
-      if(this.state.directionPressed) this.props.getDirections(this.state.markerSelected, this.state.currentLocation);
+    onMapPress(){
+      if(Object.keys(this.state.markerSelected).length>0){
+        this.setState({markerSelected:{}})
+      }
     }
     render() {
-        let { bars, directions, markerClick } = this.props;
-        let { currentLocation, regionSize, directionPressed, markerSelected } = this.state;
+        let { bars } = this.props;
+        let { currentLocation, regionSize, markerSelected } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
-
-        const coordinate = {
-            latitude: 37.78825,
-            longitude: -122.4324,
-        };
 
         return (
             <View style={styles.container}>
@@ -59,7 +50,8 @@ class GenreMap extends React.Component {
                     <MapView
                         style={styles.map}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
-                        showsUserLocation={true}>
+                        showsUserLocation={true}
+                        onPress={this.onMapPress}>
                         {bars.map(marker => (
 
                             <MapView.Marker
@@ -74,15 +66,6 @@ class GenreMap extends React.Component {
                                 onPress={this.onMarkerClick.bind(this, marker)}
                             />
                         ))}
-                        {directions && directionPressed &&
-                            <MapView.Polyline
-                              coordinates={directions.coords}
-                              strokeWidth={4}
-                              lineCap='round'
-                              lineJoin='round'
-                              strokeColor="rgba(255,140,0,0.8)"/>
-
-                        }
                     </MapView>
                 }
                 <View style={styles.search}>
@@ -91,14 +74,12 @@ class GenreMap extends React.Component {
                         round
                         placeholder='Type Here...' />
                 </View>
-                {directions && Object.keys(markerSelected).length>0 &&
-                  <View style={styles.touchable}>
-                    <TouchableOpacity
-                      onPress={this.onDirectionPress}>
-                      <View >
-                        {directionPressed ? <Text>Cancel Navigation</Text> : <Text>To The Bar!</Text>}
-                      </View>
-                    </TouchableOpacity>
+                { Object.keys(markerSelected).length>0 &&
+                  <View>
+                    <GetDirections
+                      currentLocation={ currentLocation }
+                      destLocation={{latitude: markerSelected.lat, longitude: markerSelected.lon}}
+                    />
                   </View>
                 }
             </View>
@@ -144,11 +125,6 @@ const mapDispatch = (dispatch) => {
     return {
         fetchBarsFromServer: () => {
             dispatch(fetchBarsFromServer());
-        },
-        getDirections: (marker, currentLocation) => {
-          let dest = {latitude: marker.lat, longitude: marker.lon}
-          console.log('current', currentLocation, 'dest', dest);
-          dispatch(getDirectionsToBar(currentLocation, dest))
         }
     }
 }
