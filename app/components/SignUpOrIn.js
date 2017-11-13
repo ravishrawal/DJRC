@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage, Dimensions } 
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getUser } from '../redux/user';
+import { getUser, spotifyLogin } from '../redux/user';
 
 let { width } = Dimensions.get('window')
 
@@ -18,6 +18,7 @@ class SignUpOrIn extends Component {
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.login = this.login.bind(this);
+        this.spotLogin = this.spotLogin.bind(this);
     }
 
     //value returned onChange is just string, not sure how to get full object
@@ -57,8 +58,14 @@ class SignUpOrIn extends Component {
         this.props.getUser(credentials, navigate)
     }
 
+
+    spotLogin() {
+        const { navigate } = this.props.navigation;
+        this.props.spotifyLogin(navigate)
+    }
+
     render() {
-        const { handleAdd, onChangeEmail, onChangePassword, login } = this;
+        const { handleAdd, onChangeEmail, onChangePassword, login, spotLogin } = this;
         return (
             <View style={styles.container}>
                 <FormLabel>Email</FormLabel>
@@ -71,7 +78,9 @@ class SignUpOrIn extends Component {
                 <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
                 </TouchableHighlight>
-                <Text>User: {this.props.user.email}</Text>
+                <TouchableHighlight onPress={spotLogin}>
+                    <Text style={[styles.button, styles.greenButton]}>Login with Spotify</Text>
+                </TouchableHighlight>
             </View>
         )
     }
@@ -109,6 +118,9 @@ const mapDispatch = (dispatch) => {
     return {
         getUser: (credentials, navigate) => {
             dispatch(getUser(credentials, navigate));
+        },
+        spotifyLogin: (credentials, navigate) => {
+            dispatch(spotifyLogin(credentials, navigate));
         }
     }
 }
