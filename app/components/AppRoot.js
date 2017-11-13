@@ -14,20 +14,12 @@ import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import Nav from './Nav'
 
-const AppRoot = StackNavigator({
-  Home: { screen: Nav },
-  Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile }
-}, {
-    headerMode: 'none'
-  });
-
-const ReduxApp = () => {
+const AppRoot = () => {
   return (
     <Provider store={store}>
-      <AppRoot />
+      <Nav />
     </Provider>
   );
 }
 
-export default ReduxApp;
+export default AppRoot;
