@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage, Dimensions } from 'react-native'
+import { View, StyleSheet, Linking, TouchableHighlight, Text, AsyncStorage, Dimensions } from 'react-native'
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getUser } from '../redux/user';
+import { getUser, spotifyLogin } from '../redux/user';
+import { WebBrowser } from 'expo';
 
 let { width } = Dimensions.get('window')
 
@@ -56,6 +57,31 @@ class SignUpOrIn extends Component {
 
         this.props.getUser(credentials, navigate)
     }
+    addLinkingListener ()  {
+        Linking.addEventListener('url', this.handleRedirect);
+    }
+
+    removeLinkingListener () {
+        Linking.removeEventListener('url', this.handleRedirect);
+    }
+
+
+    spotLogin() {
+        Linking.addEventListener('url', this.handleRedirect);
+        const result = WebBrowser.openBrowserAsync(`http://172.16.22.146:3002/passportAuth/spotify?`)
+        Linking.addEventListener('url', this.handleRedirect);
+        result
+            .then(val => {
+                console.log(val);
+            })
+
+    }
+
+    _handleRedirect(event) {
+        WebBrowser.dismissBrowser();
+        console.log(event);
+    }
+
 
     render() {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
@@ -70,6 +96,9 @@ class SignUpOrIn extends Component {
                 </TouchableHighlight>
                 <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this.spotLogin}>
+                    <Text style={[styles.button, styles.greenButton]}>Spotify</Text>
                 </TouchableHighlight>
             </View>
         )
@@ -108,6 +137,9 @@ const mapDispatch = (dispatch) => {
     return {
         getUser: (credentials, navigate) => {
             dispatch(getUser(credentials, navigate));
+        },
+        spotifyLogin: () => {
+            dispatch(dispatch());
         }
     }
 }

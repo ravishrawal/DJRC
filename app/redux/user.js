@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import { AuthSession } from 'expo';
+import { WebBrowser } from 'expo';
 
 const SET_USER = 'SET_USER';
 const REMOVE_USER = 'REMOVE_USER';
@@ -53,14 +53,12 @@ export const tokenUser = (navigate) => {
 export const spotifyLogin = (navigate) => {
     console.log('hello');
     return (dispatch) => {
-        let result = AuthSession.startAsync({
-            authUrl: `http://192.168.0.14:3002/passportAuth/spotify?response_type=token&redirect_uri=${encodeURIComponent(AuthSession.getRedirectUrl())}`
-        })
+        let result = WebBrowser.startAsync(`http://172.16.22.146:3002/passportAuth/spotify?`);
 
         console.log(result)
         AsyncStorage.setItem('jwt', result)
             .then(() => {
-                dispatch(tokenUser(navigate));
+                // dispatch(tokenUser(navigate));
 
             }).catch(err => {
                 console.log(err)
