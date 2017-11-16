@@ -3,8 +3,9 @@ import { View, StyleSheet, Linking, TouchableHighlight, Text } from 'react-nativ
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getUser, spotifyLogin } from '../redux/user';
 import { WebBrowser} from 'expo';
+
+import { getUser, spotifyLogin, signUp } from '../redux/user';
 
 class SignUpOrIn extends Component {
     constructor() {
@@ -33,19 +34,11 @@ class SignUpOrIn extends Component {
     }
 
     handleAdd() {
-        const data = {
+        const credentials = {
             email: this.state.email,
             password: this.state.password,
         }
-        axios.post('http://192.168.0.14:3002/passportAuth/signup', data)
-            .then((res) => res.data)
-            .then(() => {
-                alert('Success! You may now log in.');
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
+        this.props.signUp(credentials);
 
     }
 
@@ -130,6 +123,9 @@ const mapDispatch = (dispatch) => {
         },
         spotifyLogin: (token) => {
             dispatch(spotifyLogin(token));
+        },
+        signUp: (credentials) => {
+            dispatch(signUp(credentials));
         }
     }
 }

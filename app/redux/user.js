@@ -63,6 +63,19 @@ export const spotifyLogin = (token) => {
     }
 }
 
+export const signUp = (credentials) => {
+   return () => {
+        axios.post('http://192.168.0.14:3002/passportAuth/signup', credentials)
+            .then((res) => res.data)
+            .then(() => {
+                alert('Success! You may now log in.');
+            })
+            .catch(error => {
+                alert('Email already in use!');
+            })
+        }
+}
+
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
         axios.post('http://192.168.0.14:3002/passportAuth/login', credentials)
