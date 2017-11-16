@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Linking, TouchableHighlight, Text, AsyncStorage, Dimensions } from 'react-native'
+import { View, StyleSheet, Linking, TouchableHighlight, Text } from 'react-native'
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { getUser, spotifyLogin } from '../redux/user';
-import { WebBrowser } from 'expo';
-
-let { width } = Dimensions.get('window')
+import { WebBrowser} from 'expo';
 
 class SignUpOrIn extends Component {
     constructor() {
         super()
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            token: ''
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.login = this.login.bind(this);
+        this.handleRedirect = this.handleRedirect.bind(this);
+    }
+    componentDidMount(){
+        Linking.addEventListener('url', this.handleRedirect);
     }
 
-    //value returned onChange is just string, not sure how to get full object
     onChangeEmail(email) {
         this.setState({ email: email })
     }
@@ -53,33 +55,21 @@ class SignUpOrIn extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-
-
         this.props.getUser(credentials, navigate)
     }
-    addLinkingListener ()  {
-        Linking.addEventListener('url', this.handleRedirect);
-    }
 
-    removeLinkingListener () {
-        Linking.removeEventListener('url', this.handleRedirect);
+    handleRedirect(event) {
+        WebBrowser.dismissBrowser();
+        let ev = event.url.split('=');
+        const token = ev[1];
+        this.props.spotifyLogin(token)
     }
 
 
     spotLogin() {
         Linking.addEventListener('url', this.handleRedirect);
-        const result = WebBrowser.openBrowserAsync(`http://172.16.22.146:3002/passportAuth/spotify?`)
-        Linking.addEventListener('url', this.handleRedirect);
-        result
-            .then(val => {
-                console.log(val);
-            })
-
-    }
-
-    _handleRedirect(event) {
-        WebBrowser.dismissBrowser();
-        console.log(event);
+        WebBrowser.openAuthSessionAsync(`http://192.168.0.14:3002/passportAuth/spotify`)
+        Linking.removeEventListener('url', this.handleRedirect);
     }
 
 
@@ -138,8 +128,8 @@ const mapDispatch = (dispatch) => {
         getUser: (credentials, navigate) => {
             dispatch(getUser(credentials, navigate));
         },
-        spotifyLogin: () => {
-            dispatch(dispatch());
+        spotifyLogin: (token) => {
+            dispatch(spotifyLogin(token));
         }
     }
 }

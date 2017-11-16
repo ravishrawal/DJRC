@@ -28,11 +28,11 @@ export const logoutUser = (navigate) => {
     }
 }
 
-export const tokenUser = (navigate) => {
+export const tokenUser = () => {
     return (dispatch) => {
         AsyncStorage.getItem('jwt', (err, token) => {
             if (err) return err;
-            if (!token) return;
+            if (!token) return {};
             axios.get('http://192.168.0.14:3002/passportAuth/getUser', {
                 headers: {
                     Accept: 'application/json',
@@ -41,8 +41,9 @@ export const tokenUser = (navigate) => {
             })
                 .then(res => res.data)
                 .then(user => {
+                    console.log('user', user);
                     dispatch(setUser(user))
-                })
+                }).catch(console.log)
 
         }).catch(err => {
             console.log(err);
@@ -50,16 +51,12 @@ export const tokenUser = (navigate) => {
     }
 }
 
-export const spotifyLogin = (navigate) => {
-    console.log('hello');
+export const spotifyLogin = (token) => {
+    console.log(token);
     return (dispatch) => {
-        let result = WebBrowser.startAsync(`http://172.16.22.146:3002/passportAuth/spotify?`);
-
-        console.log(result)
-        AsyncStorage.setItem('jwt', result)
+        AsyncStorage.setItem('jwt', token)
             .then(() => {
-                // dispatch(tokenUser(navigate));
-
+                dispatch(tokenUser());
             }).catch(err => {
                 console.log(err)
             })
@@ -74,10 +71,8 @@ export const getUser = (credentials, navigate) => {
                 if (res.error) {
                     alert(res.error)
                 } else {
-                    // console.log(res.token)
                     AsyncStorage.setItem('jwt', res.token)
                         .then(() => {
-                            // dispatch(setUser(res.user))
                             dispatch(tokenUser(navigate));
                         })
                 }
@@ -93,7 +88,7 @@ export default (state = {}, action) => {
         case SET_USER:
             return Object.assign({}, state, action.user)
         case REMOVE_USER:
-            return Object.assign({});
+            return {};
         default:
             return state;
     }
