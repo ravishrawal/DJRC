@@ -12,7 +12,7 @@ class GenreTiles extends React.Component {
   componentDidMount(){
     this.props.fetchGenres();
     this.props.fetchUser();
-    this.props.fetchSpotifyBars();
+    // this.props.fetchSpotifyBars();
   }
   render() {
     const genres = this.props.genres.length && this.props.genres;
