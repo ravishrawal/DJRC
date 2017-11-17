@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-native';
+import { StackNavigator } from 'react-navigation'
 import { Card, ListItem, List } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
+import GenreMap from './GenreMap';
+
+// const Back = StackNavigator({
+//     Back: {screen: GenreMap },
+//     }, {
+//         headerMode: 'none'
+//     })
 
 export default class BarProfile extends Component {
+
 
 
     render() {
@@ -42,6 +51,9 @@ export default class BarProfile extends Component {
                         }
                     </List>
                 </Card>
+               <Button
+               onPress={() => this.props.navigation.goBack()}
+                title='Back' />
             </View>
         );
     }
