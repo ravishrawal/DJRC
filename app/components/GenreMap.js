@@ -39,7 +39,7 @@ class GenreMap extends Component {
       this.setState({markerSelected:ev})
     }
     onMapPress(){
-      if(Object.keys(this.state.markerSelected).length>0){
+      if(!this.state.directionPressed && Object.keys(this.state.markerSelected).length>0){
         this.setState({markerSelected:{}})
       }
     }
@@ -48,10 +48,10 @@ class GenreMap extends Component {
       if(this.state.directionPressed) {
         let { currentLocation, markerSelected } = this.state;
         getDirectionsToBar({latitude:currentLocation.latitude, longitude:currentLocation.longitude}, {latitude:markerSelected.lat, longitude:markerSelected.lon})
-        .then(res=> this.setState({ directions : res , regionSize: { latitudeDelta: 0.0005, longitudeDelta: 0.0005} }))
+        .then(res=> this.setState({ directions : res }))
         .catch(er => console.log(er))
       } else {
-        this.setState({ directions: { coords: [], time:'' } , regionSize: { latitudeDelta: 0.008, longitudeDelta: 0.008} })
+        this.setState({ directions: { coords: [], time:'' } })
       }
     }
     render() {
@@ -70,8 +70,8 @@ class GenreMap extends Component {
                     <MapView
                         style={styles.map}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
-                        region={Object.assign({}, currentLocation, regionSize)}
                         showsUserLocation={true}
+                        showsCompass={true}
                         onPress={this.onMapPress}>
                         {bars.map(marker => (
 
@@ -123,7 +123,7 @@ class GenreMap extends Component {
                 </View>
                 { Object.keys(markerSelected).length>0 &&
                   <View style={styles.polyButton}>
-                    <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? 'Stop' : 'Go!' }></Button>
+                    <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
                   </View>
                 }
             </View>
