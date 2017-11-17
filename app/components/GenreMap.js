@@ -8,6 +8,7 @@ import { fetchBarsFromServer } from '../redux/bars';
 import { getDirectionsToBar } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
+const Icons = require('./Icons');
 
 class GenreMap extends Component {
     constructor(props) {
@@ -38,6 +39,7 @@ class GenreMap extends Component {
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
     }
+
     onMapPress(){
       if(!this.state.directionPressed && Object.keys(this.state.markerSelected).length>0){
         this.setState({markerSelected:{}})
@@ -63,7 +65,7 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
-
+        console.log(bars[0]);
         return (
             <View style={styles.container}>
                 {currentLocation.latitude &&
@@ -74,7 +76,6 @@ class GenreMap extends Component {
                         showsCompass={true}
                         onPress={this.onMapPress}>
                         {bars.map(marker => (
-
                             <MapView.Marker
                                 coordinate={{
                                     latitude: marker.lat,
@@ -82,6 +83,7 @@ class GenreMap extends Component {
                                 }}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
+                                image={Icons[marker.genreNames[0]]}
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
                                     navigate('SampleProfile', { name: marker.name })

@@ -71,7 +71,6 @@ class SignUpOrIn extends Component {
                 <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
                 </TouchableHighlight>
-                <Text>User: {this.props.user.email}</Text>
             </View>
         )
     }
