@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 
-console.log(View);
 
 export default class gmapsDirections extends Component {
    constructor(props){
