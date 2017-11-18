@@ -61,7 +61,7 @@ class SignUpOrIn extends Component {
 
     spotLogin() {
         Linking.addEventListener('url', this.handleRedirect);
-        WebBrowser.openAuthSessionAsync(`https://djrc-api.herokuapp.com/passportAuth/spotify`)
+        WebBrowser.openAuthSessionAsync(`http://192.168.0.14:3002/passportAuth/spotify`)
         Linking.removeEventListener('url', this.handleRedirect);
     }
 

@@ -79,7 +79,7 @@ class GenreMap extends Component {
                                             title='Profile' />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
-                                            <Text> Great Song! </Text>
+                                            <Text> {marker.currentSong}</Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
