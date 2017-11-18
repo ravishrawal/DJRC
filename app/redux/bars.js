@@ -11,30 +11,44 @@ const getBars = (bars) => {
     }
 }
 
+
 const getSongsFromSpotify = (bar) => {
-    if (!bar.Owner && !bar.Owner.spotifyAccessToken) return;
+    return new Promise((resolve, reject) => {
+        if (!bar.owner || !bar.owner.spotifyAccessToken) {
+            return resolve(bar);
+            // return bar;
+        }
+        // console.log('owner', bar.owner)
+        let spotifyApi = new SpotifyWebApi();
+        spotifyApi.setAccessToken(bar.owner.spotifyAccessToken);
+        // console.log(bar.name)
+        spotifyApi.getMyRecentlyPlayedTracks()
+            .then(data => {
+                const songs = [];
+                data.items.forEach(song => {
+                    const track = {};
+                    track.artist = song.track.artists[0].name;
+                    track.name = song.track.name;
+                    songs.push(track);
+                })
+                // console.log(songs[0].name)
+                bar.currentSong = songs[0].name;
+            // console.log(bar);
+            
+                return resolve(bar);
+            
+                // return bar;
 
-
-    let spotifyApi = new SpotifyWebApi();
-    spotifyApi.setAccessToken(bar.Owner.spotifyAccessToken);
-    console.log(bar.name)
-    spotifyApi.getMyRecentlyPlayedTracks()
-        .then(data => {
-            const songs = [];
-            data.items.forEach(song => {
-                const track = {};
-                track.artist = song.track.artists[0].name;
-                track.name = song.track.name;
-                songs.push(track);
             })
-            console.log(songs[0].name)
-            return songs[0].name;
+            .catch(err => {
+                console.log('err', err);
+                return reject(err);
+                // console.log(bar.Owner.spotifyAccessToken);
+                
+                
+            })
 
-        })
-        .catch(err => {
-            console.log(bar.Owner.spotifyAccessToken);
-            console.log('err', err);
-        })
+    })
 }
 
 export const fetchBarsFromServer = () => {
@@ -50,8 +64,7 @@ export const fetchBarsFromServer = () => {
                         genres.push(genre.id)
                         genreNames.push(genre.name)
                     })
-                    const currentSong = bar.Owner ? getSongsFromSpotify(bar) : null;
-                    if (currentSong) console.log('song', currentSong)
+
                     return {
                         id: bar.id,
                         lat: bar.lat,
@@ -60,12 +73,23 @@ export const fetchBarsFromServer = () => {
                         address: bar.address,
                         genres: genres,
                         owner: bar.Owner,
-                        currentSong: currentSong,
                         genreNames
                     }
                 })
+                return bars
+            })
+            .then(bars => {
+                bars = bars.map(bar => {
+                    return getSongsFromSpotify(bar);
+                })
+
+                return Promise.all(bars)
+            })
+            .then(bars => {
+                console.log('bars', bars);
                 dispatch(getBars(bars));
-            }).catch(console.log);
+            })
+            .catch(console.log);
 
     }
 }
