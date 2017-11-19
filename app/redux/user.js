@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import { AuthSession } from 'expo';
+import { WebBrowser } from 'expo';
 
 const SET_USER = 'SET_USER';
 const REMOVE_USER = 'REMOVE_USER';
@@ -28,12 +28,12 @@ export const logoutUser = (navigate) => {
     }
 }
 
-export const tokenUser = (navigate) => {
+export const tokenUser = () => {
     return (dispatch) => {
         AsyncStorage.getItem('jwt', (err, token) => {
             if (err) return err;
-            if (!token) return;
-            axios.get('http://192.168.0.14:3002/passportAuth/getUser', {
+            if (!token) return {};
+            axios.get('https://djrc-api.herokuapp.com/passportAuth/getUser', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `JWT ${token}`
@@ -41,8 +41,9 @@ export const tokenUser = (navigate) => {
             })
                 .then(res => res.data)
                 .then(user => {
+                    console.log('user', user);
                     dispatch(setUser(user))
-                })
+                }).catch(console.log)
 
         }).catch(err => {
             console.log(err);
@@ -50,36 +51,41 @@ export const tokenUser = (navigate) => {
     }
 }
 
-export const spotifyLogin = (navigate) => {
-    console.log('hello');
+export const spotifyLogin = (token) => {
+    console.log(token);
     return (dispatch) => {
-        let result = AuthSession.startAsync({
-            authUrl: `http://192.168.0.14:3002/passportAuth/spotify?response_type=token&redirect_uri=${encodeURIComponent(AuthSession.getRedirectUrl())}`
-        })
-
-        console.log(result)
-        AsyncStorage.setItem('jwt', result)
+        AsyncStorage.setItem('jwt', token)
             .then(() => {
-                dispatch(tokenUser(navigate));
-
+                dispatch(tokenUser());
             }).catch(err => {
                 console.log(err)
             })
     }
 }
 
+export const signUp = (credentials) => {
+   return () => {
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
+            .then((res) => res.data)
+            .then(() => {
+                alert('Success! You may now log in.');
+            })
+            .catch(error => {
+                alert('Email already in use!');
+            })
+        }
+}
+
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
-        axios.post('http://192.168.0.14:3002/passportAuth/login', credentials)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/login', credentials)
             .then((res) => res.data)
             .then((res) => {
                 if (res.error) {
                     alert(res.error)
                 } else {
-                    // console.log(res.token)
                     AsyncStorage.setItem('jwt', res.token)
                         .then(() => {
-                            // dispatch(setUser(res.user))
                             dispatch(tokenUser(navigate));
                         })
                 }
@@ -95,7 +101,7 @@ export default (state = {}, action) => {
         case SET_USER:
             return Object.assign({}, state, action.user)
         case REMOVE_USER:
-            return Object.assign({});
+            return {};
         default:
             return state;
     }

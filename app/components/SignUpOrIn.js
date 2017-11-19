@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage, Dimensions } from 'react-native'
+import { View, StyleSheet, Linking, TouchableHighlight, Text } from 'react-native'
 import axios from 'axios';
 import { FormLabel, FormInput } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { getUser } from '../redux/user';
+import { WebBrowser} from 'expo';
 
-let { width } = Dimensions.get('window')
+import { getUser, spotifyLogin, signUp } from '../redux/user';
 
 class SignUpOrIn extends Component {
     constructor() {
         super()
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            token: ''
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.login = this.login.bind(this);
+        this.handleRedirect = this.handleRedirect.bind(this);
+    }
+    componentDidMount(){
+        Linking.addEventListener('url', this.handleRedirect);
     }
 
-    //value returned onChange is just string, not sure how to get full object
     onChangeEmail(email) {
         this.setState({ email: email })
     }
@@ -30,19 +34,11 @@ class SignUpOrIn extends Component {
     }
 
     handleAdd() {
-        const data = {
+        const credentials = {
             email: this.state.email,
             password: this.state.password,
         }
-        axios.post('http://192.168.0.14:3002/passportAuth/signup', data)
-            .then((res) => res.data)
-            .then(() => {
-                alert('Success! You may now log in.');
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
+        this.props.signUp(credentials);
 
     }
 
@@ -52,10 +48,23 @@ class SignUpOrIn extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-
-
         this.props.getUser(credentials, navigate)
     }
+
+    handleRedirect(event) {
+        WebBrowser.dismissBrowser();
+        let ev = event.url.split('=');
+        const token = ev[1];
+        this.props.spotifyLogin(token)
+    }
+
+
+    spotLogin() {
+        Linking.addEventListener('url', this.handleRedirect);
+        WebBrowser.openBrowserAsync(`https://djrc-api.herokuapp.com/passportAuth/spotify`)
+        Linking.removeEventListener('url', this.handleRedirect);
+    }
+
 
     render() {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
@@ -70,6 +79,9 @@ class SignUpOrIn extends Component {
                 </TouchableHighlight>
                 <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={this.spotLogin}>
+                    <Text style={[styles.button, styles.greenButton]}>Spotify</Text>
                 </TouchableHighlight>
             </View>
         )
@@ -108,6 +120,12 @@ const mapDispatch = (dispatch) => {
     return {
         getUser: (credentials, navigate) => {
             dispatch(getUser(credentials, navigate));
+        },
+        spotifyLogin: (token) => {
+            dispatch(spotifyLogin(token));
+        },
+        signUp: (credentials) => {
+            dispatch(signUp(credentials));
         }
     }
 }

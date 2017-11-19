@@ -2,8 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 
-import {fetchGenres} from '../redux/genres';
-import {tokenUser} from '../redux/user';
+import {fetchGenres} from '../redux/genres'
+import {tokenUser} from '../redux/user'
+import {fetchSpotifyBars} from '../redux/spotifyBars'
 
 let { width, height } = Dimensions.get('window');
 
@@ -11,6 +12,7 @@ class GenreTiles extends React.Component {
   componentDidMount(){
     this.props.fetchGenres();
     this.props.fetchUser();
+    // this.props.fetchSpotifyBars();
   }
   render() {
     const genres = this.props.genres.length && this.props.genres;
@@ -76,6 +78,9 @@ const mapDispatch = (dispatch) => {
         },
         fetchUser: () => {
           dispatch(tokenUser());
+        },
+        fetchSpotifyBars: () => {
+          dispatch(fetchSpotifyBars());
         }
     }
 }
