@@ -60,17 +60,15 @@ class GenreMap extends Component {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
         let { currentLocation, regionSize, markerSelected, directions, directionPressed } = this.state;
-        console.log(directions.time);
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
         return (
             <View style={styles.container}>
-                {currentLocation.latitude &&
                     <MapView
                         style={styles.map}
-                        initialRegion={Object.assign({}, currentLocation, regionSize)}
+                        initialRegion={ currentLocation.latitude && Object.assign({}, currentLocation, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
@@ -115,7 +113,6 @@ class GenreMap extends Component {
                               strokeColor="rgba(255,140,0,0.8)"/>
                         }
                     </MapView>
-                }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
