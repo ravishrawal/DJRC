@@ -65,6 +65,7 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
+        console.log(bars[0]);
         return (
             <View style={styles.container}>
                 {currentLocation.latitude &&
@@ -82,7 +83,7 @@ class GenreMap extends Component {
                                 }}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
-                                image={Icons[marker.genreNames[0]]}
+                                image={Icons[marker.genreNames[0].replace(/\s+/,"")]}
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
                                     navigate('SampleProfile', { name: marker.name })
