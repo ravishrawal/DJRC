@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   item: {
-    // fontFamily: 'zilla-slab-regular',
+    fontFamily: 'zilla-slab-regular',
     margin: 30,
     alignSelf: 'center',
     fontSize: 30,

@@ -1,31 +1,36 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
-import { Asset, AppLoading, Font } from 'expo';
+import { AppLoading, Font } from 'expo';
 
 import Nav from './Nav';
 
 function cacheFonts(fonts) {
-  return fonts.map(font => Font.loadAsync(font));
+  return fonts.map(font => {
+    console.log('cacheFonts ', font);
+    Font.loadAsync(font);
+  });
 }
 
 export default class App extends React.Component {
+
   constructor() {
     super();
     this.state = {
       isReady: false,
     };
+    // this._cacheResourcesAsync = this._cacheResourcesAsync.bind(this);
   }
 
   render() {
-    // if (!this.state.isReady) {
-    //   return (
-    //     <AppLoading
-    //       startAsync={this._cacheResourcesAsync}
-    //       onFinish={() => this.setState({ isReady: true })}
-    //       onError={console.warn}
-    //     />
-    //   );
-    // }
+    if (!this.state.isReady) {
+      return (
+        <AppLoading
+          startAsync={this._cacheResourcesAsync}
+          onFinish={() => this.setState({ isReady: true })}
+          onError={console.warn}
+        />
+      );
+    }
 
     return (
       <Nav />
@@ -33,6 +38,7 @@ export default class App extends React.Component {
   }
 
   _cacheResourcesAsync() {
+    console.log('_cacheResourcesAsync');
     const fontAssets = cacheFonts([
       { lobster: require('../../assets/fonts/Lobster.otf') },
       { 'zilla-slab-regular': require('../../assets/fonts/ZillaSlab-Regular.otf') },

@@ -9,7 +9,7 @@ import Nav from './Nav';
 const AppRoot = () => {
   return (
     <Provider store={store}>
-      <Nav />
+      <App />
     </Provider>
   );
 };
