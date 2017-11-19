@@ -2,10 +2,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 
-import {fetchGenres} from '../redux/genres'
-import {tokenUser} from '../redux/user'
+import {fetchGenres} from '../redux/genres';
+import {tokenUser} from '../redux/user';
 
-let { width, height } = Dimensions.get('window')
+let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {
   componentDidMount(){
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   item: {
+    // fontFamily: 'zilla-slab-regular',
     margin: 30,
     alignSelf: 'center',
     fontSize: 30,
