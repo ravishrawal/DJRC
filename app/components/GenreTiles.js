@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     fontFamily: 'zilla-slab-regular',
     fontSize: 20,
     color: '#f7f7f7',
-    margin: 30
   }
 });
 
