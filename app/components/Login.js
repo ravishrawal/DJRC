@@ -28,7 +28,7 @@ export default class Login extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-        axios.post('http:/192.168.0.14:3002/passportAuth/login', data)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/login', data)
             .then((res) => res.data)
             .then((res) => {
                 if (res.error) {
