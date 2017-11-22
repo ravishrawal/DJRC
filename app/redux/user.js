@@ -41,7 +41,6 @@ export const tokenUser = () => {
             })
                 .then(res => res.data)
                 .then(user => {
-                    console.log('user', user);
                     dispatch(setUser(user))
                 }).catch(console.log)
 
@@ -52,7 +51,6 @@ export const tokenUser = () => {
 }
 
 export const spotifyLogin = (token) => {
-    console.log(token);
     return (dispatch) => {
         AsyncStorage.setItem('jwt', token)
             .then(() => {

@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "react-native-scripts": "1.6.0",
+    "babel-preset-env": "^1.6.1",
     "jest-expo": "^22.0.0",
+    "react-native-scripts": "1.6.0",
     "react-test-renderer": "16.0.0-beta.5"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
@@ -40,6 +41,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sequelize": "^4.20.3",
+    "spotify-web-api-js": "^0.22.1",
     "tcomb-form-native": "^0.6.11",
     "watchman": "^0.1.8",
     "webpack": "^3.8.1"

@@ -1,11 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native';
-const Icons = require('./Icons');
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
 import {fetchGenres} from '../redux/genres';
 import {tokenUser} from '../redux/user';
-import {fetchSpotifyBars} from '../redux/spotifyBars';
+// import {fetchSpotifyBars} from '../redux/spotifyBars';
 
+const Icons = require('./Icons');
 let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {
