@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-nat
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
-import { fetchBarsFromServer } from '../redux/bars';
+import {} from '../redux/bars';
 import { getDirectionsToBar } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
@@ -31,7 +31,6 @@ class GenreMap extends Component {
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
     }
     componentDidMount() {
-        this.props.fetchBarsFromServer();
         navigator.geolocation.getCurrentPosition((res, rej) => {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
         });
