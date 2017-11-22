@@ -31,10 +31,10 @@ class GenreMap extends Component {
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
     }
     componentDidMount() {
-        this.props.fetchBarsFromServer();
         navigator.geolocation.getCurrentPosition((res, rej) => {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
-        });
+        })
+        this.props.fetchBarsFromServer();
     }
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
@@ -69,6 +69,7 @@ class GenreMap extends Component {
             <View style={styles.container}>
                     <MapView
                         style={styles.map}
+                        showsPointsOfInterest={false}
                         initialRegion={ currentLocation.latitude && Object.assign({}, currentLocation, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
