@@ -26,7 +26,7 @@ const getSongsFromSpotify = (bar) => {
             })
             .catch(err => {
                 console.log('err', err);
-                return reject(err);
+                return resolve(bar);
             })
 
     })
