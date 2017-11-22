@@ -1,9 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native';
+const Icons = require('./Icons');
 import {fetchGenres} from '../redux/genres';
 import {tokenUser} from '../redux/user';
+import {fetchSpotifyBars} from '../redux/spotifyBars';
 
 let { width, height } = Dimensions.get('window');
 
@@ -18,22 +19,23 @@ class GenreTiles extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.center}>
-          <FlatList
-            data={genres}
-            renderItem={({ item }) =>
-              <TouchableOpacity
-                onPress={() =>
-                  navigate('Map', { genre: item.key })
-                }>
-                <View
-                  style={styles.row}
-                >
-                  <Text style={styles.item}>{item.name}</Text>
-                </View>
-              </TouchableOpacity>}
-          />
-        </View>
+          { genres.length>0 && genres.map((genre) => {
+            return (
+              <View
+                key={genre.key}
+                style = {styles.buttonStyle}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigate('Map', { genre: genre.key })
+                  }
+                  >
+                  <Image style={{alignSelf:'center'}} source={ Icons[genre.name.replace(/\s+/,"")] } />
+                  <Text style = {styles.genreText}>{genre.name}</Text>
+                </TouchableOpacity>
+              </View>
+            )
+          })
+          }
       </View>
     );
   }
@@ -42,25 +44,27 @@ class GenreTiles extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: '#f7f7f7',
     marginTop: 50
   },
-  center: {
+  buttonStyle: {
+    width: (width-20)/2,
+    height: (height-150)/5,
+    backgroundColor: '#ff4554',
+    margin: 5,
+    borderWidth: 3,
+    borderColor: '#00c3e3',
+    borderRadius: 2,
+    justifyContent: 'center'
   },
-  row: {
-    flex: 1,
-    width: width,
-    backgroundColor: 'orange',
-    marginBottom: 10
-  },
-  item: {
-    fontFamily: 'zilla-slab-regular',
-    margin: 30,
+  genreText: {
     alignSelf: 'center',
-    fontSize: 30,
-    color: 'white'
+    fontFamily: 'zilla-slab-regular',
+    fontSize: 20,
+    color: '#f7f7f7',
+    margin: 30
   }
 });
 
