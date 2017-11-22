@@ -11,11 +11,11 @@ const getSpotifyBars = (bars) => {
 
 export const fetchSpotifyBars = () => {
     return (dispatch) => {
-        axios.get('https://djrc-api.herokuapp.com/api/users/spotify')
+        axios.get('https://djrc-api.herokuapp.com/api/venues/spotify')
         .then(res => res.data)
         .then(bars => {
-            console.log(bars)
-            dispatch(getSpotifyBars());
+
+            dispatch(getSpotifyBars(bars));
         }).catch(console.log)
     }
 }
