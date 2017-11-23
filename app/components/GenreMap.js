@@ -61,7 +61,7 @@ class GenreMap extends Component {
         let { bars } = this.props;
         let { currentLocation, regionSize, markerSelected, directions, directionPressed } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
-        const selectedGenre = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenre : undefined;
+        const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
@@ -75,7 +75,7 @@ class GenreMap extends Component {
                         showsCompass={true}
                         onPress={this.onMapPress}>
                         {bars.map(marker => {
-                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName===selectedGenre }).replace(/\s+/,"")] : Icons[ marker.genreNames[0].replace(/\s+/,"")]
+                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName===selectedGenreName }).replace(/\s+/,"")] : Icons[ marker.genreNames[0].replace(/\s+/,"")]
                           return (
                             <MapView.Marker
                                 coordinate={{
