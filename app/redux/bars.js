@@ -1,5 +1,6 @@
 import axios from 'axios';
 var SpotifyWebApi = require('spotify-web-api-js');
+import { AsyncStorage } from 'react-native';
 
 const GET_BARS = 'GET_BARS';
 
@@ -19,20 +20,20 @@ const getSongsFromSpotify = (bar) => {
         }
         let spotifyApi = new SpotifyWebApi();
         spotifyApi.setAccessToken(bar.owner.spotifyAccessToken);
-        // spotifyApi.setRefreshToken(bar.owner.spotifyRefreshToken);
         spotifyApi.getMyRecentlyPlayedTracks()
             .then(data => {
                 bar.currentSong = data.items[0].track.name;
                 return resolve(bar);
             })
             .catch(err => {
-                // spotifyApi.refreshAccessToken()
-                // .then(data => {
-                //     spotifyApi.setAccessToken(data.body['access_token']);
-                //     return getSongsFromSpotify(bar);
-                // })
-                // console.log('err', err);
-                return resolve(bar);
+                if (error[2] === 'error_description="The access token expired"') {
+                    console.log('asdfsa');
+                    AsyncStorage
+                    axios.get('http://192.168.0.14:3002/passportAuth/')
+                }
+                else {
+                    return resolve(bar);
+                }
             })
 
     })
