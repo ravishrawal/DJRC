@@ -19,13 +19,19 @@ const getSongsFromSpotify = (bar) => {
         }
         let spotifyApi = new SpotifyWebApi();
         spotifyApi.setAccessToken(bar.owner.spotifyAccessToken);
+        // spotifyApi.setRefreshToken(bar.owner.spotifyRefreshToken);
         spotifyApi.getMyRecentlyPlayedTracks()
             .then(data => {
                 bar.currentSong = data.items[0].track.name;
                 return resolve(bar);
             })
             .catch(err => {
-                console.log('err', err);
+                // spotifyApi.refreshAccessToken()
+                // .then(data => {
+                //     spotifyApi.setAccessToken(data.body['access_token']);
+                //     return getSongsFromSpotify(bar);
+                // })
+                // console.log('err', err);
                 return resolve(bar);
             })
 
