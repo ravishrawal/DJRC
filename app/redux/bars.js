@@ -26,13 +26,28 @@ const getSongsFromSpotify = (bar) => {
                 return resolve(bar);
             })
             .catch(err => {
+                // spotifyApi.refreshAccessToken()
+                // .then(data => {
+                //     spotifyApi.setAccessToken(data.body['access_token']);
+                //     return getSongsFromSpotify(bar);
+                // })
+                let error = err.responseHeaders["WWW-Authenticate"].split(', ');
+                // console.log(err.responseHeaders["WWW-Authenticate"])
+                // console.log(error[2]);
                 if (error[2] === 'error_description="The access token expired"') {
-                    console.log('asdfsa');
-                    AsyncStorage
-                    axios.get('http://192.168.0.14:3002/passportAuth/')
-                }
-                else {
-                    return resolve(bar);
+                    // console.log('asdfsa');
+                    AsyncStorage.getItem('jwt')
+                        .then(token => {
+                            axios.post(`http://192.168.0.14:3002/passportAuth/refresh/`. token)
+                                .then(access => {
+                                    spotifyApi.setAccessToken(access);
+                                    spotifyApi.getMyRecentlyPlayedTracks()
+                                        .then(data => {
+                                            bar.currentSong = data.items[0].track.name;
+                                            return resolve(bar);
+                                        })
+                                })
+                        }).catch(console.log)
                 }
             })
 
