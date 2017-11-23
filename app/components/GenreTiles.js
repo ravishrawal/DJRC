@@ -27,7 +27,7 @@ class GenreTiles extends React.Component {
                 style = {styles.buttonStyle}>
                 <TouchableOpacity
                   onPress={() =>
-                    navigate('Map', { genre: genre.key })
+                    navigate('Map', { genre: genre.key, selectedGenre: genre.name })
                   }
                   >
                   <Image style={{alignSelf:'center'}} source={ Icons[genre.name.replace(/\s+/,"")] } />

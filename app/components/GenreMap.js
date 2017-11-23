@@ -60,11 +60,11 @@ class GenreMap extends Component {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
         let { currentLocation, regionSize, markerSelected, directions, directionPressed } = this.state;
-        const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : '';
+        const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
+        const selectedGenre = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenre : undefined;
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
-        console.log(bars[0]);
         return (
             <View style={styles.container}>
                     <MapView
@@ -74,7 +74,9 @@ class GenreMap extends Component {
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
-                        {bars.map(marker => (
+                        {bars.map(marker => {
+                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName===selectedGenre }).replace(/\s+/,"")] : Icons[ marker.genreNames[0].replace(/\s+/,"")]
+                          return (
                             <MapView.Marker
                                 coordinate={{
                                     latitude: marker.lat,
@@ -82,7 +84,7 @@ class GenreMap extends Component {
                                 }}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
-                                image={Icons[marker.genreNames[0].replace(/\s+/,"")]}
+                                image={ icon }
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
                                     navigate('SampleProfile', { name: marker.name })
@@ -105,7 +107,7 @@ class GenreMap extends Component {
                                     </View>
                                 </MapView.Callout>
                             </MapView.Marker>
-                        ))}
+                        )})}
                         { directions.time.length>0 && directionPressed &&
                           <MapView.Polyline
                               coordinates={directions.coords}
