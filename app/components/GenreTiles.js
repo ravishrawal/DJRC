@@ -1,18 +1,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native';
-const Icons = require('./Icons');
-import {fetchGenres} from '../redux/genres'
-import {tokenUser} from '../redux/user'
-import {fetchSpotifyBars} from '../redux/spotifyBars'
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
+import {fetchGenres} from '../redux/genres';
+import {tokenUser} from '../redux/user';
+// import {fetchSpotifyBars} from '../redux/spotifyBars';
 
-let { width, height } = Dimensions.get('window')
+const Icons = require('./Icons');
+let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {
   componentDidMount(){
     this.props.fetchGenres();
     this.props.fetchUser();
-    // this.props.fetchSpotifyBars();
   }
   render() {
     const genres = this.props.genres.length && this.props.genres;
@@ -62,8 +61,9 @@ const styles = StyleSheet.create({
   },
   genreText: {
     alignSelf: 'center',
+    fontFamily: 'zilla-slab-regular',
     fontSize: 20,
-    color: '#f7f7f7'
+    color: '#f7f7f7',
   }
 });
 
@@ -80,10 +80,10 @@ const mapDispatch = (dispatch) => {
         fetchUser: () => {
           dispatch(tokenUser());
         },
-        fetchSpotifyBars: () => {
-          dispatch(fetchSpotifyBars());
-        }
-    }
-}
+        // fetchSpotifyBars: () => {
+        //   dispatch(fetchSpotifyBars());
+        // }
+    };
+};
 
 export default connect(mapState, mapDispatch)(GenreTiles);

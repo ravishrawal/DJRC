@@ -33,7 +33,7 @@ const LoggedOutNav = StackNavigator({
 }, {
     headerMode: 'none'
   });
-  
+
   const LoggedInNav = StackNavigator({
     Home: { screen: UserTabs },
     Map: { screen: GenreMap },
@@ -41,12 +41,12 @@ const LoggedOutNav = StackNavigator({
   }, {
       headerMode: 'none'
     });
-  
+
 
 class Nav extends Component{
-  
+
   render(){
-    
+
     const {user} = this.props;
     // const Tab = user.id ? UserTabs : Tabs;
     const Tab = user.id ? LoggedInNav : LoggedOutNav;

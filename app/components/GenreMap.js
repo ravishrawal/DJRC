@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-nat
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
-import { fetchBarsFromServer } from '../redux/bars';
+import {} from '../redux/bars';
 import { getDirectionsToBar } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
@@ -102,7 +102,7 @@ class GenreMap extends Component {
                                             title='Profile' />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
-                                            <Text> Great Song! </Text>
+                                            <Text> {marker.currentSong}</Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
