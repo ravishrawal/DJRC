@@ -34,7 +34,7 @@ const getSongsFromSpotify = (bar) => {
 
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
-        axios.get('https://djrc-api.herokuapp.com/api/venues')
+        axios.get('http://192.168.0.14:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));

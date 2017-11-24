@@ -63,12 +63,14 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
+
+        bars = bars.slice(0,10)
         return (
             <View style={styles.container}>
                     <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
-                        initialRegion={ currentLocation.latitude && Object.assign({}, currentLocation, regionSize) }
+                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
