@@ -4,7 +4,6 @@ import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-nat
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
-import {} from '../redux/bars';
 import { getDirectionsToBar } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
@@ -34,7 +33,6 @@ class GenreMap extends Component {
         navigator.geolocation.getCurrentPosition((res, rej) => {
             res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
         })
-        this.props.fetchBarsFromServer();
     }
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
@@ -102,7 +100,7 @@ class GenreMap extends Component {
                                             title='Profile' />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
-                                            <Text> {marker.currentSong}</Text>
+                                            <Text> Great Song! </Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
@@ -172,9 +170,7 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-        fetchBarsFromServer: () => {
-            dispatch(fetchBarsFromServer());
-        },
+
         getDirections: (start, end) => {
           dispatch(getDirectionsToBar(start, end))
         }
