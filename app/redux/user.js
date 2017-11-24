@@ -50,10 +50,19 @@ export const tokenUser = () => {
     }
 }
 
-
+export const spotifyLogin = (token) => {
+    return (dispatch) => {
+        AsyncStorage.setItem('jwt', token)
+            .then(() => {
+                dispatch(tokenUser());
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+}
 
 export const signUp = (credentials) => {
-    return () => {
+   return () => {
         axios.post('http://192.168.0.14:3002/passportAuth/signup', credentials)
             .then((res) => res.data)
             .then(() => {
@@ -62,35 +71,9 @@ export const signUp = (credentials) => {
             .catch(error => {
                 alert('Email already in use!');
             })
-    }
+        }
 }
 
-export const getSongsFromUser = () => {
-    AsyncStorage.getItem('jwt')
-        .then(token => {
-            console.log('asdfs');
-            axios.get(`http://192.168.0.14:3002/api/songs/${token}`)
-        })
-
-}
-
-export const spotifyLogin = (token) => {
-    return (dispatch) => {
-        AsyncStorage.setItem('jwt', token)
-            .then(() => {
-                axios.get(`http://192.168.0.14:3002/api/songs/${token}`)
-                    .then((songs) => {
-
-                        console.log('a');
-                        dispatch(tokenUser())
-
-                    })
-
-            }).catch(err => {
-                console.log(err)
-            })
-    }
-}
 
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
