@@ -7,6 +7,7 @@ import GenreMap from './GenreMap';
 import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
+import BarOwner from './BarOwner'
 
 const Tabs = TabNavigator({
   Home: { screen: GenreTiles },
@@ -42,6 +43,14 @@ const LoggedOutNav = StackNavigator({
       headerMode: 'none'
     });
 
+    const LoggedInOwner = StackNavigator({
+
+    MyBar: { screen: BarOwner },
+    SignUpOrIn: { screen: SignUpOrIn }
+  }, {
+      headerMode: 'none'
+    });
+
 
 class Nav extends Component{
 
@@ -49,7 +58,8 @@ class Nav extends Component{
 
     const {user} = this.props;
     // const Tab = user.id ? UserTabs : Tabs;
-    const Tab = user.id ? LoggedInNav : LoggedOutNav;
+    console.log(user);
+    const Tab = user.id ? (user.isBusiness ? LoggedInOwner : LoggedInNav) : LoggedOutNav;
     return (
       <Tab />
     )
