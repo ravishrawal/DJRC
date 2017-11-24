@@ -37,37 +37,40 @@ export const fetchBarsFromServer = () => {
         axios.get('https://djrc-api.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
-                if (!bars) return;
-                bars = bars.length && bars.map(bar => {
-                    let genres = [];
-                    let genreNames = [];
-                    bar.genres.forEach(genre => {
-                        genres.push(genre.id)
-                        genreNames.push(genre.name)
-                    })
-                    return {
-                        id: bar.id,
-                        lat: bar.lat,
-                        lon: bar.lon,
-                        name: bar.name,
-                        address: bar.address,
-                        genres: genres,
-                        owner: bar.Owner,
-                        genreNames
-                    }
-                })
-                return bars
-            })
-            .then(bars => {
-                bars = bars.map(bar => {
-                    return getSongsFromSpotify(bar);
-                })
-                return Promise.all(bars)
-            })
-            .then(bars => {
                 dispatch(getBars(bars));
-            })
-            .catch(console.log);
+            }).catch(console.log);
+            
+//                 if (!bars) return;
+//                 bars = bars.length && bars.map(bar => {
+//                     let genres = [];
+//                     let genreNames = [];
+//                     bar.genres.forEach(genre => {
+//                         genres.push(genre.id)
+//                         genreNames.push(genre.name)
+//                     })
+//                     return {
+//                         id: bar.id,
+//                         lat: bar.lat,
+//                         lon: bar.lon,
+//                         name: bar.name,
+//                         address: bar.address,
+//                         genres: genres,
+//                         owner: bar.Owner,
+//                         genreNames
+//                     }
+//                 })
+//                 return bars
+//             })
+//             .then(bars => {
+//                 bars = bars.map(bar => {
+//                     return getSongsFromSpotify(bar);
+//                 })
+//                 return Promise.all(bars)
+//             })
+//             .then(bars => {
+//                 dispatch(getBars(bars));
+//             })
+//             .catch(console.log);
 
     }
 }
