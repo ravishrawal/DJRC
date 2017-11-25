@@ -2,41 +2,46 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
 import { Card, ListItem, List, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { logoutUser } from '../redux/user'
-import { fetchOneBar } from '../redux/bars'
+import { logoutUser, fetchOwner } from '../redux/user'
+// import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
 
 class BarOwner extends Component {
   constructor(){
     super()
     this.state = {
-      formVisible: false
+      formVisible: false,
+
     }
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
+    // this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.logout = this.logout.bind(this);
   }
 
-  // componentWillMount(){
-  //   const currentBar = fetchOneBar(this.props.user.id);
-  //   this.setState({
-  //     bar: currentBar
-  //   })
-  // }
+
 
     logout() {
       const { navigate } = this.props.navigation;
       this.props.logoutUser(navigate);
     }
 
-    onSubmitHandler(ev){
-      ev.preventDefault();
-      this.setState({
-        formVisible: !this.state.formVisible
-      })
-    }
+    // componentWillMount(){
+    //   this.setState({
+    //     bar: fetchOneBar(this.props.user.id)
+    //   })
+    // }
+
+    // onSubmitHandler(ev){
+    //   ev.preventDefault();
+    //   this.setState({
+    //     formVisible: !this.state.formVisible
+    //   })
+    // }
   render() {
     console.log(this.state, "state")
     console.log(this.props, "props")
+    const venue = this.props.fetchOwner(this.props.user.id)
+    console.log(venue)
+
     const genres = [
     {name: 'rap',
     id: 1},
@@ -165,9 +170,8 @@ const mapDispatch = (dispatch) => {
         logoutUser: (navigate) => {
             dispatch(logoutUser(navigate));
         },
-        fetchOneBar:(user) =>{
-          dispatch(fetchOneBar(user));
-        }
+        fetchOwner: fetchOwner
+        // fetchOneBar: fetchOneBar
     }
 }
 

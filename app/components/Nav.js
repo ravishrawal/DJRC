@@ -27,6 +27,14 @@ const UserTabs = TabNavigator({
   }
 )
 
+const OwnerTabs = TabNavigator({
+  MyBar: {screen: BarOwner },
+  Map: { screen: GenreMap }
+}, {
+  tabBarPosition: 'bottom'
+  }
+)
+
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
   Map: { screen: GenreMap },
@@ -44,8 +52,8 @@ const LoggedOutNav = StackNavigator({
     });
 
     const LoggedInOwner = StackNavigator({
-
-    MyBar: { screen: BarOwner },
+    MyBar: { screen: OwnerTabs },
+    Map: { screen: GenreMap }
   }, {
       headerMode: 'none'
     });
@@ -57,7 +65,7 @@ class Nav extends Component{
 
     const {user} = this.props;
     // const Tab = user.id ? UserTabs : Tabs;
-    console.log(user);
+
     const Tab = user.id ? (user.isBusiness ? LoggedInOwner : LoggedInNav) : LoggedOutNav;
     return (
       <Tab />

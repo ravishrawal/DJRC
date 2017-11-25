@@ -11,11 +11,11 @@ const getGenres = (genres) => {
 
 export const fetchGenres = () => {
     return (dispatch) => {
-        axios.get('https://djrc-api.herokuapp.com/api/genres')
+        axios.get('http://192.168.0.17:3002/api/genres')
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {
-                    console.log(genre.id, genre.name);
+
                     return { key: genre.id, name: genre.name };
                 })
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 var SpotifyWebApi = require('spotify-web-api-js');
 
 const GET_BARS = 'GET_BARS';
-const GET_ONE_BAR = 'GET_ONE_BAR';
+// const GET_ONE_BAR = 'GET_ONE_BAR';
 
 
 const getBars = (bars) => {
@@ -12,12 +12,12 @@ const getBars = (bars) => {
     }
 }
 
-const getOneBar = (bar) => {
-    return {
-        type: GET_ONE_BAR,
-        bar
-    }
-}
+// const getOneBar = (bar) => {
+//     return {
+//         type: GET_ONE_BAR,
+//         bar
+//     }
+// }
 
 
 const getSongsFromSpotify = (bar) => {
@@ -40,20 +40,22 @@ const getSongsFromSpotify = (bar) => {
     })
 }
 
-export const fetchOneBar = (userId) => {
-    return (dispatch) => {
-        axios.get(`https://djrc-api.herokuapp.com/api/venues/owner/${userId}`)
-        .then(res => res.data)
-        .then(bar => {
-            dispatch(getOneBar(bar))
-        })
-        .catch(console.log('error'))
-    }
-}
+// export const fetchOneBar = (userId) => {
+//     return (dispatch) => {
+//         console.log('second')
+//         axios.get(`http://192.168.0.17:3002/api/venues/owner/${userId}`)
+//         .then(res => res.data)
+//         .then(bar => {
+//             dispatch(getOneBar(bar))
+//         })
+//         .catch(console.log('error'))
+//     }
+// }
 
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
-        axios.get('https://djrc-api.herokuapp.com/api/venues')
+
+        axios.get('http://192.168.0.17:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));
@@ -99,8 +101,8 @@ export default (state = [], action) => {
     switch (action.type) {
         case GET_BARS:
             return action.bars
-        case GET_ONE_BAR:
-            return action.bar
+        // case GET_ONE_BAR:
+        //     return action.bar
         default:
             return state;
     }
