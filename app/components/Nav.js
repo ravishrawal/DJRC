@@ -46,7 +46,6 @@ const LoggedOutNav = StackNavigator({
     const LoggedInOwner = StackNavigator({
 
     MyBar: { screen: BarOwner },
-    SignUpOrIn: { screen: SignUpOrIn }
   }, {
       headerMode: 'none'
     });
