@@ -6,9 +6,8 @@ import thunkMiddleware from 'redux-thunk'
 import bars from './bars'
 import genres from './genres'
 import user from './user'
-import spotifyBars from './spotifyBars'
 
-const reducer = combineReducers({ bars, genres, user, spotifyBars });
+const reducer = combineReducers({ bars, genres, user });
 
 
 const middleware = applyMiddleware(thunkMiddleware);

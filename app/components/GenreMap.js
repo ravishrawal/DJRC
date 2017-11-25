@@ -63,12 +63,15 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
+        
+        bars = bars.slice(0,10)
         return (
             <View style={styles.container}>
+            {currentLocation.latitude &&
                     <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
-                        initialRegion={ currentLocation.latitude && Object.assign({}, currentLocation, regionSize) }
+                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
@@ -100,7 +103,7 @@ class GenreMap extends Component {
                                             title='Profile' />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
-                                            <Text> Great Song! </Text>
+                                            <Text> {marker.songs && marker.songs[0].song} </Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
@@ -115,6 +118,7 @@ class GenreMap extends Component {
                               strokeColor="rgba(255,140,0,0.8)"/>
                         }
                     </MapView>
+                    }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
