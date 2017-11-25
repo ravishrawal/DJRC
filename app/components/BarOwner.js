@@ -3,6 +3,7 @@ import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, Touchable
 import { Card, ListItem, List, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
+import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
 
 class BarOwner extends Component {
@@ -14,6 +15,13 @@ class BarOwner extends Component {
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.logout = this.logout.bind(this);
   }
+
+  // componentWillMount(){
+  //   const currentBar = fetchOneBar(this.props.user.id);
+  //   this.setState({
+  //     bar: currentBar
+  //   })
+  // }
 
     logout() {
       const { navigate } = this.props.navigation;
@@ -27,6 +35,8 @@ class BarOwner extends Component {
       })
     }
   render() {
+    console.log(this.state, "state")
+    console.log(this.props, "props")
     const genres = [
     {name: 'rap',
     id: 1},
@@ -154,6 +164,9 @@ const mapDispatch = (dispatch) => {
     return {
         logoutUser: (navigate) => {
             dispatch(logoutUser(navigate));
+        },
+        fetchOneBar:(user) =>{
+          dispatch(fetchOneBar(user));
         }
     }
 }

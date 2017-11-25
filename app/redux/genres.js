@@ -11,7 +11,7 @@ const getGenres = (genres) => {
 
 export const fetchGenres = () => {
     return (dispatch) => {
-        axios.get('https://djrc-api.herokuapp.com/api/genres')
+        axios.get('http://djrc-api.herokuapp.com/api/genres')
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {

@@ -33,7 +33,7 @@ export const tokenUser = () => {
         AsyncStorage.getItem('jwt', (err, token) => {
             if (err) return err;
             if (!token) return {};
-            axios.get('https://djrc-api.herokuapp.com/passportAuth/getUser', {
+            axios.get('http://djrc-api.herokuapp.com//passportAuth/getUser', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `JWT ${token}`
@@ -63,7 +63,7 @@ export const spotifyLogin = (token) => {
 
 export const signUp = (credentials) => {
    return () => {
-        axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
+        axios.post('http://djrc-api.herokuapp.com//passportAuth/signup', credentials)
             .then((res) => res.data)
             .then(() => {
                 alert('Success! You may now log in.');
@@ -76,7 +76,7 @@ export const signUp = (credentials) => {
 
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
-        axios.post('https://djrc-api.herokuapp.com/passportAuth/login', credentials)
+        axios.post('http://djrc-api.herokuapp.com//passportAuth/login', credentials)
             .then((res) => res.data)
             .then((res) => {
                 if (res.error) {
