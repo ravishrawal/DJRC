@@ -42,7 +42,7 @@ const getSongsFromSpotify = (bar) => {
 
 export const fetchOneBar = (userId) => {
     return (dispatch) => {
-        axios.get(`http://djrc-api.herokuapp.com/api/venues/owner/${userId}`)
+        axios.get(`https://djrc-api.herokuapp.com/api/venues/owner/${userId}`)
         .then(res => res.data)
         .then(bar => {
             dispatch(getOneBar(bar))
@@ -53,7 +53,7 @@ export const fetchOneBar = (userId) => {
 
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
-        axios.get('http://djrc-api.herokuapp.com/api/venues')
+        axios.get('https://djrc-api.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));
