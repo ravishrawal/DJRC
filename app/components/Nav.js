@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
-import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../helper/colors.js';
 
 import GenreTiles from './GenreTiles';
@@ -22,8 +23,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'zilla-slab-regular',
-    fontSize: 20,
-    marginBottom: 12,
+    // fontSize: 20,
+    // marginBottom: 12,
   },
   icon: {
     backgroundColor: 'green',
@@ -34,21 +35,54 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     borderTopColor: '#fff',
     borderTopWidth: StyleSheet.hairlineWidth,
-    // borderTopWidth: 1,
-    shadowOffset: { width: 0, height: -4 },
     shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.5,
   },
 });
 
 const Tabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap },
-  Login: { screen: SignUpOrIn }
+  Home: {
+    screen: GenreTiles,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={focused ? 'ios-musical-notes' : 'ios-musical-notes-outline'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Map: {
+    screen: GenreMap,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={focused ? 'ios-map' : 'ios-map-outline'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Login: {
+    screen: SignUpOrIn,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={focused ? 'ios-settings' : 'ios-settings-outline'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  }
 }, {
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.pink,
+    inactiveTintColor: colors.gray,
     iconStyle: styles.icon,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
@@ -66,8 +100,12 @@ const UserTabs = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.pink,
+    inactiveTintColor: colors.gray,
+    iconStyle: styles.icon,
+    indicatorStyle: styles.indicator,
     labelStyle: styles.label,
-    tabStyle: styles.tab,
+    // tabStyle: styles.tab,
+    style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
 });
