@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
-// import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
 
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     width: 0,
   },
   label: {
-    fontFamily: 'zilla-slab-regular',
+    fontFamily: fonts.zilla,
     // fontSize: 20,
     // marginBottom: 12,
   },
@@ -46,8 +46,8 @@ const Tabs = TabNavigator({
     screen: GenreTiles,
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'ios-musical-notes' : 'ios-musical-notes-outline'}
+        <FontAwesome
+          name={'music'}
           size={26}
           style={{ color: tintColor }}
         />
@@ -58,8 +58,8 @@ const Tabs = TabNavigator({
     screen: GenreMap,
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'ios-map' : 'ios-map-outline'}
+        <FontAwesome
+          name={'map'}
           size={26}
           style={{ color: tintColor }}
         />
@@ -70,8 +70,8 @@ const Tabs = TabNavigator({
     screen: SignUpOrIn,
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor, focused }) => (
-        <Ionicons
-          name={focused ? 'ios-settings' : 'ios-settings-outline'}
+        <FontAwesome
+          name={'gear'}
           size={26}
           style={{ color: tintColor }}
         />
@@ -125,8 +125,6 @@ const LoggedInNav = StackNavigator({
 }, {
   headerMode: 'none'
 });
-
-// let { width, height } = Dimensions.get('window');
 
 class Nav extends Component {
 
