@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
+import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from '../helper/colors.js';
 
 import GenreTiles from './GenreTiles';
 import GenreMap from './GenreMap';
@@ -9,20 +11,49 @@ import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
 
-// const initialLayout = {
-//   height: 0,
-//   width: Dimensions.get('window').width,
-// };
+const styles = StyleSheet.create({
+  // tab: {
+  //   borderRightColor: '#fff',
+  //   borderRightWidth: 1,
+  // },
+  indicator: {
+    height: 0,
+    width: 0,
+  },
+  label: {
+    fontFamily: 'zilla-slab-regular',
+    fontSize: 20,
+    marginBottom: 12,
+  },
+  icon: {
+    backgroundColor: 'green',
+    height: 20,
+    width: 20,
+  },
+  tabBar: {
+    backgroundColor: colors.offWhite,
+    borderTopColor: '#fff',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    // borderTopWidth: 1,
+    shadowOffset: { width: 0, height: -4 },
+    shadowColor: '#ccc',
+    shadowOpacity: 0.5,
+  },
+});
 
 const Tabs = TabNavigator({
   Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
-  SignUpOrIn: { screen: SignUpOrIn }
+  Login: { screen: SignUpOrIn }
 }, {
   animationEnabled: true,
-  // initialLayout: { initialLayout },
   tabBarOptions: {
-    activeTintColor: '#e91e63',
+    activeTintColor: colors.pink,
+    iconStyle: styles.icon,
+    indicatorStyle: styles.indicator,
+    labelStyle: styles.label,
+    // tabStyle: styles.tab,
+    style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
 });
@@ -32,7 +63,13 @@ const UserTabs = TabNavigator({
   Map: { screen: GenreMap },
   Profile: { screen: Profile }
 }, {
-  tabBarPosition: 'bottom'
+  animationEnabled: true,
+  tabBarOptions: {
+    activeTintColor: colors.pink,
+    labelStyle: styles.label,
+    tabStyle: styles.tab,
+  },
+  tabBarPosition: 'bottom',
 });
 
 const LoggedOutNav = StackNavigator({
@@ -51,9 +88,9 @@ const LoggedInNav = StackNavigator({
   headerMode: 'none'
 });
 
-let { width, height } = Dimensions.get('window');
+// let { width, height } = Dimensions.get('window');
 
-class Nav extends Component{
+class Nav extends Component {
 
   render() {
 
@@ -61,38 +98,10 @@ class Nav extends Component{
     // const Tab = user.id ? UserTabs : Tabs;
     const Tab = user.id ? LoggedInNav : LoggedOutNav;
     return (
-      <View style={styles.container}>
-        <Tab />
-      </View>
+      <Tab />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#f7f7f7',
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 50,
-  },
-  buttonStyle: {
-    backgroundColor: '#ff4554',
-    borderColor: '#00c3e3',
-    borderRadius: 2,
-    borderWidth: 3,
-    height: (height - 150) / 5,
-    justifyContent: 'center',
-    margin: 5,
-    width: (width - 20) / 2,
-  },
-  genreText: {
-    alignSelf: 'center',
-    color: '#f7f7f7',
-    fontFamily: 'zilla-slab-regular',
-    fontSize: 20,
-  },
-});
 
 const mapState = ({ user, navigation}) => {
   return { user, navigation };
