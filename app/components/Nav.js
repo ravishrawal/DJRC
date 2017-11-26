@@ -130,7 +130,7 @@ class Nav extends Component {
   }
 }
 
-const mapState = ({ user, navigation}) => {
+const mapState = ({ user, navigation }) => {
   return { user, navigation };
 };
 
