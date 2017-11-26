@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
@@ -13,23 +13,17 @@ import Profile from './Profile';
 import BarProfile from './BarProfile';
 
 const styles = StyleSheet.create({
-  // tab: {
-  //   borderRightColor: '#fff',
-  //   borderRightWidth: 1,
-  // },
+  icon: {
+    backgroundColor: 'green',
+    height: 20,
+    width: 20,
+  },
   indicator: {
     height: 0,
     width: 0,
   },
   label: {
     fontFamily: fonts.zilla,
-    // fontSize: 20,
-    // marginBottom: 12,
-  },
-  icon: {
-    backgroundColor: 'green',
-    height: 20,
-    width: 20,
   },
   tabBar: {
     backgroundColor: colors.offWhite,
@@ -45,7 +39,7 @@ const Tabs = TabNavigator({
   Home: {
     screen: GenreTiles,
     navigationOptions: () => ({
-      tabBarIcon: ({ tintColor, focused }) => (
+      tabBarIcon: ({ tintColor }) => (
         <FontAwesome
           name={'music'}
           size={26}
@@ -57,7 +51,7 @@ const Tabs = TabNavigator({
   Map: {
     screen: GenreMap,
     navigationOptions: () => ({
-      tabBarIcon: ({ tintColor, focused }) => (
+      tabBarIcon: ({ tintColor }) => (
         <FontAwesome
           name={'map'}
           size={26}
@@ -69,7 +63,7 @@ const Tabs = TabNavigator({
   Login: {
     screen: SignUpOrIn,
     navigationOptions: () => ({
-      tabBarIcon: ({ tintColor, focused }) => (
+      tabBarIcon: ({ tintColor }) => (
         <FontAwesome
           name={'gear'}
           size={26}
@@ -131,7 +125,6 @@ class Nav extends Component {
   render() {
 
     const { user } = this.props;
-    // const Tab = user.id ? UserTabs : Tabs;
     const Tab = user.id ? LoggedInNav : LoggedOutNav;
     return (
       <Tab />
