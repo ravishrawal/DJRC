@@ -11,6 +11,7 @@ import GenreMap from './GenreMap';
 import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
+import Record from './Record'
 
 const styles = StyleSheet.create({
   icon: {
@@ -71,6 +72,9 @@ const Tabs = TabNavigator({
         />
       ),
     }),
+  },
+  Record: {
+    screen: Record
   }
 }, {
   animationEnabled: true,
