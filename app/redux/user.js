@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { WebBrowser } from 'expo';
+import { setOwner } from './owner';
 
 const SET_USER = 'SET_USER';
 const REMOVE_USER = 'REMOVE_USER';
-const GET_OWNER = 'GET_OWNER';
+
 
 const setUser = (user) => {
     return {
@@ -19,21 +20,8 @@ const removeUser = () => {
     }
 }
 
-export const getOwner = (owner) => {
-   return {
-        type: GET_OWNER,
-        owner
-    }
-}
 
-export const fetchOwner = (ownerId) => {
-    return (dispatch) => {
-        axios.get(`http://192.168.0.17:3002/api/owner/${ownerId}`)
-        .then((owner)=> {
-            dispatch(getOwner(owner))
-        })
-    }
-}
+
 
 export const logoutUser = (navigate) => {
     return (dispatch) => {
@@ -58,7 +46,20 @@ export const tokenUser = () => {
             })
                 .then(res => res.data)
                 .then(user => {
+
+                    if (user.isBusiness){
+
+                    axios.get(`http://192.168.0.17:3002/api/venues/owner/${user.id}`)
+                    .then(res => res.data)
+                    .then(venue => {
+                        dispatch(setOwner(venue))
+                    })
+                    }
+
+
+
                     dispatch(setUser(user))
+
                 }).catch(console.log)
 
         }).catch(err => {
@@ -117,9 +118,8 @@ export default (state = {}, action) => {
             return Object.assign({}, state, action.user)
         case REMOVE_USER:
             return {};
-        case GET_OWNER:
-            return action.owner
         default:
             return state;
     }
 }
+

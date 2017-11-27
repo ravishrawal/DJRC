@@ -1,5 +1,4 @@
 import axios from 'axios';
-var SpotifyWebApi = require('spotify-web-api-js');
 
 const GET_BARS = 'GET_BARS';
 // const GET_ONE_BAR = 'GET_ONE_BAR';
@@ -19,6 +18,10 @@ const getBars = (bars) => {
 //     }
 // }
 
+export function updateGenres (venueId, genreArr) {
+  return axios.put(`http://192.168.0.17:3002/api/venues/${venueId}`, genreArr)
+  .then(res => res.data)
+}
 
 const getSongsFromSpotify = (bar) => {
     return new Promise((resolve, reject) => {
@@ -42,7 +45,7 @@ const getSongsFromSpotify = (bar) => {
 
 // export const fetchOneBar = (userId) => {
 //     return (dispatch) => {
-//         console.log('second')
+//
 //         axios.get(`http://192.168.0.17:3002/api/venues/owner/${userId}`)
 //         .then(res => res.data)
 //         .then(bar => {
@@ -52,6 +55,7 @@ const getSongsFromSpotify = (bar) => {
 //     }
 // }
 
+
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
 
@@ -59,6 +63,7 @@ export const fetchBarsFromServer = () => {
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));
+
             }).catch(console.log);
 
 //                 if (!bars) return;
@@ -92,6 +97,9 @@ export const fetchBarsFromServer = () => {
 //                 dispatch(getBars(bars));
 //             })
 //             .catch(console.log);
+
+
+
 
     }
 }

@@ -15,7 +15,6 @@ export const fetchGenres = () => {
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {
-
                     return { key: genre.id, name: genre.name };
                 })
 

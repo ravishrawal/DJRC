@@ -6,9 +6,9 @@ import thunkMiddleware from 'redux-thunk'
 import bars from './bars'
 import genres from './genres'
 import user from './user'
-import spotifyBars from './spotifyBars'
+import owner from './owner'
 
-const reducer = combineReducers({ bars, genres, user, spotifyBars });
+const reducer = combineReducers({ bars, genres, user, owner });
 
 
 const middleware = applyMiddleware(thunkMiddleware);
@@ -20,3 +20,4 @@ export default store;
 export * from './bars';
 export * from './genres';
 export * from './directions';
+export * from './owner';

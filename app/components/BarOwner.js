@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
 import { Card, ListItem, List, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { logoutUser, fetchOwner } from '../redux/user'
+import { logoutUser } from '../redux/user'
+import { updateGenres } from '../redux/bars'
+import { fetchGenres } from '../redux/genres';
+
 // import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
 
@@ -11,24 +14,38 @@ class BarOwner extends Component {
     super()
     this.state = {
       formVisible: false,
+      genreArr: [1]
 
     }
     // this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.logout = this.logout.bind(this);
+    this.updateGenre = this.updateGenre.bind(this);
+    this.submitGenreUpdate = this.submitGenreUpdate.bind(this);
+  }
+
+  componentDidMount(){
+    this.props.fetchGenres();
+  }
+
+  logout() {
+    const { navigate } = this.props.navigation;
+    this.props.logoutUser(navigate);
+  }
+
+  updateGenre(genre) {
+    let newGenres = [this.state.genreArr[0]]
+    newGenres[0] = genre;
+    this.setState({
+      genreArr: newGenres
+    })
   }
 
 
+  submitGenreUpdate(){
+    this.props.updateGenres(this.props.owner.id, this.state.genreArr)
+  }
 
-    logout() {
-      const { navigate } = this.props.navigation;
-      this.props.logoutUser(navigate);
-    }
 
-    // componentWillMount(){
-    //   this.setState({
-    //     bar: fetchOneBar(this.props.user.id)
-    //   })
-    // }
 
     // onSubmitHandler(ev){
     //   ev.preventDefault();
@@ -37,28 +54,15 @@ class BarOwner extends Component {
     //   })
     // }
   render() {
-    console.log(this.state, "state")
-    console.log(this.props, "props")
-    const venue = this.props.fetchOwner(this.props.user.id)
-    console.log(venue)
+    // console.log(this.state, "state")
+    // console.log(this.props, "props")
+    // console.log(venue)
 
-    const genres = [
-    {name: 'rap',
-    id: 1},
-    {name: 'chill',
-    id: 2}
-    ];
+    const { updateGenre, submitGenreUpdate } = this;
 
-    const allGenres = [
-    {name: 'rap',
-    id: 1},
-    {name: 'chill',
-    id: 2},
-    {name: 'country',
-    id: 3},
-    {name: 'pop',
-    id: 4}
-    ];
+    const genres = this.state.genreArr
+
+    const allGenres = this.props.genres.length && this.props.genres;
 
     const promos = [
     {name: 'Buy 1 get 1 free'},
@@ -67,7 +71,7 @@ class BarOwner extends Component {
 
     return (
       <View style={styles.container}>
-        <Card title = 'Your Bar Name' >
+        <Card title = { this.props.owner.name } >
           <Text stlye={{ marginBottom: 10}}>
             This is info about your bar. Maybe Stats?
           </Text>
@@ -91,26 +95,26 @@ class BarOwner extends Component {
             </List>
             */}
             <Text stlye={{ marginBottom: 10}}>
-              Current Genres
+              Update Your Genre
             </Text>
             <Picker
-            // selectedValue={genres[0]}
-            onValueChange={(itemValue)=> genres[0].name = itemValue}>
+            selectedValue={genres[0]}
+            onValueChange={ updateGenre }>
               {allGenres.map((gen)=> (
-                <Picker.Item label={gen.name} value={gen.name} key={gen.id} />
+                <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
                 ))}
             </Picker>
-            <Picker selectedValue={genres[1]}>
-              {allGenres.map((gen)=> (
-                <Picker.Item label={gen.name} value={gen.name} key={gen.id} />
-                ))}
-            </Picker>
+
             <Button
-              raised
-              iconRight
-              icon={{ name: 'music'}}
+              onPress = { submitGenreUpdate }
+              title= 'Submit Genre Changes'
+            />
+
+
+            <Button
               onPress={() => alert('Add Promo!')}
-              title='Add Promo!' />
+              title='Add Promo!'
+            />
 
             <Text stlye={{ marginBottom: 10}}>
               Current Promos
@@ -129,9 +133,7 @@ class BarOwner extends Component {
           <Text style={[styles.button, styles.greenButton]}>Logout</Text>
         </TouchableHighlight>
         </Card>
-        <TouchableHighlight onPress={this.logout}>
-          <Text style={[styles.button, styles.greenButton]}>Logout</Text>
-        </TouchableHighlight>
+
       </View>
     )
   }
@@ -159,9 +161,11 @@ const styles = StyleSheet.create({
     },
 })
 
-const mapState = ({ user }) => {
+const mapState = ({ genres, user, owner }) => {
     return {
-        user
+        user,
+        genres,
+        owner
     }
 }
 
@@ -170,8 +174,10 @@ const mapDispatch = (dispatch) => {
         logoutUser: (navigate) => {
             dispatch(logoutUser(navigate));
         },
-        fetchOwner: fetchOwner
-        // fetchOneBar: fetchOneBar
+        fetchGenres: () => {
+          dispatch(fetchGenres());
+        },
+        updateGenres
     }
 }
 
