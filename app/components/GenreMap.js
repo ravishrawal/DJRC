@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
+import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
 import { MapView } from 'expo';
-import { SearchBar, Card, ListItem, List } from 'react-native-elements';
+import { Card, ListItem, List } from 'react-native-elements';
 import { getDirectionsToBar } from '../redux';
 
 import BarProfile from './BarProfile';
@@ -54,8 +54,8 @@ class GenreMap extends Component {
         // this.state.directionPressed = !this.state.directionPressed;
         if (this.state.directionPressed) {
             let { currentLocation, markerSelected } = this.state;
-            getDirectionsToBar({latitude:currentLocation.latitude, longitude:currentLocation.longitude}, {latitude:markerSelected.lat, longitude:markerSelected.lon})
-            .then(res => this.setState({ directions : res }))
+            getDirectionsToBar({ latitude: currentLocation.latitude, longitude: currentLocation.longitude}, {latitude: markerSelected.lat, longitude: markerSelected.lon })
+            .then(res => this.setState({ directions: res }))
             .catch(er => console.log(er));
         } else {
             this.setState({ directions: { coords: [], time: '' } });
@@ -71,7 +71,7 @@ class GenreMap extends Component {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
 
-        bars = bars.slice(0,10);
+        bars = bars.slice(0, 10);
         return (
             <View style={styles.container}>
             {currentLocation.latitude &&
@@ -83,7 +83,7 @@ class GenreMap extends Component {
                         showsCompass={true}
                         onPress={this.onMapPress}>
                         {bars.map(marker => {
-                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName ===selectedGenreName }).replace(/\s+/,"")] : Icons[ marker.genreNames[0].replace(/\s+/,"")]
+                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[ marker.genreNames[0].replace(/\s+/, '')];
                           return (
                             <MapView.Marker
                                 coordinate={{
@@ -94,20 +94,20 @@ class GenreMap extends Component {
                                 onPress={this.onMarkerClick.bind(this, marker)}
                                 image={ icon }
                             >
-                                <MapView.Callout style={styles.callout} onPress={() =>
-                                    navigate('SampleProfile', { name: marker.name })
-                                  } >
+                                <MapView.Callout
+                                    style={styles.callout}
+                                    onPress={() => navigate('SampleProfile', { name: marker.name })}>
                                     <View style={styles.card}>
                                         <Text style={{ fontWeight: 'bold', fontSize: 25 }}>{marker.name}</Text>
                                         <Text style={{ marginBottom: 10 }}>
                                             Address: {marker.address}</Text>
                                         <Button
                                             icon={{ name: 'code' }}
-                                            backgroundColor='#03A9F4'
+                                            backgroundColor="#03A9F4"
                                             fontFamily={fonts.zilla}
                                             buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                                             onPress={() => console.log('GenreMap: onPress()')}
-                                            title='Profile' />
+                                            title="Profile" />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
                                             <Text> {marker.songs && marker.songs[0].song} </Text>
@@ -120,21 +120,17 @@ class GenreMap extends Component {
                           <MapView.Polyline
                               coordinates={directions.coords}
                               strokeWidth={4}
-                              lineCap='round'
-                              lineJoin='round'
+                              lineCap="round"
+                              lineJoin="round"
                               strokeColor="rgba(255,140,0,0.8)" />
                         }
                     </MapView>
                     }
-                <View style={styles.search}>
-                    <SearchBar
-                        lightTheme
-                        round
-                        placeholder='Type Here...' />
-                </View>
                 { Object.keys(markerSelected).length > 0 &&
                   <View style={styles.polyButton}>
-                    <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
+                    <Button
+                        onPress={this.onPolyButtonPress}
+                        title={ directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' } />
                   </View>
                 }
             </View>
@@ -144,10 +140,20 @@ class GenreMap extends Component {
 }
 
 const styles = StyleSheet.create({
+    callout: {
+        alignItems: 'center',
+    },
+    card: {
+        flex: 10,
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
+    },
+    currentPlaying: {
+        marginTop: 25,
     },
     map: {
         left: 0,
@@ -156,23 +162,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         position: 'absolute',
     },
-    search: {
-        width: width
-    },
-    callout: {
-        alignItems: 'center',
-    },
-    currentPlaying: {
-        marginTop: 25,
-    },
-    card: {
-        flex: 10,
-        alignItems: 'center'
-    },
     polyButton: {
         alignItems: 'center',
-        marginTop: 25
-    }
+        marginTop: 25,
+    },
 });
 
 const mapState = ({ bars, directions }) => {
