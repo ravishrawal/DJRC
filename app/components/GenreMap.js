@@ -8,6 +8,9 @@ import { getDirectionsToBar } from '../redux';
 import BarProfile from './BarProfile';
 import GetDirections from './GetDirections.js';
 
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
 
