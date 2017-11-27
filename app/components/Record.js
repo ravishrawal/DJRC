@@ -62,6 +62,7 @@ export default class Record extends React.Component {
             shouldCorrectPitch: true,
             volume: 1.0,
             rate: 1.0,
+            inn:''
         };
         this.recordingSettings = JSON.parse(JSON.stringify(Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY));
         // // UNCOMMENT THIS TO TEST maxFileSize:
@@ -149,7 +150,6 @@ export default class Record extends React.Component {
         }
 
         const recording = new Audio.Recording();
-        console.log('adsfas');
         await recording.prepareToRecordAsync(this.recordingSettings);
         recording.setOnRecordingStatusUpdate(this._updateScreenForRecordingStatus);
 
@@ -160,10 +160,10 @@ export default class Record extends React.Component {
                 isLoading: false,
             });
         }
-        catch(err){
+        catch (err) {
             console.log('err', err);
         }
-  }
+    }
 
     async _stopRecordingAndEnablePlayback() {
         this.setState({
@@ -175,8 +175,15 @@ export default class Record extends React.Component {
             // Do nothing -- we are already unloaded.
         }
         const info = await FileSystem.getInfoAsync(this.recording.getURI());
+        const uri = info.uri;
+        console.log('uri', info.uri)
         console.log(`FILE INFO: ${JSON.stringify(info)}`);
-        console.log('sadfsa')
+        console.log('asdfs', this.recording);
+        const read = await Expo.FileSystem.readAsStringAsync(uri);
+        console.log('read', read);
+        const inn = await Expo.FileSystem.getInfoAsync(uri);
+        this.setState({inn});
+        console.log('inn', inn);
         await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -195,6 +202,7 @@ export default class Record extends React.Component {
             },
             this._updateScreenForSoundStatus
         );
+        console.log('sound', sound, status)
         this.sound = sound;
         this.setState({
             isLoading: false,
@@ -455,6 +463,7 @@ export default class Record extends React.Component {
                                         PC: {this.state.shouldCorrectPitch ? 'yes' : 'no'}
                                     </Text>
                                 </TouchableHighlight>
+
                             </View>
                             <View />
                         </View>
