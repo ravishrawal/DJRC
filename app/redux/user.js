@@ -38,7 +38,7 @@ export const tokenUser = () => {
         AsyncStorage.getItem('jwt', (err, token) => {
             if (err) return err;
             if (!token) return {};
-            axios.get('https://djrc-barcast.herokuapp.com/passportAuth/getUser', {
+            axios.get('https://djrc-api.herokuapp.com/passportAuth/getUser', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `JWT ${token}`
@@ -49,7 +49,7 @@ export const tokenUser = () => {
 
                     if (user.isBusiness){
 
-                    axios.get(`https://djrc-barcast.herokuapp.com/api/venues/owner/${user.id}`)
+                    axios.get(`https://djrc-api.herokuapp.com/api/venues/owner/${user.id}`)
                     .then(res => res.data)
                     .then(venue => {
                         dispatch(setOwner(venue))
@@ -81,7 +81,7 @@ export const spotifyLogin = (token) => {
 
 export const signUp = (credentials) => {
    return () => {
-        axios.post('https://djrc-barcast.herokuapp.com/passportAuth/signup', credentials)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
             .then((res) => res.data)
             .then(() => {
                 alert('Success! You may now log in.');
@@ -94,7 +94,7 @@ export const signUp = (credentials) => {
 
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
-        axios.post('https://djrc-barcast.herokuapp.com/passportAuth/login', credentials)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/login', credentials)
             .then((res) => res.data)
             .then((res) => {
                 if (res.error) {
