@@ -25,8 +25,8 @@ class GenreMap extends Component {
             },
             markerSelected: {},
             directions: {
-              coords: [],
-              time: ''
+                coords: [],
+                time: ''
             },
             directionPressed: false
         };
@@ -40,24 +40,26 @@ class GenreMap extends Component {
         });
     }
     onMarkerClick(ev) {
-      this.setState({ markerSelected: ev });
+        this.setState({ markerSelected: ev });
     }
 
     onMapPress() {
-      if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0){
-        this.setState({ markerSelected: {} });
-      }
+        if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
+            this.setState({ markerSelected: {} });
+        }
     }
     onPolyButtonPress() {
-      this.state.directionPressed = !this.state.directionPressed;
-      if (this.state.directionPressed) {
-        let { currentLocation, markerSelected } = this.state;
-        getDirectionsToBar({latitude:currentLocation.latitude, longitude:currentLocation.longitude}, {latitude:markerSelected.lat, longitude:markerSelected.lon})
-        .then(res=> this.setState({ directions : res }))
-        .catch(er => console.log(er));
-      } else {
-        this.setState({ directions: { coords: [], time: '' } });
-      }
+        // console.log('this.state.directionPressed =', this.state.directionPressed);
+        this.setState({ directionPressed: !this.state.directionPressed });
+        // this.state.directionPressed = !this.state.directionPressed;
+        if (this.state.directionPressed) {
+            let { currentLocation, markerSelected } = this.state;
+            getDirectionsToBar({latitude:currentLocation.latitude, longitude:currentLocation.longitude}, {latitude:markerSelected.lat, longitude:markerSelected.lon})
+            .then(res => this.setState({ directions : res }))
+            .catch(er => console.log(er));
+        } else {
+            this.setState({ directions: { coords: [], time: '' } });
+        }
     }
     render() {
         const { navigate } = this.props.navigation;
@@ -102,9 +104,9 @@ class GenreMap extends Component {
                                         <Button
                                             icon={{ name: 'code' }}
                                             backgroundColor='#03A9F4'
-                                            fontFamily='Lato'
+                                            fontFamily={fonts.zilla}
                                             buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                            onPress={() => console.log('assadfd')}
+                                            onPress={() => console.log('GenreMap: onPress()')}
                                             title='Profile' />
                                         <View style={styles.currentPlaying}>
                                             <Text>Currently Playing: </Text>
@@ -168,8 +170,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     polyButton: {
-      alignItems: 'center',
-      marginTop: 25
+        alignItems: 'center',
+        marginTop: 25
     }
 });
 
@@ -179,9 +181,8 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-
         getDirections: (start, end) => {
-          dispatch(getDirectionsToBar(start, end));
+            dispatch(getDirectionsToBar(start, end));
         }
     };
 };
