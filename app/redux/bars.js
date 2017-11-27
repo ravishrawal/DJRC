@@ -19,7 +19,7 @@ const getBars = (bars) => {
 // }
 
 export function updateGenres (venueId, genreArr) {
-  return axios.put(`http://192.168.0.17:3002/api/venues/${venueId}`, genreArr)
+  return axios.put(`https://djrc-barcast.herokuapp.com/api/venues/${venueId}`, genreArr)
   .then(res => res.data)
 }
 
@@ -46,7 +46,7 @@ const getSongsFromSpotify = (bar) => {
 // export const fetchOneBar = (userId) => {
 //     return (dispatch) => {
 //
-//         axios.get(`http://192.168.0.17:3002/api/venues/owner/${userId}`)
+//         axios.get(`https://djrc-barcast.herokuapp.com/api/venues/owner/${userId}`)
 //         .then(res => res.data)
 //         .then(bar => {
 //             dispatch(getOneBar(bar))
@@ -59,7 +59,7 @@ const getSongsFromSpotify = (bar) => {
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
 
-        axios.get('http://192.168.0.17:3002/api/venues')
+        axios.get('https://djrc-barcast.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));
