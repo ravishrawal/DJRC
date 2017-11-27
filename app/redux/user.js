@@ -21,8 +21,6 @@ const removeUser = () => {
 }
 
 
-
-
 export const logoutUser = (navigate) => {
     return (dispatch) => {
         AsyncStorage.removeItem('jwt')
@@ -55,9 +53,6 @@ export const tokenUser = () => {
                         dispatch(setOwner(venue))
                     })
                     }
-
-
-
                     dispatch(setUser(user))
 
                 }).catch(console.log)

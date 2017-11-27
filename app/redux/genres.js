@@ -17,7 +17,6 @@ export const fetchGenres = () => {
                 genres = genres.map(genre => {
                     return { key: genre.id, name: genre.name };
                 })
-
                 dispatch(getGenres(genres));
             }).catch(console.log);
 
