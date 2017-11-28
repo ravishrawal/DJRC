@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     width: 0,
   },
   label: {
-    fontFamily: fonts.zilla,
+    fontFamily: fonts.regular,
   },
   tabBar: {
     backgroundColor: colors.offWhite,
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     shadowColor: '#ccc',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.75,
   },
 });
 
@@ -75,7 +75,7 @@ const Tabs = TabNavigator({
 }, {
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: colors.pink,
+    activeTintColor: colors.redOrange,
     iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
@@ -86,13 +86,46 @@ const Tabs = TabNavigator({
 });
 
 const UserTabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap },
-  Profile: { screen: Profile }
+  Home: {
+    screen: GenreTiles,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'music'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Map: {
+    screen: GenreMap,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'map'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Profile: {
+    screen: Profile,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'gear'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
 }, {
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: colors.pink,
+    activeTintColor: colors.redOrange,
     iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
