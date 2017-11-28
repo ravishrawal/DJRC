@@ -134,6 +134,7 @@ class GenreMap extends Component {
                     <Button
                         backgroundColor={colors.redOrange}
                         color="#fff"
+                        fontFamily={fonts.bold}
                         iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
                         onPress={this.onPolyButtonPress}
                         title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
