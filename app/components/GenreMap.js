@@ -113,7 +113,7 @@ class GenreMap extends Component {
                                             onPress={() => console.log('GenreMap: onPress()')} />
                                         <View style={styles.currentPlaying}>
                                             <Text style={styles.currentPlayingText}>Currently Playing: </Text>
-                                            <Text>{marker.songs && marker.songs[0].song}</Text>
+                                            <Text style={styles.currentPlayingTextSong}>{marker.songs && marker.songs[0].song}</Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
@@ -186,8 +186,13 @@ const styles = StyleSheet.create({
     },
     currentPlayingText: {
         color: '#fff',
-        fontFamily: fonts.bold,
+        fontFamily: fonts.regular,
         fontSize: 15,
+    },
+    currentPlayingTextSong: {
+        color: '#fff',
+        fontFamily: fonts.bold,
+        fontSize: 20,
     },
     map: {
         backgroundColor: colors.redOrange,
