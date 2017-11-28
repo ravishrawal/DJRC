@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Dimensions, Text, Button } from 'react-native';
+import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import { MapView } from 'expo';
-import { Card, ListItem, List } from 'react-native-elements';
+import { Button, Card, ListItem, List } from 'react-native-elements';
 import { getDirectionsToBar } from '../redux';
 
 import BarProfile from './BarProfile';
@@ -13,6 +13,7 @@ import fonts from '../helper/fonts.js';
 
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
+const userLocationTitle = 'This is you!'; // changes default: 'My Location'
 
 class GenreMap extends Component {
     constructor(props) {
@@ -21,14 +22,14 @@ class GenreMap extends Component {
             currentLocation: {},
             regionSize: {
                 latitudeDelta: 0.008,
-                longitudeDelta: 0.008
+                longitudeDelta: 0.008,
             },
             markerSelected: {},
             directions: {
                 coords: [],
-                time: ''
+                time: '',
             },
-            directionPressed: false
+            directionPressed: false,
         };
         this.onMarkerClick = this.onMarkerClick.bind(this);
         this.onMapPress = this.onMapPress.bind(this);
@@ -49,9 +50,7 @@ class GenreMap extends Component {
         }
     }
     onPolyButtonPress() {
-        // console.log('this.state.directionPressed =', this.state.directionPressed);
         this.setState({ directionPressed: !this.state.directionPressed });
-        // this.state.directionPressed = !this.state.directionPressed;
         if (this.state.directionPressed) {
             let { currentLocation, markerSelected } = this.state;
             getDirectionsToBar({ latitude: currentLocation.latitude, longitude: currentLocation.longitude}, {latitude: markerSelected.lat, longitude: markerSelected.lon })
@@ -77,12 +76,15 @@ class GenreMap extends Component {
             {currentLocation.latitude &&
                     <MapView
                         style={styles.map}
+                        color="#fff"
                         showsPointsOfInterest={false}
-                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
-                        showsUserLocation={true}
-                        showsCompass={true}
+                        initialRegion={Object.assign({}, currentLocation, regionSize)}
+                        showsCompass={false}
+                        showsUserLocation={false}
+                        showsMyLocationButton={true}
+                        userLocationAnnotationTitle={userLocationTitle}
                         onPress={this.onMapPress}>
-                        {bars.map(marker => {
+                        { bars.map(marker => {
                           let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[ marker.genreNames[0].replace(/\s+/, '')];
                           return (
                             <MapView.Marker
@@ -92,25 +94,26 @@ class GenreMap extends Component {
                                 }}
                                 key={marker.id}
                                 onPress={this.onMarkerClick.bind(this, marker)}
-                                image={ icon }
-                            >
+                                image={icon}>
                                 <MapView.Callout
                                     style={styles.callout}
+                                    tooltip={true}
                                     onPress={() => navigate('SampleProfile', { name: marker.name })}>
                                     <View style={styles.card}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: 25 }}>{marker.name}</Text>
-                                        <Text style={{ marginBottom: 10 }}>
-                                            Address: {marker.address}</Text>
+                                        <Text style={styles.calloutTextName}>
+                                            {marker.name}
+                                        </Text>
+                                        <Text style={styles.calloutTextAddress}>
+                                            {marker.address}
+                                        </Text>
                                         <Button
-                                            icon={{ name: 'code' }}
-                                            backgroundColor="#03A9F4"
-                                            fontFamily={fonts.zilla}
-                                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                            onPress={() => console.log('GenreMap: onPress()')}
-                                            title="Profile" />
+                                            buttonStyle={styles.calloutButton}
+                                            icon={{ name: 'info-circle', type: 'font-awesome' }}
+                                            large={true}
+                                            onPress={() => console.log('GenreMap: onPress()')} />
                                         <View style={styles.currentPlaying}>
-                                            <Text>Currently Playing: </Text>
-                                            <Text> {marker.songs && marker.songs[0].song} </Text>
+                                            <Text style={styles.currentPlayingText}>Currently Playing: </Text>
+                                            <Text>{marker.songs && marker.songs[0].song}</Text>
                                         </View>
                                     </View>
                                 </MapView.Callout>
@@ -129,8 +132,11 @@ class GenreMap extends Component {
                 { Object.keys(markerSelected).length > 0 &&
                   <View style={styles.polyButton}>
                     <Button
+                        backgroundColor={colors.redOrange}
+                        color="#fff"
+                        iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
                         onPress={this.onPolyButtonPress}
-                        title={ directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' } />
+                        title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
                   </View>
                 }
             </View>
@@ -142,29 +148,65 @@ class GenreMap extends Component {
 const styles = StyleSheet.create({
     callout: {
         alignItems: 'center',
+        backgroundColor: colors.blue,
+        borderColor: colors.blue,
+        borderRadius: 5,
+        borderWidth: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
+        shadowColor: '#ccc',
+        shadowOffset: { width: 5, height: 5 },
+        shadowOpacity: 0.75,
+    },
+    calloutButton: {
+        backgroundColor: colors.blue,
+    },
+    calloutTextName: {
+        color: '#fff',
+        fontFamily: fonts.bold,
+        fontSize: 25,
+    },
+    calloutTextAddress: {
+        color: '#fff',
+        fontFamily: fonts.bold,
+        fontSize: 15,
     },
     card: {
-        flex: 10,
         alignItems: 'center',
+        backgroundColor: colors.blue,
+        flex: 10,
     },
     container: {
-        flex: 1,
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: colors.offWhite,
+        flex: 1,
     },
     currentPlaying: {
-        marginTop: 25,
+        margin: 0,
+    },
+    currentPlayingText: {
+        color: '#fff',
+        fontFamily: fonts.bold,
+        fontSize: 15,
     },
     map: {
+        backgroundColor: colors.redOrange,
+        bottom: 0,
         left: 0,
+        position: 'absolute',
         right: 0,
         top: 0,
-        bottom: 0,
-        position: 'absolute',
     },
     polyButton: {
         alignItems: 'center',
+        backgroundColor: colors.redOrange,
+        borderColor: colors.redOrange,
+        borderRadius: 5,
+        borderWidth: 5,
         marginTop: 25,
+        shadowColor: '#ccc',
+        shadowOffset: { width: 5, height: 5 },
+        shadowOpacity: 1,
     },
 });
 
