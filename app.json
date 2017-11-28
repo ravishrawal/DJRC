@@ -7,6 +7,7 @@
       "image": "./assets/splash.png",
       "backgroundColor": "#F7F7F7",
       "resizeMode": "contain"
-    }
+    },
+    "orientation": "portrait",
   }
 }

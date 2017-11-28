@@ -26,6 +26,7 @@ export const fetchBarsFromServer = () => {
         axios.get('https://djrc-api.herokuapp.com/api/venues')
             .then(res => res.data)
             .then(bars => {
+                
                 dispatch(getBars(bars));
 
             }).catch(console.log);
