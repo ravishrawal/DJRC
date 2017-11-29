@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-nat
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
-import { getDirectionsToBar } from '../redux';
+import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
@@ -30,8 +30,10 @@ class GenreMap extends Component {
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
     }
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition((res, rej) => {
-            res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
+        navigator.geolocation.getCurrentPosition((res) => {
+            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
+        }, (rej)=> {
+          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
         })
     }
     onMarkerClick(ev){
@@ -63,15 +65,15 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) > 0;
         }) : bars;
-        
+
         bars = bars.slice(0,10)
         return (
             <View style={styles.container}>
-            {currentLocation.latitude &&
-                    <MapView
+                     { currentLocation.latitude &&
+                       <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
-                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
+                        initialRegion={ currentLocation.latitude ? Object.assign({}, currentLocation, regionSize) : Object.assign({}, {latitude: 40.72173744, longitude:-73.98800687}, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
@@ -118,7 +120,7 @@ class GenreMap extends Component {
                               strokeColor="rgba(255,140,0,0.8)"/>
                         }
                     </MapView>
-                    }
+                  }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
@@ -174,7 +176,9 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-
+        fetchBars: (location) => {
+          dispatch(fetchBarsFromServer(location))
+        },
         getDirections: (start, end) => {
           dispatch(getDirectionsToBar(start, end))
         }
