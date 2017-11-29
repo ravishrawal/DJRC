@@ -11,6 +11,7 @@ import GenreMap from './GenreMap';
 import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
+import BarOwner from './BarOwner';
 
 const styles = StyleSheet.create({
   icon: {
@@ -135,6 +136,14 @@ const UserTabs = TabNavigator({
   tabBarPosition: 'bottom',
 });
 
+const OwnerTabs = TabNavigator({
+  MyBar: {screen: BarOwner },
+  Map: { screen: GenreMap }
+}, {
+  tabBarPosition: 'bottom'
+  }
+)
+
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
   Map: { screen: GenreMap },
@@ -151,12 +160,20 @@ const LoggedInNav = StackNavigator({
   headerMode: 'none'
 });
 
+const LoggedInOwner = StackNavigator({
+  MyBar: { screen: OwnerTabs },
+  Map: { screen: GenreMap }
+}, {
+    headerMode: 'none'
+});
+
 class Nav extends Component {
 
   render() {
 
-    const { user } = this.props;
-    const Tab = user.id ? LoggedInNav : LoggedOutNav;
+    const {user} = this.props;
+    const Tab = user.id ? (user.isBusiness ? LoggedInOwner : LoggedInNav) : LoggedOutNav;
+
     return (
       <Tab />
     );
