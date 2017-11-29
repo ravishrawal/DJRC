@@ -50,7 +50,7 @@ class GenreMap extends Component {
         }
     }
     onPolyButtonPress() {
-        this.setState({ directionPressed: !this.state.directionPressed });
+        this.state.directionPressed = !this.state.directionPressed;
         if (this.state.directionPressed) {
             let { currentLocation, markerSelected } = this.state;
             getDirectionsToBar({ latitude: currentLocation.latitude, longitude: currentLocation.longitude}, {latitude: markerSelected.lat, longitude: markerSelected.lon })
@@ -80,7 +80,7 @@ class GenreMap extends Component {
                         showsPointsOfInterest={false}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
                         showsCompass={false}
-                        showsUserLocation={false}
+                        showsUserLocation={true}
                         showsMyLocationButton={true}
                         userLocationAnnotationTitle={userLocationTitle}
                         onPress={this.onMapPress}>
