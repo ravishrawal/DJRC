@@ -8,8 +8,10 @@ import {
     Text,
     TouchableHighlight,
     View,
+    Fetch
 } from 'react-native';
 import Expo, { Asset, Audio, FileSystem, Permissions } from 'expo';
+import axios from 'axios';
 
 class Icon {
     constructor(module, width, height) {
@@ -64,20 +66,19 @@ export default class Record extends React.Component {
             rate: 1.0,
             inn:''
         };
-        this.recordingSettings = JSON.parse(JSON.stringify(Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY));
+        this.recordingSettings = JSON.parse(JSON.stringify(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY));
         // // UNCOMMENT THIS TO TEST maxFileSize:
         // this.recordingSettings.android['maxFileSize'] = 12000;
     }
 
     componentDidMount() {
         (async () => {
-            //   await Font.loadAsync({
-            //     'cutive-mono-regular': require('../../assets/fonts/CutiveMono-Regular.ttf'),
-            //   });
             this.setState({ fontLoaded: true });
         })();
         this._askForPermissions();
     }
+
+  
 
     _askForPermissions = async () => {
         const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
@@ -128,6 +129,8 @@ export default class Record extends React.Component {
         }
     };
 
+     
+
     async _stopPlaybackAndBeginRecording() {
         this.setState({
             isLoading: true,
@@ -165,6 +168,17 @@ export default class Record extends React.Component {
         }
     }
 
+    _sendRecording(audioFile){
+        console.log('audiofile', audioFile)
+        axios.post('http://172.16.25.173:3002/api/sound', {audio: audioFile})
+        .then(res => res.data)
+        .then(() => {
+            console.log('sent');
+        }).catch(err => {
+            console.log('err', err)
+        })
+    }
+
     async _stopRecordingAndEnablePlayback() {
         this.setState({
             isLoading: true,
@@ -176,14 +190,15 @@ export default class Record extends React.Component {
         }
         const info = await FileSystem.getInfoAsync(this.recording.getURI());
         const uri = info.uri;
-        console.log('uri', info.uri)
+        // console.log('uri', info.uri)
         console.log(`FILE INFO: ${JSON.stringify(info)}`);
-        console.log('asdfs', this.recording);
-        const read = await Expo.FileSystem.readAsStringAsync(uri);
-        console.log('read', read);
+        // console.log('asdfs', this.recording);
+        const audio = await Expo.FileSystem.readAsStringAsync(uri);
+        // console.log('read', audio);
         const inn = await Expo.FileSystem.getInfoAsync(uri);
         this.setState({inn});
-        console.log('inn', inn);
+        this._sendRecording(audio);
+        // console.log('inn', inn);
         await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
