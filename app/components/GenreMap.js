@@ -73,7 +73,7 @@ class GenreMap extends Component {
                        <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
-                        initialRegion={ currentLocation.latitude ? Object.assign({}, currentLocation, regionSize) : Object.assign({}, {latitude: 40.72173744, longitude:-73.98800687}, regionSize) }
+                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
