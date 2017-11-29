@@ -90,7 +90,7 @@ class GenreMap extends Component {
                                 image={ icon }
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
-                                    navigate('SampleProfile', { name: marker.name })
+                                    navigate('SampleProfile', { bar: marker })
                                   } >
                                     <View style={styles.card}>
                                         <Text style={{ fontWeight: 'bold', 'fontSize': 25 }}>{marker.name}</Text>
