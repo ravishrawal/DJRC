@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
     },
     calloutTextName: {
-        color: '#fff',
+        color: colors.yellow,
         fontFamily: fonts.bold,
         fontSize: 25,
     },
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     currentPlayingTextSong: {
-        color: '#fff',
+        color: colors.yellow,
         fontFamily: fonts.bold,
         fontSize: 20,
     },
