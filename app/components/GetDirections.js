@@ -11,8 +11,7 @@ export default class gmapsDirections extends Component {
    }
    handleGetDirections() {
     const data = {
-       source: this.props.currentLocation,
-      destination: this.props.destLocation,
+      destination: this.props.barLocation,
       params: [
         {
           key: "dirflg",
