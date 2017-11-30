@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation'
 import { Card, ListItem, List } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
 import GenreMap from './GenreMap';
+import Review from './Review';
 
 // const Back = StackNavigator({
 //     Back: {screen: GenreMap },
@@ -21,8 +22,8 @@ export default class BarProfile extends Component {
             { title: 'Song2' },
             { title: 'Song3' },
         ];
-        const bar = this.props.navigation.state.params;
-
+        const { bar } = this.props.navigation.state.params;
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
                 <Card
@@ -39,7 +40,7 @@ export default class BarProfile extends Component {
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
 
-                    <List containerStyle={{ marginBottom: 20 }}>
+                        <List containerStyle={{ marginBottom: 20 }}>
                         {
                             songs.map((l, i) => (
                                 <ListItem
@@ -49,11 +50,15 @@ export default class BarProfile extends Component {
                                 />
                             ))
                         }
-                    </List>
+                        </List>
+                        <Button
+                        onPress={() => navigate('Review', { bar: bar })}
+                        title='Review' />
                 </Card>
-               <Button
-               onPress={() => this.props.navigation.goBack()}
-                title='Back' />
+               
+                <Button
+                    onPress={() => this.props.navigation.goBack()}
+                    title='Back' />
             </View>
         );
     }
@@ -68,3 +73,5 @@ const styles = StyleSheet.create({
         width: width
     }
 })
+
+

@@ -14,6 +14,7 @@ import BarProfile from './BarProfile';
 import BarOwner from './BarOwner';
 import Review from './Review';
 
+
 const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'green',
@@ -73,8 +74,7 @@ const Tabs = TabNavigator({
         />
       ),
     }),
-  },
-  Review: {screen: Review}
+  }
 }, {
   animationEnabled: true,
   tabBarOptions: {
@@ -91,8 +91,7 @@ const Tabs = TabNavigator({
 const UserTabs = TabNavigator({
   Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
-  Profile: { screen: Profile },
-  Review: {screen: Review}
+  Profile: { screen: Profile }
 }, {
   animationEnabled: true,
   tabBarOptions: {
@@ -118,6 +117,7 @@ const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
   Map: { screen: GenreMap },
   SampleProfile: { screen: BarProfile },
+  Review: { screen: Review }
 }, {
   headerMode: 'none'
 });
@@ -125,7 +125,8 @@ const LoggedOutNav = StackNavigator({
 const LoggedInNav = StackNavigator({
   Home: { screen: UserTabs },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile }
+  SampleProfile: { screen: BarProfile },
+  Review: { screen: Review }
 }, {
   headerMode: 'none'
 });

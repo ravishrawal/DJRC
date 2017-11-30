@@ -7,8 +7,9 @@ import bars from './bars'
 import genres from './genres'
 import user from './user'
 import owner from './owner'
+import reviews from './reviews'
 
-const reducer = combineReducers({ bars, genres, user, owner });
+const reducer = combineReducers({ bars, genres, user, owner, reviews });
 
 
 const middleware = applyMiddleware(thunkMiddleware);
@@ -21,3 +22,4 @@ export * from './bars';
 export * from './genres';
 export * from './directions';
 export * from './owner';
+export * from './reviews';

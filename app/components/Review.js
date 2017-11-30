@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import t from 'tcomb-form-native';
+import { postReviewToServer } from '../redux/reviews';
 var _ = require('lodash');
 
 // clone the default stylesheet
@@ -31,19 +32,21 @@ class Review extends React.Component {
     }
 
     onChange(value) {
-
         this.setState(value);
     }
 
     handleSubmit() {
-        console.log(this.state);
+        const { bar } = this.props.navigation.state.params;
+        console.log(this.state)
+        this.props.postReviewToServer(this.state, bar.id, this.props.user.id)
     }
 
     render() {
+
         const Ratings = t.enums({ "1": "1", "2": "2", "3": "3", "4": "4", "5": "5" })
 
         const Genres = this.props.genres.reduce((memo, next) => {
-            memo[next.key] = next.name
+            memo[next.name] = next.name
             return memo;
         }, {})
 
@@ -70,14 +73,13 @@ class Review extends React.Component {
                 }
             }
         }
-
         return (
             <View style={styles.container}>
                 <Form
                     type={ReviewForm}
                     onChange={this.onChange}
                     options={options}
-                    value = {this.state}
+                    value={this.state}
                 />
                 <Button
                     title="Leave Review"
@@ -98,13 +100,16 @@ const styles = StyleSheet.create({
 });
 
 
-const mapState = ({ genres }) => {
-    return { genres };
+const mapState = ({ genres, user }) => {
+    return { genres, user };
 };
 
 const mapDispatch = (dispatch) => {
     return {
-    };
+        postReviewToServer: (review, barId, userId) => {
+            dispatch(postReviewToServer(review, barId, userId))
+        }
+    }
 };
 
 export default connect(mapState, mapDispatch)(Review);
