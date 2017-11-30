@@ -8,36 +8,42 @@ import GenreMap from './GenreMap';
 import Review from './Review';
 
 
-// const Back = StackNavigator({
-//     Back: {screen: GenreMap },
-//     }, {
-//         headerMode: 'none'
-//     })
-
 export default class BarProfile extends Component {
     constructor() {
         super()
         this.state = {
-            isModalVisible: false
+            isModalVisibleRead: false,
+            isModalVisibleWrite: false,
         }
-        this._hideModal = this._hideModal.bind(this);
-        this._showModal = this._showModal.bind(this);
+        this._hideModalWrite = this._hideModalWrite.bind(this);
+        this._showModalWrite = this._showModalWrite.bind(this);
+        this._hideModalRead = this._hideModalRead.bind(this);
+        this._showModalRead = this._showModalRead.bind(this);
     }
 
-    _showModal() {
-        this.setState({ isModalVisible: true })
+    _showModalWrite() {
+        this.setState({ isModalVisibleWrite: true })
     }
 
-    _hideModal() {
-        this.setState({ isModalVisible: false })
+    _hideModalWrite() {
+        this.setState({ isModalVisibleWrite: false })
     }
+
+    _showModalRead() {
+        this.setState({ isModalVisibleRead: true })
+    }
+
+    _hideModalRead() {
+        this.setState({ isModalVisibleRead: false })
+    }
+
 
 
     render() {
         const defaultSongs = [
-            { title: 'Song1' },
-            { title: 'Song2' },
-            { title: 'Song3' },
+            { song: 'Song1' },
+            { song: 'Song2' },
+            { song: 'Song3' },
         ];
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
@@ -58,6 +64,30 @@ export default class BarProfile extends Component {
                         buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
+                    <View>
+                        <Button
+                            onPress={this._showModalRead}
+                            title='Read Reviews' />
+                        <Modal isVisible={this.state.isModalVisibleRead}>
+                            <View style={{ flex: 1 }}>
+                                <List containerStyle={{ marginBottom: 20 }}>
+                                    {
+                                        songs.map((song, i) => (
+
+                                            <ListItem
+                                                roundAvatar
+                                                key={i}
+                                                title={song.song}
+                                            />
+                                        ))
+                                    }
+                                </List>
+                                <Button
+                                    onPress={this._hideModalRead}
+                                    title='Go Back' />
+                            </View>
+                        </Modal>
+                    </View>
 
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
@@ -73,15 +103,14 @@ export default class BarProfile extends Component {
                     </List>
                     <View>
                         <Button
-                            onPress={this._showModal}
-                            title='Review' />
-
-                        <Modal isVisible={this.state.isModalVisible}>
+                            onPress={this._showModalWrite}
+                            title='Write a Review' />
+                        <Modal isVisible={this.state.isModalVisibleWrite}>
                             <View style={{ flex: 1 }}>
-                                <Review bar={bar} _hideModal={this._hideModal} />
+                                <Review bar={bar} _hideModal={this._hideModalWrite} />
                                 <Button
-                                onPress={this._hideModal}
-                                title='Cancel' />
+                                    onPress={this._hideModalWrite}
+                                    title='Cancel' />
                             </View>
                         </Modal>
                     </View>
