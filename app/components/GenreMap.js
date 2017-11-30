@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     shadow: {
         shadowColor: '#ccc',
         shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 0.75,
+        shadowOpacity: 1,
     }
 });
 
