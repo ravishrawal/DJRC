@@ -47,7 +47,7 @@ class GenreMap extends Component {
     }
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
-        // fixes callout overlay bug
+        // fixes iOS callout overlay bug by animating the map (hopefully) imperceptibly
         this.map.animateToCoordinate({
             latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
             longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
     },
     calloutTextName: {
-        color: colors.yellow,
+        color: colors.yellowLight,
         fontFamily: fonts.bold,
         fontSize: 25,
     },
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     currentPlayingTextSong: {
-        color: colors.yellow,
+        color: colors.yellowLight,
         fontFamily: fonts.bold,
         fontSize: 20,
     },

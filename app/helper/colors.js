@@ -5,6 +5,7 @@ const colors = {
   pink: '#ff4554',
   redOrange: '#ff6763', // logo
   yellow: '#ffcba4',
+  yellowLight: '#fdfea4',
 };
 
 export default colors;
