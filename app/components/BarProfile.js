@@ -7,6 +7,7 @@ import Modal from 'react-native-modal'
 import GenreMap from './GenreMap';
 import Review from './Review';
 
+
 // const Back = StackNavigator({
 //     Back: {screen: GenreMap },
 //     }, {
@@ -33,13 +34,15 @@ export default class BarProfile extends Component {
 
 
     render() {
-        const songs = [
+        const defaultSongs = [
             { title: 'Song1' },
             { title: 'Song2' },
             { title: 'Song3' },
         ];
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
+
+        const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
         return (
             <View style={styles.container}>
                 <Card
@@ -58,11 +61,12 @@ export default class BarProfile extends Component {
 
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
-                            songs.map((l, i) => (
+                            songs.map((song, i) => (
+
                                 <ListItem
                                     roundAvatar
                                     key={i}
-                                    title={l.title}
+                                    title={song.song}
                                 />
                             ))
                         }
@@ -74,10 +78,10 @@ export default class BarProfile extends Component {
 
                         <Modal isVisible={this.state.isModalVisible}>
                             <View style={{ flex: 1 }}>
-                                <Review bar={bar} _hideModal = {this._hideModal}/>
+                                <Review bar={bar} _hideModal={this._hideModal} />
                                 <Button
                                 onPress={this._hideModal}
-                                title='Exit' />
+                                title='Cancel' />
                             </View>
                         </Modal>
                     </View>
