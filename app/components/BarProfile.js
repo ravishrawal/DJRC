@@ -57,9 +57,7 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-        // const avgRating = this.props.reviews && (this.props.reviews.reduce((memo, review) => {
-        //     return memo + Number(review.rating);
-        // }, 0)) / this.props.reviews.length;
+    
         
         return (
             <View style={styles.container}>
@@ -79,7 +77,7 @@ class BarProfile extends Component {
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
 
-                    {this.props.user && this.props.user.id ?
+
                         <View style={{ marginTop: 10 }} >
                             <Button
                                 onPress={this._showModalRead}
@@ -117,7 +115,7 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        : null}
+
 
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
