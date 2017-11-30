@@ -5,7 +5,8 @@ const GET_REVIEWS_FOR_VENUE = 'GET_REVIEWS_FOR_VENUE';
 
 const postReview = (review) => {
     return {
-        type: POST_REVIEW
+        type: POST_REVIEW,
+        review
     }
 }
 
@@ -43,8 +44,11 @@ export const fetchVenueReviews = (venueId) => {
 export default (state = [], action) => {
     switch (action.type) {
         case POST_REVIEW:
-            return action.review;
+            const reviews = state.slice();
+            reviews.push(action.review)
+            return reviews;
         case GET_REVIEWS_FOR_VENUE:
+
             return action.reviews;
         default:
             return state;

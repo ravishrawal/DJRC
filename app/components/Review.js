@@ -63,10 +63,6 @@ class Review extends React.Component {
 
         const options = {
             fields: {
-                Review: {
-                    multiline: true,
-                    numberOfLines: 10
-                },
                 Rating: {
                     stylesheet: stylesheet
                 },
