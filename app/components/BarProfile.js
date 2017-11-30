@@ -7,12 +7,8 @@ import Modal from 'react-native-modal'
 import Stars from 'react-native-stars';
 
 import GenreMap from './GenreMap';
-<<<<<<< HEAD
 import Review from './Review';
-=======
 import GetDirections from './GetDirections';
->>>>>>> master
-
 
 let { width, height } = Dimensions.get('window')
 
@@ -56,16 +52,11 @@ class BarProfile extends Component {
             { song: 'Song2' },
             { song: 'Song3' },
         ];
-<<<<<<< HEAD
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
     
         
-=======
-        const {bar} = this.props.navigation.state.params;
-
->>>>>>> master
         return (
             <View style={styles.container}>
 
@@ -75,7 +66,6 @@ class BarProfile extends Component {
                     <Text style={{ marginBottom: 10 }}>
                         Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
             </Text>
-<<<<<<< HEAD
 
                     <Button
                         icon={{ name: 'code' }}
@@ -84,11 +74,9 @@ class BarProfile extends Component {
                         buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
-=======
                     <GetDirections
                       barLocation={{latitude: bar.lat, longitude: bar.lon}}
                     />
->>>>>>> master
 
 
                         <View style={{ marginTop: 10 }} >
