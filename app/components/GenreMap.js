@@ -114,7 +114,7 @@ class GenreMap extends Component {
                                 onPress={this.onMarkerClick.bind(this, marker)}
                                 image={icon}>
                                 <MapView.Callout
-                                    style={styles.callout}
+                                    style={[styles.callout, styles.shadow]}
                                     tooltip={true}
                                     onPress={() => navigate('SampleProfile', { bar: marker })}>
                                     <View style={styles.card}>
@@ -148,17 +148,25 @@ class GenreMap extends Component {
                     </MapView>
                 }
                 { Object.keys(markerSelected).length > 0 &&
-                    <Button style={styles.polyButton}
-                        backgroundColor={colors.redOrange}
-                        color="#fff"
-                        fontFamily={fonts.bold}
-                        iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
-                        onPress={this.onPolyButtonPress}
-                        title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                    <View style={styles.buttonRow}>
+                            <Button style={[styles.polyButton, styles.shadow]}
+                                backgroundColor={colors.redOrange}
+                                color="#fff"
+                                fontFamily={fonts.bold}
+                                iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
+                                onPress={this.onPolyButtonPress}
+                                title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                    </View>
                 }
                 { regionChanged &&
-                    <View>
-                        <Button onPress={this.onRegionButtonPress} title="Search This Area" />
+                    <View style={styles.buttonRow}>
+                            <Button style={[styles.searchRegionButton, styles.shadow]}
+                                backgroundColor={colors.redOrangeDark}
+                                color="#fff"
+                                fontFamily={fonts.bold}
+                                iconRight={{ name: 'search', type: 'font-awesome' }}
+                                onPress={this.onRegionButtonPress}
+                                title="Search Area" />
                     </View>
                 }
             </View>
@@ -167,6 +175,10 @@ class GenreMap extends Component {
 }
 
 const styles = StyleSheet.create({
+    buttonRow: {
+        marginBottom: 10,
+        marginTop: 25,
+    },
     callout: {
         alignItems: 'center',
         backgroundColor: colors.blue,
@@ -175,9 +187,6 @@ const styles = StyleSheet.create({
         borderWidth: 5,
         paddingLeft: 5,
         paddingRight: 5,
-        shadowColor: '#ccc',
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 0.75,
     },
     calloutButton: {
         backgroundColor: colors.blue,
@@ -198,9 +207,9 @@ const styles = StyleSheet.create({
         flex: 10,
     },
     container: {
-        alignItems: 'center',
-        backgroundColor: colors.offWhite,
         flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
     },
     currentPlaying: {
         margin: 0,
@@ -224,16 +233,22 @@ const styles = StyleSheet.create({
         top: 0,
     },
     polyButton: {
-        alignItems: 'center',
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
         borderRadius: 5,
         borderWidth: 5,
-        marginTop: 25,
+    },
+    searchRegionButton: {
+        backgroundColor: colors.redOrangeDark,
+        borderColor: colors.redOrangeDark,
+        borderRadius: 5,
+        borderWidth: 5,
+    },
+    shadow: {
         shadowColor: '#ccc',
         shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 1,
-    },
+        shadowOpacity: 0.75,
+    }
 });
 
 const mapState = ({ bars, directions }) => {
