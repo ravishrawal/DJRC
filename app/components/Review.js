@@ -1,29 +1,88 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import t from 'tcomb-form-native';
+var _ = require('lodash');
+
+// clone the default stylesheet
+const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
+
+stylesheet.fieldset = {
+    flexDirection: 'row'
+};
+// stylesheet.formGroup.normal.flex = fl;
+// // stylesheet.formGroup.error.flex = 1;
+
+const Form = t.form.Form;
+
+//require's string for prop,  converts '1' into number
+
 
 class Review extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            Rating: '',
+            Review: '',
+            Genre: ''
+        }
+        this.onChange = this.onChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    onChange(value) {
+
+        this.setState(value);
+    }
+
+    handleSubmit() {
+        console.log(this.state);
+    }
 
     render() {
+        const Ratings = t.enums({ "1": "1", "2": "2", "3": "3", "4": "4", "5": "5" })
+
+        const Genres = this.props.genres.reduce((memo, next) => {
+            memo[next.key] = next.name
+            return memo;
+        }, {})
+
+        const GenreEnums = t.enums(Genres)
+
+
+        const ReviewForm = t.struct({
+            Rating: Ratings,
+            Genre: GenreEnums,
+            Review: t.String,
+        })
+
+        const options = {
+            fields: {
+                Review: {
+                    multiline: true,
+                    numberOfLines: 10
+                },
+                Rating: {
+                    stylesheet: stylesheet
+                },
+                Genres: {
+                    stylesheet: stylesheet
+                }
+            }
+        }
+
         return (
             <View style={styles.container}>
-                {genres.length > 0 && genres.map((genre) => {
-                    return (
-                        <View
-                            key={genre.key}
-                            style={styles.buttonStyle}>
-                            <TouchableOpacity
-                                onPress={() =>
-                                    navigate('Map', { genre: genre.key, selectedGenreName: genre.name })
-                                }
-                            >
-                                <Image style={{ alignSelf: 'center' }} source={Icons[genre.name.replace(/\s+/, "")]} />
-                                <Text style={styles.genreText}>{genre.name}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )
-                })
-                }
+                <Form
+                    type={ReviewForm}
+                    onChange={this.onChange}
+                    options={options}
+                    value = {this.state}
+                />
+                <Button
+                    title="Leave Review"
+                    onPress={this.handleSubmit}
+                />
             </View>
         );
     }
@@ -31,33 +90,16 @@ class Review extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        backgroundColor: '#f7f7f7',
-        marginTop: 50
+        justifyContent: 'center',
+        marginTop: 50,
+        padding: 20,
+        backgroundColor: '#ffffff',
     },
-    buttonStyle: {
-        width: (width - 20) / 2,
-        height: (height - 150) / 5,
-        backgroundColor: '#ff4554',
-        margin: 5,
-        borderWidth: 3,
-        borderColor: '#00c3e3',
-        borderRadius: 2,
-        justifyContent: 'center'
-    },
-    genreText: {
-        alignSelf: 'center',
-        fontFamily: 'zilla-slab-regular',
-        fontSize: 20,
-        color: '#f7f7f7',
-    }
 });
 
 
-const mapState = ({ }) => {
-    return {};
+const mapState = ({ genres }) => {
+    return { genres };
 };
 
 const mapDispatch = (dispatch) => {

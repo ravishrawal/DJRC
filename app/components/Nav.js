@@ -12,6 +12,7 @@ import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
 import BarOwner from './BarOwner';
+import Review from './Review';
 
 const styles = StyleSheet.create({
   icon: {
@@ -72,7 +73,8 @@ const Tabs = TabNavigator({
         />
       ),
     }),
-  }
+  },
+  Review: {screen: Review}
 }, {
   animationEnabled: true,
   tabBarOptions: {
@@ -89,7 +91,8 @@ const Tabs = TabNavigator({
 const UserTabs = TabNavigator({
   Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
-  Profile: { screen: Profile }
+  Profile: { screen: Profile },
+  Review: {screen: Review}
 }, {
   animationEnabled: true,
   tabBarOptions: {
@@ -114,7 +117,7 @@ const OwnerTabs = TabNavigator({
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile }
+  SampleProfile: { screen: BarProfile },
 }, {
   headerMode: 'none'
 });
