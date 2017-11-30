@@ -42,11 +42,16 @@ class GenreMap extends Component {
         navigator.geolocation.getCurrentPosition((res) => {
             this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => { this.props.fetchBars(this.state.currentLocation); });
         }, (rej) => {
-          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => { this.props.fetchBars(this.state.currentLocation); });
+            this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => { this.props.fetchBars(this.state.currentLocation); });
         });
     }
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
+        // fixes callout overlay bug
+        this.map.animateToCoordinate({
+            latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
+            longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
+        }, 0);
     }
     onMapPress() {
       if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
@@ -90,11 +95,12 @@ class GenreMap extends Component {
                         color="#fff"
                         showsPointsOfInterest={false}
                         initialRegion={ Object.assign({}, currentLocation, regionSize) }
-                        onRegionChangeComplete={this.onRegionChangeComplete}
+                        onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
                         showsCompass={false}
                         showsUserLocation={true}
                         showsMyLocationButton={true}
                         userLocationAnnotationTitle={userLocationTitle}
+                        ref={ref => { this.map = ref; }}
                         onPress={this.onMapPress}>
                         { bars.map(marker => {
                             let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[ marker.genreNames[0].replace(/\s+/, '')];
