@@ -148,15 +148,13 @@ class GenreMap extends Component {
                     </MapView>
                 }
                 { Object.keys(markerSelected).length > 0 &&
-                  <View style={styles.polyButton}>
-                    <Button
+                    <Button style={styles.polyButton}
                         backgroundColor={colors.redOrange}
                         color="#fff"
                         fontFamily={fonts.bold}
                         iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
                         onPress={this.onPolyButtonPress}
                         title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
-                  </View>
                 }
                 { regionChanged &&
                     <View>
