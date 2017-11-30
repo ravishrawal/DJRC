@@ -14,19 +14,25 @@ const getBars = (bars) => {
 
 
 export function updateGenres (venueId, genreArr) {
-  return axios.put(`https://djrc-api.herokuapp.com/api/venues/${venueId}`, genreArr)
+  return axios.put(`http://192.168.0.17:3002/api/venues/${venueId}`, genreArr)
   .then(res => res.data)
 }
 
+export function addPromo (venueId, description) {
+
+
+  return axios.post(`http://192.168.0.17:3002/api/promos/${venueId}`, { description } )
+  .then(res => res.data)
+}
 
 
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
 
-        axios.get('https://djrc-api.herokuapp.com/api/venues')
+        axios.get('http://192.168.0.17:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
-                
+
                 dispatch(getBars(bars));
 
             }).catch(console.log);

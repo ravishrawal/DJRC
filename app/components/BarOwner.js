@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
-import { Card, ListItem, List, Icon } from 'react-native-elements';
+import { Card, ListItem, List, Icon, FormLabel, FormInput } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
-import { updateGenres } from '../redux/bars'
+import { updateGenres, addPromo } from '../redux/bars'
 import { fetchGenres } from '../redux/genres';
+
 
 // import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
@@ -14,13 +15,17 @@ class BarOwner extends Component {
     super()
     this.state = {
       formVisible: false,
-      genreArr: [1]
+      genreArr: [1],
+      promoText: ''
 
     }
     // this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.logout = this.logout.bind(this);
     this.updateGenre = this.updateGenre.bind(this);
     this.submitGenreUpdate = this.submitGenreUpdate.bind(this);
+    this.changePromo = this.changePromo.bind(this);
+    this.submitPromo = this.submitPromo.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
   }
 
   componentDidMount(){
@@ -30,6 +35,25 @@ class BarOwner extends Component {
   logout() {
     const { navigate } = this.props.navigation;
     this.props.logoutUser(navigate);
+  }
+
+  changePromo(promoText){
+    this.setState({promoText: promoText})
+    console.log(this.state.promoText);
+  }
+
+  submitPromo(){
+    this.props.addPromo(this.props.owner.id, this.state.promoText)
+    this.setState({
+      promoText: ''
+    })
+    this.toggleForm();
+  }
+
+  toggleForm(){
+    this.setState({
+      formVisible: !this.state.formVisible
+    })
   }
 
   updateGenre(genre) {
@@ -58,16 +82,13 @@ class BarOwner extends Component {
     // console.log(this.props, "props")
     // console.log(venue)
 
-    const { updateGenre, submitGenreUpdate } = this;
+    const { updateGenre, submitGenreUpdate, changePromo, submitPromo, toggleForm } = this;
 
     const genres = this.state.genreArr
 
     const allGenres = this.props.genres.length && this.props.genres;
 
-    const promos = [
-    {name: 'Buy 1 get 1 free'},
-    {name: '3 Beers and wings to make you feel awful'}
-    ]
+    const promos = this.props.owners && this.props.owners.promos
 
     return (
       <View style={styles.container}>
@@ -75,25 +96,6 @@ class BarOwner extends Component {
           <Text stlye={{ marginBottom: 10}}>
             This is info about your bar. Maybe Stats?
           </Text>
-      {/*    <List containerStyle = {{ marginBottom: 20 }}>
-            {
-              genres.map((genre)=> (
-                <ListItem
-                  roundAvatar
-                  key={ genre.id }
-                  title={ genre.name }
-                  >
-                  <Picker>
-                    {allGenres.map((gen)=> (
-                      <Picker.Item label={gen.name} value={gen.name} key={gen.id} />
-                      ))}
-                  </Picker>
-                </ListItem>
-              ))
-            }
-
-            </List>
-            */}
             <Text stlye={{ marginBottom: 10}}>
               Update Your Genre
             </Text>
@@ -110,11 +112,22 @@ class BarOwner extends Component {
               title= 'Submit Genre Changes'
             />
 
+            { this.state.formVisible ?
+              <View style={styles.form}>
+                <FormLabel> Promo Description </FormLabel>
+                <FormInput onChangeText={changePromo} ></FormInput>
 
+                <Button
+                  onPress={() => submitPromo()}
+                  title='Save Promo'
+                />
+            </View>
+            :
             <Button
-              onPress={() => alert('Add Promo!')}
+              onPress={() => toggleForm()}
               title='Add Promo!'
             />
+            }
 
             <Text stlye={{ marginBottom: 10}}>
               Current Promos
@@ -148,6 +161,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: width
   },
+  form: {
+    alignItems: 'center',
+    width: width
+  },
   button: {
         borderRadius: 4,
         padding: 20,
@@ -177,7 +194,8 @@ const mapDispatch = (dispatch) => {
         fetchGenres: () => {
           dispatch(fetchGenres());
         },
-        updateGenres
+        updateGenres,
+        addPromo
     }
 }
 
