@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Button, Text } from 'react-native';
 import { Card, ListItem, List } from 'react-native-elements'
-let { width, height } = Dimensions.get('window')
+import { fetchVenueReviews } from '../redux/reviews';
 import Modal from 'react-native-modal'
 
 import GenreMap from './GenreMap';
 import Review from './Review';
 
 
-export default class BarProfile extends Component {
+let { width, height } = Dimensions.get('window')
+
+class BarProfile extends Component {
     constructor() {
         super()
         this.state = {
@@ -19,6 +22,11 @@ export default class BarProfile extends Component {
         this._showModalWrite = this._showModalWrite.bind(this);
         this._hideModalRead = this._hideModalRead.bind(this);
         this._showModalRead = this._showModalRead.bind(this);
+    }
+
+    componentDidMount() {
+        const { bar } = this.props.navigation.state.params;
+        this.props.fetchVenueReviews(bar.id)
     }
 
     _showModalWrite() {
@@ -64,7 +72,7 @@ export default class BarProfile extends Component {
                         buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
-                    <View>
+                    <View style={{ marginTop: 10 }} >
                         <Button
                             onPress={this._showModalRead}
                             title='Read Reviews' />
@@ -72,14 +80,16 @@ export default class BarProfile extends Component {
                             <View style={{ flex: 1 }}>
                                 <List containerStyle={{ marginBottom: 20 }}>
                                     {
-                                        songs.map((song, i) => (
+                                        this.props.reviews ? this.props.reviews.map((review, i) => (
 
                                             <ListItem
                                                 roundAvatar
                                                 key={i}
-                                                title={song.song}
+                                                title={review.content}
                                             />
                                         ))
+                                            :
+                                            <Text> No Reviews</Text>
                                     }
                                 </List>
                                 <Button
@@ -134,4 +144,18 @@ const styles = StyleSheet.create({
     }
 })
 
+const mapState = ({ reviews }) => {
+    return {
+        reviews
+    }
+}
 
+const mapDispatch = (dispatch) => {
+    return {
+        fetchVenueReviews: (venueId) => {
+            dispatch(fetchVenueReviews(venueId))
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(BarProfile)

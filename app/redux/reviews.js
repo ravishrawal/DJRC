@@ -1,10 +1,18 @@
 import axios from 'axios';
 
 const POST_REVIEW = 'POST_REVIEW';
+const GET_REVIEWS_FOR_VENUE = 'GET_REVIEWS_FOR_VENUE';
 
 const postReview = (review) => {
     return {
         type: POST_REVIEW
+    }
+}
+
+const getReviewsForVenue = (reviews) => {
+    return {
+        type: GET_REVIEWS_FOR_VENUE,
+        reviews
     }
 }
 
@@ -20,10 +28,24 @@ export const postReviewToServer = (review, venueId, userId) => {
 
     }
 }
+
+export const fetchVenueReviews = (venueId) => {
+    return (dispatch) => {
+        axios.get(`http://192.168.0.14:3002/api/reviews/${venueId}`)
+            .then(res => res.data)
+            .then(reviews => {
+                dispatch(getReviewsForVenue(reviews));
+            }).catch(console.log);
+
+    }
+}
+
 export default (state = [], action) => {
     switch (action.type) {
         case POST_REVIEW:
-            return action.review
+            return action.review;
+        case GET_REVIEWS_FOR_VENUE:
+            return action.reviews;
         default:
             return state;
     }
