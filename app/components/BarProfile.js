@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-native';
-import { StackNavigator } from 'react-navigation'
+import { StyleSheet, View, Dimensions, Button, Text } from 'react-native';
 import { Card, ListItem, List } from 'react-native-elements'
 let { width, height } = Dimensions.get('window')
+import Modal from 'react-native-modal'
+
 import GenreMap from './GenreMap';
 import Review from './Review';
 
@@ -13,7 +14,22 @@ import Review from './Review';
 //     })
 
 export default class BarProfile extends Component {
+    constructor() {
+        super()
+        this.state = {
+            isModalVisible: false
+        }
+        this._hideModal = this._hideModal.bind(this);
+        this._showModal = this._showModal.bind(this);
+    }
 
+    _showModal() {
+        this.setState({ isModalVisible: true })
+    }
+
+    _hideModal() {
+        this.setState({ isModalVisible: false })
+    }
 
 
     render() {
@@ -40,7 +56,7 @@ export default class BarProfile extends Component {
                         onPress={() => console.log('assadfd')}
                         title='Directions' />
 
-                        <List containerStyle={{ marginBottom: 20 }}>
+                    <List containerStyle={{ marginBottom: 20 }}>
                         {
                             songs.map((l, i) => (
                                 <ListItem
@@ -50,12 +66,23 @@ export default class BarProfile extends Component {
                                 />
                             ))
                         }
-                        </List>
+                    </List>
+                    <View>
                         <Button
-                        onPress={() => navigate('Review', { bar: bar })}
-                        title='Review' />
+                            onPress={this._showModal}
+                            title='Review' />
+
+                        <Modal isVisible={this.state.isModalVisible}>
+                            <View style={{ flex: 1 }}>
+                                <Review bar={bar} _hideModal = {this._hideModal}/>
+                                <Button
+                                onPress={this._hideModal}
+                                title='Exit' />
+                            </View>
+                        </Modal>
+                    </View>
                 </Card>
-               
+
                 <Button
                     onPress={() => this.props.navigation.goBack()}
                     title='Back' />
