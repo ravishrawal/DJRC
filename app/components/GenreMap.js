@@ -54,16 +54,16 @@ class GenreMap extends Component {
         }, 0);
     }
     onMapPress() {
-      if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
-        this.setState({markerSelected: {}});
-      }
+        if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
+            this.setState({ markerSelected: {} });
+        }
     }
     onRegionChangeComplete(region) {
         const {latitude, longitude} = region;
-        this.setState({currentLocation: {latitude, longitude}, regionChanged: true});
+        this.setState({ currentLocation: {latitude, longitude}, regionChanged: true });
     }
     onRegionButtonPress() {
-        this.setState({regionChanged: false});
+        this.setState({ regionChanged: false });
         this.props.fetchBars(this.state.currentLocation);
     }
     onPolyButtonPress() {
@@ -94,7 +94,7 @@ class GenreMap extends Component {
                         style={styles.map}
                         color="#fff"
                         showsPointsOfInterest={false}
-                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
+                        initialRegion={Object.assign({}, currentLocation, regionSize)}
                         onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
                         showsCompass={false}
                         showsUserLocation={true}
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
         flex: 10,
     },
     container: {
+        backgroundColor: colors.offWhite,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
