@@ -40,9 +40,9 @@ class GenreMap extends Component {
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition((res) => {
-            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => { this.props.fetchBars(this.state.currentLocation); });
+            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => { this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta); });
         }, (rej) => {
-            this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => { this.props.fetchBars(this.state.currentLocation); });
+          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () =>{ this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta); });
         });
     }
     onMarkerClick(ev) {
@@ -58,13 +58,15 @@ class GenreMap extends Component {
             this.setState({ markerSelected: {} });
         }
     }
-    onRegionChangeComplete(region) {
-        const {latitude, longitude} = region;
-        this.setState({ currentLocation: {latitude, longitude}, regionChanged: true });
+    onRegionChangeComplete(region){
+        const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
+        this.setState({currentLocation:{latitude, longitude}, regionSize:{latitudeDelta, longitudeDelta}, regionChanged:true});
     }
-    onRegionButtonPress() {
-        this.setState({ regionChanged: false });
-        this.props.fetchBars(this.state.currentLocation);
+    onRegionButtonPress(){
+        this.setState({regionChanged:false});
+        const {latitudeDelta, longitudeDelta} = this.state.regionSize;
+        let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta;
+        this.props.fetchBars(this.state.currentLocation, delta/3);
     }
     onPolyButtonPress() {
         this.state.directionPressed = !this.state.directionPressed;
@@ -84,7 +86,7 @@ class GenreMap extends Component {
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
         const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
-            return bar.genres.indexOf(genre) > 0;
+            return bar.genres.indexOf(genre) >= 0;
         }) : bars;
 
         return (
@@ -168,6 +170,11 @@ class GenreMap extends Component {
                                 onPress={this.onRegionButtonPress}
                                 title="Search Area" />
                     </View>
+                }
+                { genre &&
+                  <View>
+                    <Button onPress = {()=>navigate('Map', { genre: null, selectedGenreName: null })} title = {`${selectedGenreName}\nxRemove Filter`}></Button>
+                  </View>
                 }
             </View>
         );
@@ -258,8 +265,8 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-        fetchBars: (location) => {
-            dispatch(fetchBarsFromServer(location));
+        fetchBars: (location, radius) => {
+            dispatch(fetchBarsFromServer(location, radius));
         },
         getDirections: (start, end) => {
             dispatch(getDirectionsToBar(start, end));

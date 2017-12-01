@@ -20,7 +20,7 @@ const getReviewsForVenue = (reviews) => {
 export const postReviewToServer = (review, venueId, userId) => {
 
     return (dispatch) => {
-        axios.post(`http://192.168.0.14:3002/api/reviews/${venueId}`, { venueId: venueId, rating: review.Rating, content: review.Review, genre: review.Genre, userId: userId })
+        axios.post(`https://djrc-api.herokuapp.com/api/reviews/${venueId}`, { venueId: venueId, rating: review.Rating, content: review.Review, genre: review.Genre, userId: userId })
             .then(res => res.data)
             .then(review => {
                 console.log(review);
@@ -32,7 +32,7 @@ export const postReviewToServer = (review, venueId, userId) => {
 
 export const fetchVenueReviews = (venueId) => {
     return (dispatch) => {
-        axios.get(`http://192.168.0.14:3002/api/reviews/${venueId}`)
+        axios.get(`https://djrc-api.herokuapp.com/api/reviews/${venueId}`)
             .then(res => res.data)
             .then(reviews => {
                 dispatch(getReviewsForVenue(reviews));
