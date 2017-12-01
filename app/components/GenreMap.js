@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
-import { SearchBar, Card, ListItem, List } from 'react-native-elements'
+import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements'
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import BarProfile from './BarProfile';
+import BarList from './BarList';
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
 
@@ -18,14 +19,17 @@ class GenreMap extends Component {
                 latitudeDelta: 0.008,
                 longitudeDelta: 0.008
             },
+            focusArea: {},
             markerSelected: {},
             directions: {
               coords: [],
               time:''
             },
             directionPressed: false,
-            regionChanged: false
+            regionChanged: false,
+            viewMode: 'map'
         };
+        this.toggleView = this.toggleView.bind(this)
         this.onMarkerClick = this.onMarkerClick.bind(this)
         this.onMapPress = this.onMapPress.bind(this)
         this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
@@ -39,6 +43,9 @@ class GenreMap extends Component {
           this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, ()=>{ this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta) })
         });
     }
+    toggleView(){
+      this.state.viewMode === 'map' ? this.setState({viewMode:'list'}) : this.setState({viewMode:'map'});
+    }
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
     }
@@ -49,13 +56,13 @@ class GenreMap extends Component {
     }
     onRegionChangeComplete(region){
       const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
-      this.setState({currentLocation:{latitude, longitude}, regionSize:{latitudeDelta, longitudeDelta}, regionChanged:true})
+      this.setState({focusArea:{latitude, longitude}, regionSize:{latitudeDelta, longitudeDelta}, regionChanged:true})
     }
     onRegionButtonPress(){
       this.setState({regionChanged:false})
       const {latitudeDelta, longitudeDelta} = this.state.regionSize;
       let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta
-      this.props.fetchBars(this.state.currentLocation, delta/3)
+      this.props.fetchBars(this.state.focusArea, delta/3)
     }
     onPolyButtonPress(){
       this.state.directionPressed = !this.state.directionPressed;
@@ -71,15 +78,16 @@ class GenreMap extends Component {
     render() {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
-        let { currentLocation, regionSize, markerSelected, directions, directionPressed, regionChanged } = this.state;
+        let { currentLocation, regionSize, markerSelected, directions, directionPressed, regionChanged, viewMode } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
         const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) >= 0;
         }) : bars;
         return (
-            <View style={styles.container}>
-                     { currentLocation.latitude &&
+
+              <View style={styles.container}>
+                     { viewMode === 'map' && currentLocation.latitude &&
                        <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
@@ -132,15 +140,26 @@ class GenreMap extends Component {
                         }
                     </MapView>
                   }
+                  { viewMode === 'list' &&
+                    <BarList bars={bars}/>
+                  }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
                         round
                         placeholder='Type Here...' />
                 </View>
+                {
+
+                }
                 { Object.keys(markerSelected).length>0 &&
                   <View style={styles.polyButton}>
                     <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
+                  </View>
+                }
+                {
+                  <View>
+                    <Button onPress = {this.toggleView} title = {`Toggle View`} />
                   </View>
                 }
                 { regionChanged &&
@@ -154,7 +173,6 @@ class GenreMap extends Component {
                   </View>
                 }
             </View>
-
         );
     }
 }

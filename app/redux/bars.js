@@ -22,7 +22,6 @@ export function updateGenres (venueId, genreArr) {
 
 export const fetchBarsFromServer = (location, radius) => {
     const { latitude, longitude } = location;
-    console.log(radius);
     return (dispatch) => {
 
         axios.get(`http://172.16.25.188:3002/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
