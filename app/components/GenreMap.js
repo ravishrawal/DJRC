@@ -73,7 +73,7 @@ class GenreMap extends Component {
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
         const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
-            return bar.genres.indexOf(genre) > 0;
+            return bar.genres.indexOf(genre) >= 0;
         }) : bars;
         return (
             <View style={styles.container}>
