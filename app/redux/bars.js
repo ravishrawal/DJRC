@@ -20,14 +20,14 @@ export function updateGenres (venueId, genreArr) {
 
 
 
-export const fetchBarsFromServer = (location) => {
+export const fetchBarsFromServer = (location, radius) => {
     const { latitude, longitude } = location;
+    console.log(radius);
     return (dispatch) => {
 
-        axios.get(`https://djrc-api.herokuapp.com/api/venues?latitude=${latitude}&longitude=${longitude}`)
+        axios.get(`http://172.16.25.188:3002/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
             .then(res => res.data)
             .then(bars => {
-
                 dispatch(getBars(bars));
 
             }).catch(console.log);
