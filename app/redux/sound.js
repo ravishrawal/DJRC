@@ -11,10 +11,12 @@ const sendRecording = (recording) => {
 
 export const sendAudio = (soundFile) => {
     return (dispatch) => {
+
         axios.get('http://172.16.25.177:3002/api/genres')
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {
+
 
                     return { key: genre.id, name: genre.name };
                 })

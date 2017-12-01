@@ -12,6 +12,8 @@ import SignUpOrIn from './SignUpOrIn';
 import Profile from './Profile';
 import BarProfile from './BarProfile';
 import BarOwner from './BarOwner';
+import Review from './Review';
+
 
 const styles = StyleSheet.create({
   icon: {
@@ -114,7 +116,8 @@ const OwnerTabs = TabNavigator({
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile }
+  SampleProfile: { screen: BarProfile },
+  Review: { screen: Review }
 }, {
   headerMode: 'none'
 });
@@ -122,7 +125,8 @@ const LoggedOutNav = StackNavigator({
 const LoggedInNav = StackNavigator({
   Home: { screen: UserTabs },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile }
+  SampleProfile: { screen: BarProfile },
+  Review: { screen: Review }
 }, {
   headerMode: 'none'
 });

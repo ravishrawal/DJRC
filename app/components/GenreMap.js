@@ -4,7 +4,7 @@ import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-nat
 import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
-import { getDirectionsToBar } from '../redux';
+import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
@@ -23,25 +23,37 @@ class GenreMap extends Component {
               coords: [],
               time:''
             },
-            directionPressed: false
+            directionPressed: false,
+            regionChanged: false
         };
         this.onMarkerClick = this.onMarkerClick.bind(this)
         this.onMapPress = this.onMapPress.bind(this)
+        this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
+        this.onRegionButtonPress = this.onRegionButtonPress.bind(this)
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
     }
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition((res, rej) => {
-            res ? this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }) : console.log(rej);
-        })
+        navigator.geolocation.getCurrentPosition((res) => {
+            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
+        }, (rej)=> {
+          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
+        });
     }
     onMarkerClick(ev){
       this.setState({markerSelected:ev})
     }
-
     onMapPress(){
       if(!this.state.directionPressed && Object.keys(this.state.markerSelected).length>0){
         this.setState({markerSelected:{}})
       }
+    }
+    onRegionChangeComplete(region){
+      const {latitude, longitude} = region;
+      this.setState({currentLocation:{latitude, longitude}, regionChanged:true})
+    }
+    onRegionButtonPress(){
+      this.setState({regionChanged:false})
+      this.props.fetchBars(this.state.currentLocation)
     }
     onPolyButtonPress(){
       this.state.directionPressed = !this.state.directionPressed;
@@ -57,21 +69,20 @@ class GenreMap extends Component {
     render() {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
-        let { currentLocation, regionSize, markerSelected, directions, directionPressed } = this.state;
+        let { currentLocation, regionSize, markerSelected, directions, directionPressed, regionChanged } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
         const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
-            return bar.genres.indexOf(genre) > 0;
+            return bar.genres.indexOf(genre) >= 0;
         }) : bars;
-        
-        bars = bars.slice(0,10)
         return (
             <View style={styles.container}>
-            {currentLocation.latitude &&
-                    <MapView
+                     { currentLocation.latitude &&
+                       <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
                         initialRegion={ Object.assign({}, currentLocation, regionSize) }
+                        onRegionChangeComplete={this.onRegionChangeComplete}
                         showsUserLocation={true}
                         showsCompass={true}
                         onPress={this.onMapPress}>
@@ -88,7 +99,7 @@ class GenreMap extends Component {
                                 image={ icon }
                             >
                                 <MapView.Callout style={styles.callout} onPress={() =>
-                                    navigate('SampleProfile', { name: marker.name })
+                                    navigate('SampleProfile', { bar: marker })
                                   } >
                                     <View style={styles.card}>
                                         <Text style={{ fontWeight: 'bold', 'fontSize': 25 }}>{marker.name}</Text>
@@ -118,7 +129,7 @@ class GenreMap extends Component {
                               strokeColor="rgba(255,140,0,0.8)"/>
                         }
                     </MapView>
-                    }
+                  }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
@@ -128,6 +139,11 @@ class GenreMap extends Component {
                 { Object.keys(markerSelected).length>0 &&
                   <View style={styles.polyButton}>
                     <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
+                  </View>
+                }
+                { regionChanged &&
+                  <View>
+                    <Button onPress = {this.onRegionButtonPress} title = 'Search This Area'></Button>
                   </View>
                 }
             </View>
@@ -174,7 +190,9 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-
+        fetchBars: (location) => {
+          dispatch(fetchBarsFromServer(location))
+        },
         getDirections: (start, end) => {
           dispatch(getDirectionsToBar(start, end))
         }

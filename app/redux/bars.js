@@ -26,10 +26,13 @@ export function addPromo (venueId, description) {
 }
 
 
-export const fetchBarsFromServer = () => {
+export const fetchBarsFromServer = (location) => {
+    const { latitude, longitude } = location;
     return (dispatch) => {
 
-        axios.get('http://172.16.25.177:3002/api/venues')
+
+        axios.get(`http://172.16.25.177:3002/api/venues?latitude=${latitude}&longitude=${longitude}`)
+
             .then(res => res.data)
             .then(bars => {
 
