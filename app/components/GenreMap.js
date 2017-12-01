@@ -146,6 +146,11 @@ class GenreMap extends Component {
                     <Button onPress = {this.onRegionButtonPress} title = 'Search This Area'></Button>
                   </View>
                 }
+                { genre &&
+                  <View>
+                    <Button onPress = {()=>navigate('Map', { genre: null, selectedGenreName: null })} title = {`${selectedGenreName}\nxRemove Filter`}></Button>
+                  </View>
+                }
             </View>
 
         );
