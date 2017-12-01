@@ -14,7 +14,7 @@ export const setOwner = (owner) => {
 //     // return function (dispatch) {
 //         return (dispatch) => {
 //         console.log('also here')
-//         axios.get(`http://192.168.0.17:3002/api/venues/owner/${ownerId}`)
+//         axios.get(`http://172.16.25.177:3002/api/venues/owner/${ownerId}`)
 //         .then((venue) => {
 //             console.log(venue);
 //             dispatch(setOwner(venue))

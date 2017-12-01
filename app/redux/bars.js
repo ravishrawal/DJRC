@@ -14,14 +14,14 @@ const getBars = (bars) => {
 
 
 export function updateGenres (venueId, genreArr) {
-  return axios.put(`http://192.168.0.17:3002/api/venues/${venueId}`, genreArr)
+  return axios.put(`http://172.16.25.177:3002/api/venues/${venueId}`, genreArr)
   .then(res => res.data)
 }
 
 export function addPromo (venueId, description) {
 
 
-  return axios.post(`http://192.168.0.17:3002/api/promos/${venueId}`, { description } )
+  return axios.post(`http://172.16.25.177:3002/api/promos/${venueId}`, { description } )
   .then(res => res.data)
 }
 
@@ -29,7 +29,7 @@ export function addPromo (venueId, description) {
 export const fetchBarsFromServer = () => {
     return (dispatch) => {
 
-        axios.get('http://192.168.0.17:3002/api/venues')
+        axios.get('http://172.16.25.177:3002/api/venues')
             .then(res => res.data)
             .then(bars => {
 

@@ -1,22 +1,24 @@
 import axios from 'axios';
 
-const GET_GENRES = 'GET_GENRES';
+const SEND_RECORDING = 'SEND_RECORDING';
 
-const getGenres = (genres) => {
+const sendRecording = (recording) => {
     return {
-        type: GET_GENRES,
-        genres
+        type: SEND_RECORDING,
+        recording
     }
 }
 
-export const fetchGenres = () => {
+export const sendAudio = (soundFile) => {
     return (dispatch) => {
         axios.get('http://172.16.25.177:3002/api/genres')
             .then(res => res.data)
             .then(genres => {
                 genres = genres.map(genre => {
+
                     return { key: genre.id, name: genre.name };
                 })
+
                 dispatch(getGenres(genres));
             }).catch(console.log);
 

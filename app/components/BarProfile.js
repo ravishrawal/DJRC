@@ -22,6 +22,7 @@ export default class BarProfile extends Component {
             { title: 'Song3' },
         ];
         const bar = this.props.navigation.state.params;
+        console.log(this.props.navigation.state)
 
         return (
             <View style={styles.container}>
