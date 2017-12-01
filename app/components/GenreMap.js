@@ -140,15 +140,15 @@ class GenreMap extends Component {
                         }
                     </MapView>
                   }
-                  { viewMode === 'list' &&
-                    <BarList bars={bars}/>
-                  }
                 <View style={styles.search}>
                     <SearchBar
                         lightTheme
                         round
                         placeholder='Type Here...' />
                 </View>
+                { viewMode === 'list' &&
+                  <BarList bars={bars}/>
+                }
                 {
 
                 }
