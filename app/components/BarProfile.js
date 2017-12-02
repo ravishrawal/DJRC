@@ -138,7 +138,7 @@ class BarProfile extends Component {
                                 title='Write a Review' />
                             <Modal isVisible={this.state.isModalVisibleWrite}>
                                 <View style={{ flex: 1 }}>
-                                    <Review bar={bar} _hideModal={this._hideModalWrite} />
+                                    <Review bar={bar} _hideModal={this._hideModalWrite} navigate = {navigate} />
                                     <Button
                                         onPress={this._hideModalWrite}
                                         title='Cancel' />

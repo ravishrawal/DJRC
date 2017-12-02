@@ -27,7 +27,6 @@ export const fetchBarsFromServer = (location, radius) => {
         axios.get(`http://172.16.25.173:3002/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
             .then(res => res.data)
             .then(bars => {
-                console.log('bar', bars[0].name)
                 dispatch(getBars(bars));
 
             }).catch(console.log);

@@ -16,7 +16,6 @@ stylesheet.fieldset = {
 
 const Form = t.form.Form;
 
-//require's string for prop,  converts '1' into number
 
 
 class Review extends React.Component {
@@ -25,7 +24,7 @@ class Review extends React.Component {
         this.state = {
             Rating: '',
             Review: '',
-            Genre: ''
+            Genre: '',
         }
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,9 +35,12 @@ class Review extends React.Component {
     }
 
     handleSubmit() {
-        const { bar, location } = this.props;
-        this.props.postReviewToServer(this.state, bar.id, this.props.user.id, location);
-        this.props._hideModal();
+        const { bar, location, navigate } = this.props;
+        
+        Promise.all([this.props.postReviewToServer(this.state, bar.id, this.props.user.id, location)])
+        .then(() => {
+            this.props._hideModal();  
+        })
     }
 
     render() {
