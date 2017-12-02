@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import { MapView } from 'expo';
-import { Button, Card, ListItem, List } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 
 import BarProfile from './BarProfile';
@@ -151,30 +151,34 @@ class GenreMap extends Component {
                 }
                 { Object.keys(markerSelected).length > 0 &&
                     <View style={styles.buttonRow}>
-                            <Button style={[styles.polyButton, styles.shadow]}
-                                backgroundColor={colors.redOrange}
-                                color="#fff"
-                                fontFamily={fonts.bold}
-                                iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
-                                onPress={this.onPolyButtonPress}
-                                title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                        <Button
+                            backgroundColor={colors.redOrange}
+                            buttonStyle={[styles.polyButton, styles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
+                            onPress={this.onPolyButtonPress}
+                            title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
                     </View>
                 }
                 { regionChanged &&
                     <View style={styles.buttonRow}>
-                            <Button style={[styles.searchRegionButton, styles.shadow]}
-                                backgroundColor={colors.redOrangeDark}
-                                color="#fff"
-                                fontFamily={fonts.bold}
-                                iconRight={{ name: 'search', type: 'font-awesome' }}
-                                onPress={this.onRegionButtonPress}
-                                title="Search Area" />
+                        <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.searchRegionButton, styles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            iconRight={{ name: 'search', type: 'font-awesome' }}
+                            onPress={this.onRegionButtonPress}
+                            title="Search Area" />
                     </View>
                 }
                 { genre &&
-                  <View>
-                    <Button onPress = {()=>navigate('Map', { genre: null, selectedGenreName: null })} title = {`${selectedGenreName}\nxRemove Filter`}></Button>
-                  </View>
+                    <View>
+                        <Button
+                            onPress={() => navigate('Map', { genre: null, selectedGenreName: null })}
+                            title = {`${selectedGenreName}\nxRemove Filter`} />
+                    </View>
                 }
             </View>
         );
