@@ -65,15 +65,25 @@ class SignUpOrIn extends Component {
         return (
             <View style={styles.container}>
                 <FormLabel>Email</FormLabel>
-                <FormInput onChangeText={onChangeEmail}></FormInput>
+                <FormInput
+                    autoFocus={true}
+                    keyboardType="email-address"
+                    onChangeText={onChangeEmail} />
+
                 <FormLabel>Password</FormLabel>
-                <FormInput name="password" onChangeText={onChangePassword}></FormInput>
+                <FormInput
+                    onChangeText={onChangePassword}
+                    name="password"
+                    secureTextEntry={true} />
+
                 <TouchableHighlight onPress={handleAdd}>
                     <Text style={[styles.button, styles.greenButton]}>Create account</Text>
                 </TouchableHighlight>
+
                 <TouchableHighlight onPress={login}>
                     <Text style={[styles.button, styles.greenButton]}>Login</Text>
                 </TouchableHighlight>
+
                 <TouchableHighlight onPress={this.spotLogin}>
                     <Text style={[styles.button, styles.greenButton]}>Spotify</Text>
                 </TouchableHighlight>
