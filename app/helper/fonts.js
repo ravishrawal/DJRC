@@ -1,6 +1,7 @@
 const fonts = {
+  bold: 'zilla-slab-bold',
   lobster: 'lobster',
-  zilla: 'zilla-slab-regular',
+  regular: 'zilla-slab-regular',
 };
 
 export default fonts;

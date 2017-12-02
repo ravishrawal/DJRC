@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
 import { Card, ListItem, List, Icon, FormLabel, FormInput } from 'react-native-elements';
+import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
 import { updateGenres, addPromo } from '../redux/bars'
 import { fetchGenres } from '../redux/genres';
+import { fetchPromos, deletePromo } from '../redux/promos';
 
 
 // import { fetchOneBar } from '../redux/bars'
@@ -26,10 +28,13 @@ class BarOwner extends Component {
     this.changePromo = this.changePromo.bind(this);
     this.submitPromo = this.submitPromo.bind(this);
     this.toggleForm = this.toggleForm.bind(this);
+    this.removePromo = this.removePromo.bind(this)
   }
 
   componentDidMount(){
+
     this.props.fetchGenres();
+
   }
 
   logout() {
@@ -39,7 +44,10 @@ class BarOwner extends Component {
 
   changePromo(promoText){
     this.setState({promoText: promoText})
-    console.log(this.state.promoText);
+  }
+
+  removePromo(promoId){
+    this.props.deletePromo(promoId);
   }
 
   submitPromo(){
@@ -48,6 +56,8 @@ class BarOwner extends Component {
       promoText: ''
     })
     this.toggleForm();
+    this.props.fetchPromos(this.props.owner.id)
+    alert('Promo added!');
   }
 
   toggleForm(){
@@ -71,27 +81,57 @@ class BarOwner extends Component {
 
 
 
-    // onSubmitHandler(ev){
-    //   ev.preventDefault();
-    //   this.setState({
-    //     formVisible: !this.state.formVisible
-    //   })
-    // }
-  render() {
-    // console.log(this.state, "state")
-    // console.log(this.props, "props")
-    // console.log(venue)
 
-    const { updateGenre, submitGenreUpdate, changePromo, submitPromo, toggleForm } = this;
+  render() {
+
+    const { updateGenre, submitGenreUpdate, changePromo, submitPromo, toggleForm, removePromo } = this;
 
     const genres = this.state.genreArr
 
     const allGenres = this.props.genres.length && this.props.genres;
 
-    const promos = this.props.owners && this.props.owners.promos
+    function renderRow(promo){
+
+     const swipeBtns = [{
+        text: 'Delete',
+        backgroundColor: 'red',
+        underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+        onPress: () => {deletePromo(promo.id)}
+      }]
+      return (
+        <Swipeout
+        right={swipeBtns}
+        autoclose='true'
+        backgroundColor='transparent'>
+
+          <ListItem
+          roundAvatar
+          key={promo.id}
+          title={promo.description}
+        />
+        </Swipeout>
+      )
+    }
+
+
 
     return (
+
       <View style={styles.container}>
+        { this.state.formVisible ?
+          <View style={styles.form}>
+            <FormLabel> Promo Description </FormLabel>
+            <FormInput onChangeText={changePromo} ></FormInput>
+
+            <Button
+              onPress={() => submitPromo()}
+              title='Save Promo'
+            />
+            <Button
+              onPress={() => toggleForm()}
+              title='Go Back' />
+        </View>
+        :
         <Card title = { this.props.owner.name } >
           <Text stlye={{ marginBottom: 10}}>
             This is info about your bar. Maybe Stats?
@@ -112,41 +152,40 @@ class BarOwner extends Component {
               title= 'Submit Genre Changes'
             />
 
-            { this.state.formVisible ?
-              <View style={styles.form}>
-                <FormLabel> Promo Description </FormLabel>
-                <FormInput onChangeText={changePromo} ></FormInput>
 
-                <Button
-                  onPress={() => submitPromo()}
-                  title='Save Promo'
-                />
-            </View>
-            :
             <Button
               onPress={() => toggleForm()}
               title='Add Promo!'
             />
-            }
+
 
             <Text stlye={{ marginBottom: 10}}>
               Current Promos
             </Text>
-            <FlatList
-              data={promos}
-              keyExtractor={item => item.name}
-              renderItem={({item})=> (
-                <ListItem
-                roundAvatar
-                title={item.name}
-                />
-              )}
-              />
+
+              <View>
+              <List containerStyle={{ marginBottom: 20 }}>
+                {
+                 this.props.owner.promos && this.props.owner.promos.length ? this.props.owner.promos.map((promo) => (
+                  <View key = {promo.id}>
+                    {renderRow(promo)}
+                    </View>
+                    )) :
+
+                          <Text>
+                           </Text>
+                          }
+              </List>
+
+            </View>
+
+
+
         <TouchableHighlight onPress={this.logout}>
           <Text style={[styles.button, styles.greenButton]}>Logout</Text>
         </TouchableHighlight>
         </Card>
-
+        }
       </View>
     )
   }
@@ -178,11 +217,12 @@ const styles = StyleSheet.create({
     },
 })
 
-const mapState = ({ genres, user, owner }) => {
+const mapState = ({ genres, user, owner, promos }) => {
     return {
         user,
         genres,
-        owner
+        owner,
+        promos
     }
 }
 
@@ -194,8 +234,12 @@ const mapDispatch = (dispatch) => {
         fetchGenres: () => {
           dispatch(fetchGenres());
         },
+        fetchPromos: (venueId) => {
+          dispatch(fetchPromos(venueId))
+        },
         updateGenres,
-        addPromo
+        addPromo,
+        deletePromo
     }
 }
 

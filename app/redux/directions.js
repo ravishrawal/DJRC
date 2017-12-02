@@ -11,7 +11,7 @@ export function getDirections(directions){
 }
 
 export function getDirectionsToBar(startLoc, destLoc){
-    return axios.post('http://172.16.25.177:3002/api/directions', {startLoc: startLoc, destLoc:destLoc})
+    return axios.post('https://djrc-api.herokuapp.com/api/directions', {startLoc: startLoc, destLoc:destLoc})
       .then(res => { return res.data })
       .catch(er=>console.log(er))
 }

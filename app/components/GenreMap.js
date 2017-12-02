@@ -34,9 +34,9 @@ class GenreMap extends Component {
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition((res) => {
-            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
+            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, ()=>{ this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta) })
         }, (rej)=> {
-          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, ()=>{ this.props.fetchBars(this.state.currentLocation) })
+          this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, ()=>{ this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta) })
         });
     }
     onMarkerClick(ev){
@@ -48,12 +48,14 @@ class GenreMap extends Component {
       }
     }
     onRegionChangeComplete(region){
-      const {latitude, longitude} = region;
-      this.setState({currentLocation:{latitude, longitude}, regionChanged:true})
+      const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
+      this.setState({currentLocation:{latitude, longitude}, regionSize:{latitudeDelta, longitudeDelta}, regionChanged:true})
     }
     onRegionButtonPress(){
       this.setState({regionChanged:false})
-      this.props.fetchBars(this.state.currentLocation)
+      const {latitudeDelta, longitudeDelta} = this.state.regionSize;
+      let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta
+      this.props.fetchBars(this.state.currentLocation, delta/3)
     }
     onPolyButtonPress(){
       this.state.directionPressed = !this.state.directionPressed;
@@ -195,8 +197,8 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-        fetchBars: (location) => {
-          dispatch(fetchBarsFromServer(location))
+        fetchBars: (location, radius) => {
+          dispatch(fetchBarsFromServer(location, radius))
         },
         getDirections: (start, end) => {
           dispatch(getDirectionsToBar(start, end))

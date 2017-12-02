@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Dimensions, Button, Text } from 'react-native';
+import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-native';
 import { Card, ListItem, List } from 'react-native-elements'
 import { fetchVenueReviews } from '../redux/reviews';
+import { fetchPromos } from '../redux/promos';
 import Modal from 'react-native-modal'
 import Stars from 'react-native-stars';
 
@@ -18,16 +19,23 @@ class BarProfile extends Component {
         this.state = {
             isModalVisibleRead: false,
             isModalVisibleWrite: false,
+            promoModalVisible: false
         }
         this._hideModalWrite = this._hideModalWrite.bind(this);
         this._showModalWrite = this._showModalWrite.bind(this);
         this._hideModalRead = this._hideModalRead.bind(this);
         this._showModalRead = this._showModalRead.bind(this);
+        this.togglePromoModal = this.togglePromoModal.bind(this);
     }
 
     componentDidMount() {
         const { bar } = this.props.navigation.state.params;
-        this.props.fetchVenueReviews(bar.id)
+        // this.props.fetchVenueReviews(bar.id)
+        // this.props.fetchPromos(bar.id)
+    }
+
+    togglePromoModal() {
+        this.setState({promoModalVisible: !this.state.promoModalVisible})
     }
 
     _showModalWrite() {
@@ -56,7 +64,9 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-        console.log(this.props.navigation.state);
+        console.log(bar.promos)
+        // const promos = bar.promos && bar.promos.length ? bar.promos : []
+
 
 
 
@@ -68,21 +78,45 @@ class BarProfile extends Component {
                     image={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHcLzVure3ON14O3siJ4qcBRGiIel7RUCxBxlUIk6QzJIIxzsx4A' }} >
                     <Text style={{ marginBottom: 10 }}>
                         Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
-            </Text>
-
-                    <Button
-                        icon={{ name: 'code' }}
-                        backgroundColor='#03A9F4'
-                        fontFamily='Lato'
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        onPress={() => console.log('assadfd')}
-                        title='Directions' />
+                    </Text>
                     <GetDirections
                       barLocation={{latitude: bar.lat, longitude: bar.lon}}
                     />
 
 
+
                         <View style={{ marginTop: 10 }} >
+                            <Button
+                                onPress = {this.togglePromoModal}
+                                title='See Promos'
+                            />
+                            <Modal isVisible = {this.state.promoModalVisible}>
+                                <View style ={{ flex:1 }}>
+                                    <List containerStyle={{ marginBottom: 20 }}>
+                                        {
+
+                                            bar.promos && bar.promos.length ? bar.promos.map((promo, i) => (
+                                                <View key = {i}>
+                                                    <ListItem
+                                                        roundAvatar
+                                                        key={i}
+                                                        title={promo}
+                                                    />
+                                                </View>
+                                                    )) :
+
+                                                <Text>
+                                                Sorry no current promos! </Text>
+                                                }
+                                    </List>
+                                    <Button
+                                        onPress={this.togglePromoModal}
+                                        title='Go Back' />
+                                </View>
+                            </Modal>
+
+
+
                             <Button
                                 onPress={this._showModalRead}
                                 title='Read Reviews' />
@@ -170,9 +204,9 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ reviews, user }) => {
+const mapState = ({ reviews, user, promos }) => {
     return {
-        reviews, user
+        reviews, user, promos
     }
 }
 
@@ -180,6 +214,9 @@ const mapDispatch = (dispatch) => {
     return {
         fetchVenueReviews: (venueId) => {
             dispatch(fetchVenueReviews(venueId))
+        },
+        fetchPromos: (venueId) => {
+            dispatch(fetchPromos(venueId))
         }
     }
 }

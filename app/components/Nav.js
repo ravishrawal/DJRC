@@ -49,6 +49,7 @@ const Tabs = TabNavigator({
           style={{ color: tintColor }}
         />
       ),
+      swipeEnabled: false
     }),
   },
   Map: {
@@ -61,6 +62,7 @@ const Tabs = TabNavigator({
           style={{ color: tintColor }}
         />
       ),
+      swipeEnabled: false
     }),
   },
   Login: {
@@ -73,6 +75,7 @@ const Tabs = TabNavigator({
           style={{ color: tintColor }}
         />
       ),
+      swipeEnabled: false
     }),
   }
 }, {
