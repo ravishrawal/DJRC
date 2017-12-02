@@ -39,6 +39,7 @@ class GenreMap extends Component {
             this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => {
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
                 this.props.setLocation({ currentLocation: this.state.currentLocation })
+                setInterval(this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta), 30)
             })
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
