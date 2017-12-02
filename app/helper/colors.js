@@ -6,6 +6,7 @@ const colors = {
   redOrange: '#ff6763', // logo
   redOrangeDark: '#e5413d',
   yellow: '#ffcba4',
+  yellowDark: '#ad6938',
   yellowLight: '#fdfea4',
 };
 
