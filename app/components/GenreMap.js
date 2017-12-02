@@ -84,6 +84,7 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) >= 0;
         }) : bars;
+        console.log(bars[0]);
         return (
 
               <View style={styles.container}>
@@ -122,10 +123,14 @@ class GenreMap extends Component {
                                             buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                                             onPress={() => console.log('assadfd')}
                                             title='Profile' />
-                                        <View style={styles.currentPlaying}>
-                                            <Text>Currently Playing: </Text>
-                                            <Text> {marker.songs && marker.songs[0].song} </Text>
-                                        </View>
+                                          { marker.songs &&
+                                            <View style={styles.currentPlaying}>
+                                              <Text>Currently Playing: </Text>
+                                              <Text> Song: {marker.songs[0].song} </Text>
+                                              <Text> Artist: {marker.songs[0].artist}</Text>
+                                            </View>
+                                          }
+
                                     </View>
                                 </MapView.Callout>
                             </MapView.Marker>
@@ -136,7 +141,7 @@ class GenreMap extends Component {
                               strokeWidth={4}
                               lineCap='round'
                               lineJoin='round'
-                              strokeColor="rgba(255,140,0,0.8)"/>
+                              strokeColor="#ff6763"/>
                         }
                     </MapView>
                   }
@@ -146,17 +151,17 @@ class GenreMap extends Component {
                         round
                         placeholder='Type Here...' />
                 </View>
+                {
+                  <View>
+                    <Button onPress = {this.toggleView} title = {`Toggle View`} />
+                  </View>
+                }
                 { viewMode === 'list' &&
                   <BarList bars={bars} navigate={navigate}/>
                 }
                 { Object.keys(markerSelected).length>0 &&
                   <View style={styles.polyButton}>
                     <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
-                  </View>
-                }
-                {
-                  <View>
-                    <Button onPress = {this.toggleView} title = {`Toggle View`} />
                   </View>
                 }
                 { regionChanged &&
