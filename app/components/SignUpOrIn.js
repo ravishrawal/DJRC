@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Linking, TouchableHighlight, Text } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 // import axios from 'axios';
-import { Button, FormInput, FormLabel } from 'react-native-elements';
+import { Button, FormInput, FormLabel, FormValidationMessage } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { WebBrowser} from 'expo';
 
@@ -64,66 +64,102 @@ class SignUpOrIn extends Component {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
         return (
             <View style={styles.container}>
-                <View style={styles.inputContainer}>
-                    <FormLabel>Email</FormLabel>
+                <View style={styles.formContainer}>
+                    <FormLabel
+                        labelStyle={styles.formLabel}>Email</FormLabel>
                     <FormInput
                         autoFocus={true}
                         keyboardType="email-address"
-                        onChangeText={onChangeEmail} />
+                        inputStyle={styles.formInput}
+                        onChangeText={onChangeEmail}
+                        placeholder="..."
+                        placeholderTextColor={colors.yellow}
+                        selectionColor={colors.yellow} />
+                    <FormValidationMessage
+                        labelStyle={styles.formError}>Error!</FormValidationMessage>
 
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel
+                        labelStyle={styles.formLabel}>Password</FormLabel>
                     <FormInput
+                        inputStyle={styles.formInput}
                         onChangeText={onChangePassword}
                         name="password"
-                    secureTextEntry={true} />
+                        placeholder="..."
+                        placeholderTextColor={colors.yellow}
+                        secureTextEntry={true}
+                        selectionColor={colors.yellow} />
+                    <FormValidationMessage
+                        labelStyle={styles.formError}>Error!</FormValidationMessage>
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                    <Button
                         backgroundColor={colors.redOrange}
+                        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                         color="#fff"
                         fontFamily={fonts.bold}
                         onPress={handleAdd}
                         title="Create Account" />
 
-                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                    <Button
                         backgroundColor={colors.redOrange}
+                        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                         color="#fff"
                         fontFamily={fonts.bold}
                         onPress={login}
                         title="Login" />
 
-                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                    <Button
                         backgroundColor={colors.redOrange}
+                        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                         color="#fff"
                         fontFamily={fonts.bold}
+                        iconRight={{ name: 'spotify', type: 'font-awesome' }}
                         onPress={this.spotLogin}
                         title="Login with Spotify" />
                 </View>
-
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    buttonContainer: {
-        alignItems: 'center',
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-    },
-    inputContainer: {
-        marginBottom: 20,
-    },
     button: {
         alignItems: 'center',
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
         margin: 10,
         width: 200,
+    },
+    buttonContainer: {
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    formError: {
+        color: colors.pink,
+        fontFamily: fonts.regular,
+        textAlign: 'right',
+    },
+    formContainer: {
+        marginBottom: 20,
+    },
+    formInput: {
+        backgroundColor: '#fff',
+        borderBottomColor: colors.blue,
+        borderBottomWidth: 1,
+        color: colors.yellow,
+        fontFamily: fonts.regular,
+        fontSize: 20,
+        padding: 10,
+        width: '100%', // github.com/react-native-training/react-native-elements/issues/461
+    },
+    formLabel: {
+        color: colors.blue,
+        fontFamily: fonts.regular,
+        fontSize: 20,
     },
 });
 
