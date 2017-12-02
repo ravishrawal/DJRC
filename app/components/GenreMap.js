@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Dimensions, Text } from 'react-native';
-import { MapView } from 'expo';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, Card, FlatList, List, ListItem, SearchBar } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import { setLocation } from '../redux/location';
@@ -63,10 +63,10 @@ class GenreMap extends Component {
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
         // fixes iOS callout overlay bug by animating the map (hopefully) imperceptibly
-        this.map.animateToCoordinate({
-            latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
-            longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
-        }, 0);
+        // this.map.animateToCoordinate({
+        //     latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
+        //     longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
+        // }, 0);
     }
     onMapPress() {
         if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
@@ -82,7 +82,7 @@ class GenreMap extends Component {
         const { latitudeDelta, longitudeDelta } = this.state.regionSize;
         let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta;
         this.props.fetchBars(this.state.focusArea, delta / 3);
-        this.props.setLocation({ currentLocation: this.state.focusArea, radius: delta / 3 });       
+        this.props.setLocation({ currentLocation: this.state.focusArea, radius: delta / 3 });
     }
     onPolyButtonPress() {
         this.state.directionPressed = !this.state.directionPressed;
@@ -115,6 +115,7 @@ class GenreMap extends Component {
                         showsPointsOfInterest={false}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
                         onRegionChangeComplete={this.onRegionChangeComplete}
+                        provider={PROVIDER_GOOGLE}
                         showsCompass={false}
                         showsUserLocation={true}
                         showsMyLocationButton={true}
@@ -123,7 +124,7 @@ class GenreMap extends Component {
                         onPress={this.onMapPress}>
 
                         { bars.map(marker => {
-                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[marker.genreNames[0].replace(/\s+/, '')];  
+                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[marker.genreNames[0].replace(/\s+/, '')];
                             return (
                             <MapView.Marker
                                 coordinate={{
@@ -150,7 +151,7 @@ class GenreMap extends Component {
                                                 <Text style={styles.currentPlayingTextSong}>Song: {marker.songs[0].song} </Text>
                                                 <Text style={styles.currentPlayingTextSong}>Artist: {marker.songs[0].artist} </Text>
                                             </View>
-                                        }                                        
+                                        }
                                     </View>
                                 </MapView.Callout>
                             </MapView.Marker>
@@ -283,16 +284,16 @@ const mapState = ({ bars, directions }) => {
 const mapDispatch = (dispatch) => {
     return {
         fetchBars: (location, radius) => {
-            dispatch(fetchBarsFromServer(location, radius))
+            dispatch(fetchBarsFromServer(location, radius));
         },
         getDirections: (start, end) => {
-            dispatch(getDirectionsToBar(start, end))
+            dispatch(getDirectionsToBar(start, end));
         },
         setLocation: (location) => {
             dispatch(setLocation(location));
         }
-    }
-}
+    };
+};
 
 
 export default connect(mapState, mapDispatch)(GenreMap);
