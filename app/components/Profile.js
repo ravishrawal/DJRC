@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, AsyncStorage } from 'react-native'
+import { View, StyleSheet, TouchableHighlight, TouchableOpacity, Text, AsyncStorage } from 'react-native'
 import { Card, ListItem, List } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user';
+import { email } from 'react-native-communications';
 
 class Profile extends Component {
     constructor() {
         super()
-       
+
         this.logout = this.logout.bind(this);
     }
 
@@ -23,6 +24,11 @@ class Profile extends Component {
             <View style={styles.container}>
                 <Card title={user.email}>
                     <Text style={{ marginBottom: 10 }}>I love music</Text>
+                    <TouchableHighlight 
+                    onPress={() => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name).')}
+                    >
+                        <Text style={[styles.button, styles.greenButton]}>Email</Text>
+                    </TouchableHighlight>
                 </Card>
                 <TouchableHighlight onPress={this.logout}>
                     <Text style={[styles.button, styles.greenButton]}>Logout</Text>
