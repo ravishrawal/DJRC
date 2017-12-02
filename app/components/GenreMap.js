@@ -61,10 +61,10 @@ class GenreMap extends Component {
     }
     onRegionChangeComplete(region){
         const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
-        this.setState({currentLocation: {latitude, longitude}, regionSize: {latitudeDelta, longitudeDelta}, regionChanged: true});
+        this.setState({ currentLocation: {latitude, longitude}, regionSize: {latitudeDelta, longitudeDelta}, regionChanged: true });
     }
     onRegionButtonPress(){
-        this.setState({regionChanged: false});
+        this.setState({ regionChanged: false });
         const {latitudeDelta, longitudeDelta} = this.state.regionSize;
         let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta;
         this.props.fetchBars(this.state.currentLocation, delta / 3);
@@ -73,7 +73,7 @@ class GenreMap extends Component {
         this.state.directionPressed = !this.state.directionPressed;
         if (this.state.directionPressed) {
             let { currentLocation, markerSelected } = this.state;
-            getDirectionsToBar({latitude: currentLocation.latitude, longitude: currentLocation.longitude}, {latitude: markerSelected.lat, longitude: markerSelected.lon})
+            getDirectionsToBar({ latitude: currentLocation.latitude, longitude: currentLocation.longitude }, { latitude: markerSelected.lat, longitude: markerSelected.lon })
             .then(res => this.setState({ directions: res }))
             .catch(er => console.log(er));
         } else {
@@ -127,11 +127,6 @@ class GenreMap extends Component {
                                         <Text style={styles.calloutTextAddress}>
                                             {marker.address}
                                         </Text>
-                                        <Button
-                                            buttonStyle={styles.calloutButton}
-                                            icon={{ name: 'info-circle', type: 'font-awesome' }}
-                                            large={true}
-                                            onPress={() => console.log('GenreMap: onPress()')} />
                                         <View style={styles.currentPlaying}>
                                             <Text style={styles.currentPlayingText}>Currently Playing: </Text>
                                             <Text style={styles.currentPlayingTextSong}>{marker.songs && marker.songs[0].song}</Text>

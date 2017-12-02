@@ -36,7 +36,7 @@ export const tokenUser = () => {
         AsyncStorage.getItem('jwt', (err, token) => {
             if (err) return err;
             if (!token) return {};
-            axios.get('http://172.16.25.175:3002/passportAuth/getUser', {
+            axios.get('https://djrc-api.herokuapp.com/passportAuth/getUser', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `JWT ${token}`
@@ -47,7 +47,7 @@ export const tokenUser = () => {
 
                     if (user.isBusiness){
 
-                    axios.get(`http://172.16.25.175:3002/api/venues/owner/${user.id}`)
+                    axios.get(`https://djrc-api.herokuapp.com/api/venues/owner/${user.id}`)
                     .then(res => res.data)
                     .then(venue => {
                         dispatch(setOwner(venue))
