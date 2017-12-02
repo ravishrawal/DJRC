@@ -55,8 +55,8 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-    
-        
+
+
         return (
             <View style={styles.container}>
 
@@ -66,14 +66,6 @@ class BarProfile extends Component {
                     <Text style={{ marginBottom: 10 }}>
                         Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
             </Text>
-
-                    <Button
-                        icon={{ name: 'code' }}
-                        backgroundColor='#03A9F4'
-                        fontFamily='Lato'
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        onPress={() => console.log('assadfd')}
-                        title='Directions' />
                     <GetDirections
                       barLocation={{latitude: bar.lat, longitude: bar.lon}}
                     />

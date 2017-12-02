@@ -147,10 +147,7 @@ class GenreMap extends Component {
                         placeholder='Type Here...' />
                 </View>
                 { viewMode === 'list' &&
-                  <BarList bars={bars}/>
-                }
-                {
-
+                  <BarList bars={bars} navigate={navigate}/>
                 }
                 { Object.keys(markerSelected).length>0 &&
                   <View style={styles.polyButton}>
@@ -209,7 +206,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ bars, directions }) => {
+const mapState = ({ bars, directions }, ownProps) => {
     return { bars, directions };
 };
 
