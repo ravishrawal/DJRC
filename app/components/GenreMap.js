@@ -38,31 +38,34 @@ class GenreMap extends Component {
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
         this.refreshMap = this.refreshMap.bind(this);
     }
+
+    
     componentDidMount() {
+        const {fetchBars} = this.props;
         navigator.geolocation.getCurrentPosition((res) => {
             this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => {
+                const {currentLocation, regionSize} = this.state;
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
                 this.props.setLocation({ currentLocation: this.state.currentLocation })
-                setInterval(this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta), 30)
+                setInterval(function () { fetchBars(currentLocation, regionSize.latitudeDelta) }, 600000)
             })
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
+                const {currentLocation, regionSize} = this.state;
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
                 this.props.setLocation({ currentLocation: this.state.currentLocation })
+                setInterval(function () { fetchBars(currentLocation, regionSize.latitudeDelta) }, 600000)
             })
         });
     }
 
-<<<<<<< HEAD
     refreshMap() {
         this.props.fetchBars(this.props.location.currentLocation, this.props.location.radius)
     }
 
-=======
     toggleView() {
         this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
     }
->>>>>>> master
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev })
     }
@@ -167,7 +170,7 @@ class GenreMap extends Component {
                         }
                     </MapView>
                 }
-              
+
                 {
                     <View>
                         <Button onPress={this.toggleView} title={`Toggle View`} />
