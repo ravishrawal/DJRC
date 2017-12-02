@@ -5,7 +5,7 @@ import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List } from 'react-native-elements'
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
-import {setLocation} from '../redux/location';
+import { setLocation } from '../redux/location';
 import BarProfile from './BarProfile';
 let { width, height } = Dimensions.get('window');
 const Icons = require('./Icons');
@@ -32,6 +32,7 @@ class GenreMap extends Component {
         this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
         this.onRegionButtonPress = this.onRegionButtonPress.bind(this)
         this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
+        this.refreshMap = this.refreshMap.bind(this);
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition((res) => {
@@ -42,10 +43,15 @@ class GenreMap extends Component {
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
-                this.props.setLocation({ currentLocation: this.state.currentLocation})
+                this.props.setLocation({ currentLocation: this.state.currentLocation })
             })
         });
     }
+
+    refreshMap() {
+        this.props.fetchBars(this.props.location.currentLocation, this.props.location.radius)
+    }
+
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev })
     }
@@ -163,6 +169,10 @@ class GenreMap extends Component {
                         <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`}></Button>
                     </View>
                 }
+                <Button
+                    title='Refresh map'
+                    onPress={this.refreshMap}
+                />
             </View>
 
         );
