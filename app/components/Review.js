@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import t from 'tcomb-form-native';
-
 import { postReviewToServer } from '../redux/reviews';
 var _ = require('lodash');
 
@@ -37,9 +36,8 @@ class Review extends React.Component {
     }
 
     handleSubmit() {
-        const { bar } = this.props;
-        console.log(this.state)
-        this.props.postReviewToServer(this.state, bar.id, this.props.user.id);
+        const { bar, location } = this.props;
+        this.props.postReviewToServer(this.state, bar.id, this.props.user.id, location);
         this.props._hideModal();
     }
 
@@ -98,14 +96,14 @@ const styles = StyleSheet.create({
 });
 
 
-const mapState = ({ genres, user }) => {
-    return { genres, user };
+const mapState = ({ genres, user, location }) => {
+    return { genres, user, location };
 };
 
 const mapDispatch = (dispatch) => {
     return {
-        postReviewToServer: (review, barId, userId) => {
-            dispatch(postReviewToServer(review, barId, userId))
+        postReviewToServer: (review, barId, userId, location) => {
+            dispatch(postReviewToServer(review, barId, userId, location))
         }
     }
 };

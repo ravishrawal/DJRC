@@ -55,7 +55,6 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-        console.log('review', bar)
 
         return (
             <View style={styles.container}>
@@ -146,7 +145,7 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        : <Text></Text>}
+                        : <Text>Log in to write a review!</Text>}
 
                 </Card>
 
