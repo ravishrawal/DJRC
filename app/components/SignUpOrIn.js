@@ -64,58 +64,66 @@ class SignUpOrIn extends Component {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
         return (
             <View style={styles.container}>
-                <FormLabel>Email</FormLabel>
-                <FormInput
-                    autoFocus={true}
-                    keyboardType="email-address"
-                    onChangeText={onChangeEmail} />
+                <View style={styles.inputContainer}>
+                    <FormLabel>Email</FormLabel>
+                    <FormInput
+                        autoFocus={true}
+                        keyboardType="email-address"
+                        onChangeText={onChangeEmail} />
 
-                <FormLabel>Password</FormLabel>
-                <FormInput
-                    onChangeText={onChangePassword}
-                    name="password"
+                    <FormLabel>Password</FormLabel>
+                    <FormInput
+                        onChangeText={onChangePassword}
+                        name="password"
                     secureTextEntry={true} />
+                </View>
 
-                <TouchableHighlight
-                    onPress={handleAdd}
-                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
-                        <Text style={styles.buttonText}>Create account</Text>
-                </TouchableHighlight>
+                <View style={styles.buttonContainer}>
+                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                        backgroundColor={colors.redOrange}
+                        color="#fff"
+                        fontFamily={fonts.bold}
+                        onPress={handleAdd}
+                        title="Create Account" />
 
-                <TouchableHighlight
-                    onPress={login}
-                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
-                        <Text style={styles.buttonText}>Login</Text>
-                </TouchableHighlight>
+                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                        backgroundColor={colors.redOrange}
+                        color="#fff"
+                        fontFamily={fonts.bold}
+                        onPress={login}
+                        title="Login" />
 
-                <TouchableHighlight
-                    onPress={this.spotLogin}
-                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
-                        <Text style={styles.buttonText}>Spotify</Text>
-                </TouchableHighlight>
+                    <Button style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                        backgroundColor={colors.redOrange}
+                        color="#fff"
+                        fontFamily={fonts.bold}
+                        onPress={this.spotLogin}
+                        title="Login with Spotify" />
+                </View>
+
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 10,
+    },
+    inputContainer: {
+        marginBottom: 20,
     },
     button: {
         alignItems: 'center',
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
         margin: 10,
-        padding: 10,
         width: 200,
-    },
-    buttonText: {
-        color: '#fff',
-        fontFamily: fonts.bold,
-        fontSize: 20,
     },
 });
 
