@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
@@ -13,6 +13,7 @@ import Profile from './Profile';
 import BarProfile from './BarProfile';
 import BarOwner from './BarOwner';
 import Review from './Review';
+import DrawerNav from './DrawerNav';
 
 
 const styles = StyleSheet.create({
@@ -74,42 +75,45 @@ const Tabs = TabNavigator({
         />
       ),
     }),
+  },
+  DrawerNav: {
+    screen: DrawerNav
   }
 }, {
-  animationEnabled: true,
-  tabBarOptions: {
-    activeTintColor: colors.pink,
-    iconStyle: styles.icon,
-    inactiveTintColor: colors.gray,
-    indicatorStyle: styles.indicator,
-    labelStyle: styles.label,
-    style: styles.tabBar,
-  },
-  tabBarPosition: 'bottom',
-});
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: colors.pink,
+      iconStyle: styles.icon,
+      inactiveTintColor: colors.gray,
+      indicatorStyle: styles.indicator,
+      labelStyle: styles.label,
+      style: styles.tabBar,
+    },
+    tabBarPosition: 'bottom',
+  });
 
 const UserTabs = TabNavigator({
   Home: { screen: GenreTiles },
   Map: { screen: GenreMap },
   Profile: { screen: Profile }
 }, {
-  animationEnabled: true,
-  tabBarOptions: {
-    activeTintColor: colors.pink,
-    iconStyle: styles.icon,
-    inactiveTintColor: colors.gray,
-    indicatorStyle: styles.indicator,
-    labelStyle: styles.label,
-    style: styles.tabBar,
-  },
-  tabBarPosition: 'bottom',
-});
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: colors.pink,
+      iconStyle: styles.icon,
+      inactiveTintColor: colors.gray,
+      indicatorStyle: styles.indicator,
+      labelStyle: styles.label,
+      style: styles.tabBar,
+    },
+    tabBarPosition: 'bottom',
+  });
 
 const OwnerTabs = TabNavigator({
-  MyBar: {screen: BarOwner },
+  MyBar: { screen: BarOwner },
   Map: { screen: GenreMap }
 }, {
-  tabBarPosition: 'bottom'
+    tabBarPosition: 'bottom'
   }
 )
 
@@ -119,8 +123,8 @@ const LoggedOutNav = StackNavigator({
   SampleProfile: { screen: BarProfile },
   Review: { screen: Review }
 }, {
-  headerMode: 'none'
-});
+    headerMode: 'none'
+  });
 
 const LoggedInNav = StackNavigator({
   Home: { screen: UserTabs },
@@ -128,21 +132,21 @@ const LoggedInNav = StackNavigator({
   SampleProfile: { screen: BarProfile },
   Review: { screen: Review }
 }, {
-  headerMode: 'none'
-});
+    headerMode: 'none'
+  });
 
 const LoggedInOwner = StackNavigator({
   MyBar: { screen: OwnerTabs },
   Map: { screen: GenreMap }
 }, {
     headerMode: 'none'
-});
+  });
 
 class Nav extends Component {
 
   render() {
 
-    const {user} = this.props;
+    const { user } = this.props;
     const Tab = user.id ? (user.isBusiness ? LoggedInOwner : LoggedInNav) : LoggedOutNav;
 
     return (
