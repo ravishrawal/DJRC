@@ -68,7 +68,7 @@ class SignUpOrIn extends Component {
                     <FormLabel
                         labelStyle={styles.formLabel}>Email</FormLabel>
                     <FormInput
-                        autoFocus={true}
+                        autoFocus={false}
                         keyboardType="email-address"
                         inputStyle={styles.formInput}
                         onChangeText={onChangeEmail}
@@ -76,7 +76,7 @@ class SignUpOrIn extends Component {
                         placeholderTextColor={colors.yellow}
                         selectionColor={colors.yellow} />
                     <FormValidationMessage
-                        labelStyle={styles.formError}>Error!</FormValidationMessage>
+                        labelStyle={styles.formError}></FormValidationMessage>
 
                     <FormLabel
                         labelStyle={styles.formLabel}>Password</FormLabel>
@@ -89,7 +89,7 @@ class SignUpOrIn extends Component {
                         secureTextEntry={true}
                         selectionColor={colors.yellow} />
                     <FormValidationMessage
-                        labelStyle={styles.formError}>Error!</FormValidationMessage>
+                        labelStyle={styles.formError}></FormValidationMessage>
                 </View>
 
                 <View style={styles.buttonContainer}>
