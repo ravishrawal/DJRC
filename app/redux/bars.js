@@ -14,7 +14,7 @@ const getBars = (bars) => {
 
 
 export function updateGenres (venueId, genreArr) {
-  return axios.put(`https://djrc-api.herokuapp.com/api/venues/${venueId}`, genreArr)
+  return axios.put(`http://172.16.25.175:3002/api/venues/${venueId}`, genreArr)
   .then(res => res.data)
 }
 
@@ -25,7 +25,7 @@ export const fetchBarsFromServer = (location, radius) => {
     console.log(radius);
     return (dispatch) => {
 
-        axios.get(`http://172.16.25.188:3002/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
+        axios.get(`http://172.16.25.175:3002/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
             .then(res => res.data)
             .then(bars => {
                 dispatch(getBars(bars));
