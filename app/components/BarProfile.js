@@ -55,67 +55,68 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-    
-        
+        console.log('review', bar)
+
         return (
             <View style={styles.container}>
 
                 <Card
-                    title={`${bar.name} \n ${bar.genreNames}`}
-                    image={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHcLzVure3ON14O3siJ4qcBRGiIel7RUCxBxlUIk6QzJIIxzsx4A' }} >
+                    title={`${bar.name} \n ${bar.genreNames} \n`}>
+                    <Text>Rating:</Text>
+                    <Stars
+                        value={Number(bar.avgRating)}
+                        spacing={8}
+                        count={5}
+                        starSize={20}
+                        fullStar={require('../../assets/starFilled.png')}
+                        emptyStar={require('../../assets/starEmpty.png')} />
+
                     <Text style={{ marginBottom: 10 }}>
                         Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
-            </Text>
+    </Text>
 
-                    <Button
-                        icon={{ name: 'code' }}
-                        backgroundColor='#03A9F4'
-                        fontFamily='Lato'
-                        buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                        onPress={() => console.log('assadfd')}
-                        title='Directions' />
                     <GetDirections
-                      barLocation={{latitude: bar.lat, longitude: bar.lon}}
+                        barLocation={{ latitude: bar.lat, longitude: bar.lon }}
                     />
 
 
-                        <View style={{ marginTop: 10 }} >
-                            <Button
-                                onPress={this._showModalRead}
-                                title='Read Reviews' />
-                            <Modal isVisible={this.state.isModalVisibleRead}>
-                                <View style={{ flex: 1 }}>
-                                    <List containerStyle={{ marginBottom: 20 }}>
-                                        {
-                                            this.props.reviews && this.props.reviews.length ? this.props.reviews.map((review, i) => (
-                                                <View key = {i}>
-                                                    <ListItem
-                                                        roundAvatar
-                                                        key={i}
-                                                        title={review.content}
-                                                        avatar={<View style={{ alignItems: 'center' }}>
-                                                            <Stars
-                                                                value={Number(review.rating)}
-                                                                spacing={8}
-                                                                count={5}
-                                                                starSize={10}
-                                                                fullStar={require('../../assets/starFilled.png')}
-                                                                emptyStar={require('../../assets/starEmpty.png')} />
-                                                        </View>}
-                                                    />
+                    <View style={{ marginTop: 10 }} >
+                        <Button
+                            onPress={this._showModalRead}
+                            title='Read Reviews' />
+                        <Modal isVisible={this.state.isModalVisibleRead}>
+                            <View style={{ flex: 1 }}>
+                                <List containerStyle={{ marginBottom: 20 }}>
+                                    {
+                                        this.props.reviews && this.props.reviews.length ? this.props.reviews.map((review, i) => (
+                                            <View key={i}>
+                                                <ListItem
+                                                    roundAvatar
+                                                    key={i}
+                                                    title={review.content}
+                                                    avatar={<View style={{ alignItems: 'center' }}>
+                                                        <Stars
+                                                            value={Number(review.rating)}
+                                                            spacing={8}
+                                                            count={5}
+                                                            starSize={10}
+                                                            fullStar={require('../../assets/starFilled.png')}
+                                                            emptyStar={require('../../assets/starEmpty.png')} />
+                                                    </View>}
+                                                />
 
-                                                </View>
-                                            ))
-                                                :
-                                                null
-                                        }
-                                    </List>
-                                    <Button
-                                        onPress={this._hideModalRead}
-                                        title='Go Back' />
-                                </View>
-                            </Modal>
-                        </View>
+                                            </View>
+                                        ))
+                                            :
+                                            null
+                                    }
+                                </List>
+                                <Button
+                                    onPress={this._hideModalRead}
+                                    title='Go Back' />
+                            </View>
+                        </Modal>
+                    </View>
 
 
                     <List containerStyle={{ marginBottom: 20 }}>
@@ -145,7 +146,7 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        : null}
+                        : <Text></Text>}
 
                 </Card>
 
