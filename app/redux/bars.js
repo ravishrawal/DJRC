@@ -27,6 +27,7 @@ export const fetchBarsFromServer = (location, radius) => {
         axios.get(`https://djrc-api.herokuapp.com/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
             .then(res => res.data)
             .then(bars => {
+                console.log('asdf', bars.length)
                 dispatch(getBars(bars));
 
             }).catch(console.log);

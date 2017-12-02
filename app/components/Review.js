@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import t from 'tcomb-form-native';
-
 import { postReviewToServer } from '../redux/reviews';
 var _ = require('lodash');
 
@@ -17,7 +16,6 @@ stylesheet.fieldset = {
 
 const Form = t.form.Form;
 
-//require's string for prop,  converts '1' into number
 
 
 class Review extends React.Component {
@@ -26,7 +24,7 @@ class Review extends React.Component {
         this.state = {
             Rating: '',
             Review: '',
-            Genre: ''
+            Genre: '',
         }
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,10 +35,12 @@ class Review extends React.Component {
     }
 
     handleSubmit() {
-        const { bar } = this.props;
-        console.log(this.state)
-        this.props.postReviewToServer(this.state, bar.id, this.props.user.id);
-        this.props._hideModal();
+        const { bar, location, navigate } = this.props;
+        
+        Promise.all([this.props.postReviewToServer(this.state, bar.id, this.props.user.id, location)])
+        .then(() => {
+            this.props._hideModal();  
+        })
     }
 
     render() {
@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
 });
 
 
-const mapState = ({ genres, user }) => {
-    return { genres, user };
+const mapState = ({ genres, user, location }) => {
+    return { genres, user, location };
 };
 
 const mapDispatch = (dispatch) => {
     return {
-        postReviewToServer: (review, barId, userId) => {
-            dispatch(postReviewToServer(review, barId, userId))
+        postReviewToServer: (review, barId, userId, location) => {
+            dispatch(postReviewToServer(review, barId, userId, location))
         }
     }
 };
