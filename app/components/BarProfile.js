@@ -64,9 +64,6 @@ class BarProfile extends Component {
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
-        console.log(bar.promos)
-        // const promos = bar.promos && bar.promos.length ? bar.promos : []
-
 
 
 
@@ -74,17 +71,22 @@ class BarProfile extends Component {
             <View style={styles.container}>
 
                 <Card
-                    title={`${bar.name} \n ${bar.genreNames}`}
-                    image={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHcLzVure3ON14O3siJ4qcBRGiIel7RUCxBxlUIk6QzJIIxzsx4A' }} >
-                    <Text style={{ marginBottom: 10 }}>
-                        Low-key Irish tavern serving pints & a full menu of pub grub to Financial District types.
-                    </Text>
+                    title={`${bar.name} \n ${bar.genreNames} \n`}>
+                    <Text>Rating:</Text>
+                    <Stars
+                        value={Number(bar.avgRating)}
+                        spacing={8}
+                        count={5}
+                        starSize={20}
+                        fullStar={require('../../assets/starFilled.png')}
+                        emptyStar={require('../../assets/starEmpty.png')} />
+
+
+
+
                     <GetDirections
-                      barLocation={{latitude: bar.lat, longitude: bar.lon}}
+                        barLocation={{ latitude: bar.lat, longitude: bar.lon }}
                     />
-
-
-
                         <View style={{ marginTop: 10 }} >
                             <Button
                                 onPress = {this.togglePromoModal}
@@ -153,8 +155,6 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-
-
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
                             songs.map((song, i) => (
@@ -175,14 +175,14 @@ class BarProfile extends Component {
                                 title='Write a Review' />
                             <Modal isVisible={this.state.isModalVisibleWrite}>
                                 <View style={{ flex: 1 }}>
-                                    <Review bar={bar} _hideModal={this._hideModalWrite} />
+                                    <Review bar={bar} _hideModal={this._hideModalWrite} navigate = {navigate} />
                                     <Button
                                         onPress={this._hideModalWrite}
                                         title='Cancel' />
                                 </View>
                             </Modal>
                         </View>
-                        : null}
+                        : <Text>Log in to write a review!</Text>}
 
                 </Card>
 

@@ -37,6 +37,7 @@ export const fetchBarsFromServer = (location, radius) => {
 
             .then(res => res.data)
             .then(bars => {
+                console.log('asdf', bars.length)
                 dispatch(getBars(bars));
 
             }).catch(console.log);
