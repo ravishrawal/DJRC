@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Linking, TouchableHighlight, Text } from 'react-native';
-import axios from 'axios';
-import { FormLabel, FormInput } from 'react-native-elements';
+// import axios from 'axios';
+import { Button, FormInput, FormLabel } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { WebBrowser} from 'expo';
 
@@ -17,7 +17,7 @@ class SignUpOrIn extends Component {
         this.state = {
             email: '',
             password: '',
-            token: ''
+            token: '',
         };
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
@@ -76,16 +76,22 @@ class SignUpOrIn extends Component {
                     name="password"
                     secureTextEntry={true} />
 
-                <TouchableHighlight onPress={handleAdd}>
-                    <Text style={[styles.button, styles.greenButton]}>Create account</Text>
+                <TouchableHighlight
+                    onPress={handleAdd}
+                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
+                        <Text style={styles.buttonText}>Create account</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={login}>
-                    <Text style={[styles.button, styles.greenButton]}>Login</Text>
+                <TouchableHighlight
+                    onPress={login}
+                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
+                        <Text style={styles.buttonText}>Login</Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight onPress={this.spotLogin}>
-                    <Text style={[styles.button, styles.greenButton]}>Spotify</Text>
+                <TouchableHighlight
+                    onPress={this.spotLogin}
+                    style={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}>
+                        <Text style={styles.buttonText}>Spotify</Text>
                 </TouchableHighlight>
             </View>
         );
@@ -95,22 +101,21 @@ class SignUpOrIn extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingHorizontal: 10,
     },
     button: {
-        borderRadius: 4,
-        padding: 20,
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#fff'
-    },
-    greenButton: {
-        marginTop: 20,
-        backgroundColor: '#4CD964'
-    },
-    centering: {
         alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: colors.redOrange,
+        borderColor: colors.redOrange,
+        margin: 10,
+        padding: 10,
+        width: 200,
+    },
+    buttonText: {
+        color: '#fff',
+        fontFamily: fonts.bold,
+        fontSize: 20,
     },
 });
 
