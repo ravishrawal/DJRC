@@ -5,7 +5,7 @@ import { MapView } from 'expo';
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements'
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
-import {setLocation} from '../redux/location';
+import { setLocation } from '../redux/location';
 import BarProfile from './BarProfile';
 import BarList from './BarList';
 let { width, height } = Dimensions.get('window');
@@ -46,16 +46,16 @@ class GenreMap extends Component {
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
-                this.props.setLocation({ currentLocation: this.state.currentLocation})
+                this.props.setLocation({ currentLocation: this.state.currentLocation })
             })
         });
     }
 
-    toggleView(){
-      this.state.viewMode === 'map' ? this.setState({viewMode:'list'}) : this.setState({viewMode:'map'});
+    toggleView() {
+        this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
     }
-    onMarkerClick(ev){
-      this.setState({markerSelected:ev})
+    onMarkerClick(ev) {
+        this.setState({ markerSelected: ev })
     }
     onMapPress() {
         if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
@@ -65,7 +65,7 @@ class GenreMap extends Component {
 
     onRegionChangeComplete(region) {
         const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
-        this.setState({ currentLocation: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta }, regionChanged: true })
+        this.setState({ focusArea: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta }, regionChanged: true })
     }
     onRegionButtonPress() {
         this.setState({ regionChanged: false })
@@ -97,9 +97,9 @@ class GenreMap extends Component {
         console.log(bars[0]);
         return (
 
-              <View style={styles.container}>
-                     { viewMode === 'map' && currentLocation.latitude &&
-                       <MapView
+            <View style={styles.container}>
+                {viewMode === 'map' && currentLocation.latitude &&
+                    <MapView
                         style={styles.map}
                         showsPointsOfInterest={false}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
@@ -109,80 +109,77 @@ class GenreMap extends Component {
                         onPress={this.onMapPress}>
                         {bars.map(marker => {
 
-                          let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName===selectedGenreName }).replace(/\s+/,"")] : Icons[ marker.genreNames[0].replace(/\s+/,"")]
-                          return (
-                            <MapView.Marker
-                                coordinate={{
-                                    latitude: marker.lat,
-                                    longitude: marker.lon
-                                }}
-                                key={marker.id}
-                                onPress={this.onMarkerClick.bind(this, marker)}
-                                image={ icon }
-                            >
-                                <MapView.Callout style={styles.callout} onPress={() =>
-                                    navigate('SampleProfile', { bar: marker })
-                                  } >
-                                    <View style={styles.card}>
-                                        <Text style={{ fontWeight: 'bold', 'fontSize': 25 }}>{marker.name}</Text>
-                                        <Text style={{ marginBottom: 10 }}>
-                                            Address: {marker.address}</Text>
-                                        <Button
-                                            icon={{ name: 'code' }}
-                                            backgroundColor='#03A9F4'
-                                            fontFamily='Lato'
-                                            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
-                                            onPress={() => console.log('assadfd')}
-                                            title='Profile' />
-                                          { marker.songs &&
-                                            <View style={styles.currentPlaying}>
-                                              <Text>Currently Playing: </Text>
-                                              <Text> Song: {marker.songs[0].song} </Text>
-                                              <Text> Artist: {marker.songs[0].artist}</Text>
-                                            </View>
-                                          }
+                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName }).replace(/\s+/, "")] : Icons[marker.genreNames[0].replace(/\s+/, "")]
+                            return (
+                                <MapView.Marker
+                                    coordinate={{
+                                        latitude: marker.lat,
+                                        longitude: marker.lon
+                                    }}
+                                    key={marker.id}
+                                    onPress={this.onMarkerClick.bind(this, marker)}
+                                    image={icon}
+                                >
+                                    <MapView.Callout style={styles.callout} onPress={() =>
+                                        navigate('SampleProfile', { bar: marker })
+                                    } >
+                                        <View style={styles.card}>
+                                            <Text style={{ fontWeight: 'bold', 'fontSize': 25 }}>{marker.name}</Text>
+                                            <Text style={{ marginBottom: 10 }}>Address: {marker.address}</Text>
+                                            <Button
+                                                icon={{ name: 'code' }}
+                                                backgroundColor='#03A9F4'
+                                                fontFamily='Lato'
+                                                buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+                                                onPress={() => console.log('assadfd')}
+                                                title='Profile' />
 
-                                    </View>
-                                </MapView.Callout>
-                            </MapView.Marker>
-                        )})}
-                        { directions.time.length>0 && directionPressed &&
-                          <MapView.Polyline
-                              coordinates={directions.coords}
-                              strokeWidth={4}
-                              lineCap='round'
-                              lineJoin='round'
-                              strokeColor="#ff6763"/>
+                                            {marker.songs &&
+                                                <View style={styles.currentPlaying}>
+                                                    <Text>Currently Playing: </Text>
+                                                    <Text> Song: {marker.songs[0].song} </Text>
+                                                    <Text> Artist: {marker.songs[0].artist}</Text>
+                                                </View>
+                                            }
+
+                                        </View>
+                                    </MapView.Callout>
+                                </MapView.Marker>
+                            )
+                        })}
+
+                        {directions.time.length > 0 && directionPressed &&
+                            <MapView.Polyline
+                                coordinates={directions.coords}
+                                strokeWidth={4}
+                                lineCap='round'
+                                lineJoin='round'
+                                strokeColor="#ff6763" />
                         }
                     </MapView>
                 }
-                <View style={styles.search}>
-                    <SearchBar
-                        lightTheme
-                        round
-                        placeholder='Type Here...' />
-                </View>
+              
                 {
-                  <View>
-                    <Button onPress = {this.toggleView} title = {`Toggle View`} />
-                  </View>
-                }
-                { viewMode === 'list' &&
-                  <BarList bars={bars} navigate={navigate}/>
-                }
-                { Object.keys(markerSelected).length>0 &&
-                  <View style={styles.polyButton}>
-                    <Button onPress = {this.onPolyButtonPress} title = { directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!' }></Button>
-                  </View>
-                }
-                {regionChanged &&
                     <View>
-                        <Button onPress={this.onRegionButtonPress} title='Search This Area'></Button>
+                        <Button onPress={this.toggleView} title={`Toggle View`} />
+                    </View>
+                }
+                {viewMode === 'list' &&
+                    <BarList bars={bars} navigate={navigate} />
+                }
+                {Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
+                    <View style={styles.polyButton}>
+                        <Button onPress={this.onPolyButtonPress} title={directionPressed ? `${directions.time} Away! \n x Cancel Navigation` : 'Let\'s Go!'} />
+                    </View>
+                }
+                {regionChanged && viewMode === 'map' &&
+                    <View>
+                        <Button onPress={this.onRegionButtonPress} title='Search This Area' />
                     </View>
                 }
                 {genre &&
                     <View>
-                        <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`}></Button>
+                        <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`} />
                     </View>
                 }
             </View>
@@ -222,7 +219,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ bars, directions }, ownProps) => {
+const mapState = ({ bars, directions }) => {
     return { bars, directions };
 };
 
