@@ -211,8 +211,8 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapState = ({ bars, directions }) => {
-    return { bars, directions };
+const mapState = ({ bars, directions, location }) => {
+    return { bars, directions, location };
 };
 
 const mapDispatch = (dispatch) => {
