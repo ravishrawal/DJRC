@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableHighlight, TouchableOpacity, Text, AsyncStor
 import { Card, ListItem, List } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user';
-import { email } from 'react-native-communications';
+
 
 class Profile extends Component {
     constructor() {
@@ -30,11 +30,6 @@ class Profile extends Component {
                    
                 </Card>
 
-                <TouchableHighlight
-                onPress={() => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name).')}
-            >
-                <Text style={[styles.button, styles.greenButton]}>CLick here to link your bar!</Text>
-            </TouchableHighlight>
                
             </View>
         )

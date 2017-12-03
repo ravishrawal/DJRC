@@ -30,7 +30,7 @@ class BarProfile extends Component {
 
     componentDidMount() {
         const { bar } = this.props.navigation.state.params;
-        // this.props.fetchVenueReviews(bar.id)
+        this.props.fetchVenueReviews(bar.id)
         // this.props.fetchPromos(bar.id)
     }
 
