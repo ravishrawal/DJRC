@@ -3,7 +3,9 @@ import {connect} from 'react-redux';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
 import {fetchGenres} from '../redux/genres';
 import {tokenUser} from '../redux/user';
-// import {fetchSpotifyBars} from '../redux/spotifyBars';
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 
 const Icons = require('../../assets/Icons');
 let { width, height } = Dimensions.get('window');
@@ -23,7 +25,7 @@ class GenreTiles extends React.Component {
             return (
               <View
                 key={genre.key}
-                style = {styles.buttonStyle}>
+                style = {[styles.buttonStyle, commonStyles.shadow, commonStyles.roundedCorners]}>
                 <TouchableOpacity
                   onPress={() =>
                     navigate('Map', { genre: genre.key, selectedGenreName: genre.name })
@@ -52,18 +54,16 @@ const styles = StyleSheet.create({
   buttonStyle: {
     width: (width-20)/2,
     height: (height-150)/5,
-    backgroundColor: '#ff4554',
+    backgroundColor: colors.redOrangeDark,
     margin: 5,
-    borderWidth: 3,
-    borderColor: '#00c3e3',
-    borderRadius: 2,
+    borderColor: colors.redOrangeDark,
     justifyContent: 'center'
   },
   genreText: {
     alignSelf: 'center',
-    fontFamily: 'zilla-slab-regular',
+    fontFamily: fonts.bold,
     fontSize: 20,
-    color: '#f7f7f7',
+    color: colors.offWhite,
   }
 });
 
