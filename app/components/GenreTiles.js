@@ -7,7 +7,7 @@ import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js';
 
-const Icons = require('../../assets/Icons');
+const Icons = require('../../assets/Icons/tile');
 let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {
