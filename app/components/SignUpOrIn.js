@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Linking } from 'react-native';
 // import axios from 'axios';
-import { Button, FormInput, FormLabel, FormValidationMessage } from 'react-native-elements';
+import { Button, FormInput, FormLabel, FormValidationMessage, CheckBox } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { WebBrowser} from 'expo';
 
@@ -18,12 +18,14 @@ class SignUpOrIn extends Component {
             email: '',
             password: '',
             token: '',
+            checked: false
         };
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.login = this.login.bind(this);
         this.handleRedirect = this.handleRedirect.bind(this);
+        this.onCheck = this.onCheck.bind(this);
     }
     componentDidMount() {
         Linking.addEventListener('url', this.handleRedirect);
@@ -34,12 +36,18 @@ class SignUpOrIn extends Component {
     onChangePassword(password) {
         this.setState({ password: password });
     }
+    onCheck(){
+        this.setState({checked:!this.state.checked})
+    }
     handleAdd() {
         const credentials = {
             email: this.state.email,
             password: this.state.password,
+            isBusiness: this.state.checked
         };
-        this.props.signUp(credentials);
+        const {navigate} = this.props.navigation;
+        this.props.signUp(credentials)
+        if (this.state.checked) navigate('ClaimBar', {navigate: this.props.navigation});
     }
     login() {
         const { navigate } = this.props.navigation;
@@ -90,7 +98,17 @@ class SignUpOrIn extends Component {
                         selectionColor={colors.yellow} />
                     <FormValidationMessage
                         labelStyle={styles.formError}>Error!</FormValidationMessage>
+                    
+                    <CheckBox
+                        center
+                        title='Check here to claim a bar!'
+                        checked={this.state.checked}
+                        onPress={this.onCheck}
+                        textStyle = {styles.formLabel}
+                      />
+
                 </View>
+
 
                 <View style={styles.buttonContainer}>
                     <Button
