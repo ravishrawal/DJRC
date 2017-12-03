@@ -31,7 +31,7 @@ export default function BarList(props){
         }
       }
     ]
-    const icon = Icons[ bar.genreNames[0].replace(/\s+/,"")]
+    const icon = Icons[ bar.genreNames[0].replace(/\s+/,"").replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')]
     return (
       <Swipeout
         right={swipeoutBtns}
