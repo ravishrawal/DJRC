@@ -117,7 +117,7 @@ const UserTabs = TabNavigator({
       ),
     }),
   },
-  Profile: {
+  Logout: {
     screen: Profile,
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor }) => (

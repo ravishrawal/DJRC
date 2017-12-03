@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, TouchableOpacity, Text, AsyncStorage } from 'react-native'
-import { Card, ListItem, List } from 'react-native-elements'
+import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
+import { Card, ListItem, List, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { logoutUser } from '../redux/user';
+import { email } from 'react-native-communications';
 
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 
 class Profile extends Component {
     constructor() {
@@ -18,19 +21,13 @@ class Profile extends Component {
     }
 
     render() {
-        const { user } = this.props;
 
         return (
             <View style={styles.container}>
-                <Card title={user.email}>
-                    <Text style={{ marginBottom: 10 }}>I love music</Text>
-                    <TouchableHighlight onPress={this.logout}>
-                    <Text style={[styles.button, styles.greenButton]}>Logout</Text>
+                <Text style={[styles.button, styles.name]}>User: {this.props.user.email}</Text>
+                <TouchableHighlight onPress={this.logout}>
+                    <Text style={[styles.button, styles.redButton]}>Logout</Text>
                 </TouchableHighlight>
-                   
-                </Card>
-
-               
             </View>
         )
     }
@@ -48,9 +45,19 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#fff'
     },
-    greenButton: {
-        marginTop: 20,
-        backgroundColor: '#4CD964'
+    redButton: {
+        alignItems: 'center',
+        backgroundColor: colors.redOrange,
+        borderColor: colors.redOrange,
+        margin: 10,
+        fontSize: 30
+    },
+    name: {
+        alignItems: 'center',
+        color: colors.blue,
+        borderColor: colors.redOrange,
+        margin: 10,
+        fontSize: 30
     },
     centering: {
         alignItems: 'center',
@@ -58,19 +65,9 @@ const styles = StyleSheet.create({
     }
 })
 
-
 const mapState = ({ user }) => {
-    return {
-        user
-    }
+    return { user };
 }
 
-const mapDispatch = (dispatch) => {
-    return {
-        logoutUser: (navigate) => {
-            dispatch(logoutUser(navigate));
-        }
-    }
-}
 
-export default connect(mapState, mapDispatch)(Profile);
+export default connect(mapState, null)(Profile);
