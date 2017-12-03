@@ -138,6 +138,8 @@ class BarOwner extends Component {
         :
         <Card 
         containerStyle={styles.card}
+        titleStyle ={{fontSize: 20}}
+        fontFamily = {fonts.regular}
         title = { this.props.owner.name } >
           <View style ={{alignItems: 'center', marginBottom: 10}}>
             <Text style={styles.text}>
@@ -177,7 +179,7 @@ class BarOwner extends Component {
             </Text>
 
               <View>
-              <List containerStyle={{ marginBottom: 20 }}>
+              <List containerStyle={{ marginBottom: 10 }}>
                 {
                  this.props.owner.promos && this.props.owner.promos.length ? this.props.owner.promos.map((promo) => (
                   <View key = {promo.id}>
