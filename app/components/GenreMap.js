@@ -18,7 +18,7 @@ import { log } from 'util';
 import mapStyle from '../helper/mapStyle.js';
 
 let { width, height } = Dimensions.get('window');
-const Icons = require('../../assets/Icons');
+const Icons = require('../../assets/Icons/map');
 const userLocationTitle = 'This is you!'; // changes default: 'My Location'
 
 class GenreMap extends Component {
@@ -49,7 +49,7 @@ class GenreMap extends Component {
         this.refreshMap = this.refreshMap.bind(this);
     }
 
-    
+
     componentDidMount() {
         const {fetchBars} = this.props;
         navigator.geolocation.getCurrentPosition((res) => {
@@ -192,7 +192,7 @@ class GenreMap extends Component {
                             fontFamily={fonts.bold}/>
                         </View>
                     }
-                   
+
                     {genre &&
                         <View style={styles.filterButtonPosition}>
                             <Button
@@ -239,7 +239,7 @@ class GenreMap extends Component {
                             title="Search Area" />
                     </View>
                 }
-              
+
             </View>
         );
     }

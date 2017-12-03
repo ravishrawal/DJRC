@@ -4,7 +4,7 @@ import { View, Text, TouchableHighlight, StyleSheet, Dimensions, Image, ScrollVi
 import { List, ListItem, Separator } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import getDirections from 'react-native-google-maps-directions';
-const Icons = require('../../assets/Icons');
+const Icons = require('../../assets/Icons/tile');
 
 
 export default function BarList(props){
