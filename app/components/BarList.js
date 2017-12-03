@@ -4,6 +4,9 @@ import { View, Text, TouchableHighlight, StyleSheet, Dimensions, Image, ScrollVi
 import { List, ListItem, Separator } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import getDirections from 'react-native-google-maps-directions';
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 const Icons = require('../../assets/Icons/tile');
 
 
@@ -13,7 +16,7 @@ export default function BarList(props){
     let swipeoutBtns = [
       {
         text: 'Go',
-        backgroundColor: '#ff4554',
+        backgroundColor: colors.gray,
         onPress: ()=>{
           const data = {
             destination: { latitude: bar.lat, longitude: bar.lon },
@@ -51,7 +54,7 @@ export default function BarList(props){
                 }
               </View>
               <View style={styles.iconSection}>
-                <Image style= {styles.iconStyle} source={icon} />
+                <Image source={icon} />
               </View>
             </View>
         </TouchableHighlight>
@@ -62,17 +65,19 @@ export default function BarList(props){
   const { bars, navigate } = props;
   return (
     <ScrollView>
-      <List>
-        {
-          bars.map(bar => {
-            return (
-              <View key={bar.id} >
-                {renderRow(bar)}
-              </View>
-            )
-          })
-        }
-      </List>
+      { bars.length <= 0 ? <Text>No Bars To Show</Text> :
+          <List>
+            {
+              bars.map(bar => {
+                return (
+                  <View key={bar.id}>
+                    {renderRow(bar)}
+                  </View>
+                )
+              })
+            }
+          </List>
+      }
     </ScrollView>
   )
 }
@@ -81,24 +86,32 @@ let { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   row: {
-    backgroundColor: '#ff4554',
+    backgroundColor: colors.blue,
     width: width,
-    borderWidth:2,
-    borderColor:'black',
-    flexDirection: 'row'
+    borderWidth:1,
+    borderColor:colors.gray,
+    flexDirection: 'row',
+    flex: 1
   },
   barNameText: {
-    fontFamily: 'zilla-slab-bold',
+    fontFamily: fonts.bold,
     fontSize: 20,
-    color: '#f7f7f7'
+    color: colors.yellowLight
   },
   barSongsText: {
-    fontFamily: 'zilla-slab-regular',
+    fontFamily: fonts.bold,
     fontSize: 16,
-    color: '#f7f7f7'
+    color: colors.offWhite,
+    marginLeft: 4
+  },
+  textSection: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: 0.8*width
   },
   iconSection: {
     justifyContent: 'center',
-    alignSelf: 'flex-end'
+    alignItems: 'flex-end',
+    marginRight: 10
   }
-})
+});
