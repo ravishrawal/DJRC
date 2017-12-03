@@ -189,8 +189,15 @@ class GenreMap extends Component {
                     </View>
                 }
                 { regionChanged && viewMode === 'map' &&
-                    <View>
-                        <Button onPress={this.onRegionButtonPress} title="Search This Area" />
+                    <View style={styles.buttonRow}>
+                        <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.searchRegionButton, commonStyles.roundedCorners, commonStyles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            iconRight={{ name: 'search', type: 'font-awesome' }}
+                            onPress={this.onRegionButtonPress}
+                            title="Search Area" />
                     </View>
                 }
                 {genre &&
@@ -268,6 +275,10 @@ const styles = StyleSheet.create({
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange
     },
+    searchRegionButton: {
+        backgroundColor: colors.redOrangeDark,
+        borderColor: colors.redOrangeDark,
+    }
 });
 
 const mapState = ({ bars, directions }) => {
