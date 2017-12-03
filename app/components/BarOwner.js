@@ -142,7 +142,7 @@ class BarOwner extends Component {
             style = {  {color: colors.redOrange}}
             selectedValue={genres[0]}
             onValueChange={ updateGenre }>
-              {allGenres.map((gen)=> (
+              {allGenres.length && allGenres.map((gen)=> (
                 <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
                 ))}
             </Picker>
