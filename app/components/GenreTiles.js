@@ -31,7 +31,7 @@ class GenreTiles extends React.Component {
                     navigate('Map', { genre: genre.key, selectedGenreName: genre.name })
                   }
                   >
-                  <Image style={{alignSelf:'center'}} source={ Icons[genre.name.replace(/\s+/,"")] } />
+                  <Image style={{alignSelf:'center'}} source={ Icons[genre.name.replace(/\s+/,"").replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')] } />
                   <Text style = {styles.genreText}>{genre.name}</Text>
                 </TouchableOpacity>
               </View>

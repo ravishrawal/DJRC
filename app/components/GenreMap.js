@@ -137,7 +137,7 @@ class GenreMap extends Component {
                         ref={ref => { this.map = ref; }}
                         onPress={this.onMapPress}>
                         { bars.map(marker => {
-                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '')] : Icons[ marker.genreNames[0].replace(/\s+/, '')];
+                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')] : Icons[ marker.genreNames[0].replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')];
                             return (
                             <MapView.Marker
                                 coordinate={{
