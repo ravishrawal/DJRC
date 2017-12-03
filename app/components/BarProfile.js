@@ -69,27 +69,32 @@ class BarProfile extends Component {
         const { navigate } = this.props.navigation;
         const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
 
-
+        console.log('this.props', this.props)
 
         return (
             <View style={styles.container}>
                 <Card
                     containerStyle={styles.card}
                     title={`${bar.name} \n ${bar.genreNames} \n`}>
-                    <Text>Rating:</Text>
-                    <Stars
-                        value={Number(bar.avgRating)}
-                        spacing={8}
-                        count={5}
-                        starSize={20}
-                        fullStar={require('../../assets/starFilled.png')}
-                        emptyStar={require('../../assets/starEmpty.png')} />
+                    <Text style = {styles.text}>Rating:</Text>
+                    {bar.avgRating > 0 ?
+                        <Stars
+                            value={Number(bar.avgRating)}
+                            spacing={8}
+                            count={5}
+                            starSize={20}
+                            fullStar={require('../../assets/starFilled.png')}
+                            emptyStar={require('../../assets/starEmpty.png')} />
+                        :
+                        <Text>No Reviews</Text>
+                    }
 
                     <GetDirections
                         barLocation={{ latitude: bar.lat, longitude: bar.lon }}
                     />
                     <View style={{ marginTop: 10 }} >
                         <Button
+                            fontFamily={fonts.bold}
                             buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                             onPress={this.togglePromoModal}
                             title='See Promos'
@@ -119,6 +124,7 @@ class BarProfile extends Component {
                             </View>
                         </Modal>
                         <Button
+                            fontFamily={fonts.bold}
                             buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                             onPress={this._showModalRead}
                             title='Read Reviews' />
@@ -160,6 +166,7 @@ class BarProfile extends Component {
                             songs.map((song, i) => (
 
                                 <ListItem
+                                titleStyle={styles.text}
                                     roundAvatar
                                     key={i}
                                     title={song.song}
@@ -170,6 +177,8 @@ class BarProfile extends Component {
                     {this.props.user && this.props.user.id ?
                         <View>
                             <Button
+                                buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                                fontFamily={fonts.bold}
                                 onPress={this._showModalWrite}
                                 title='Write a Review' />
                             <Modal isVisible={this.state.isModalVisibleWrite}>
@@ -181,7 +190,7 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        : <Text>Log in to write a review!</Text>}
+                        : <Text style={styles.text}>Log in to write a review!</Text>}
 
                 </Card>
 
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
         width: width
     },
     card: {
-        // flex: 1,
+        alignItems: 'center',
         width: width
     },
     button: {
@@ -212,6 +221,11 @@ const styles = StyleSheet.create({
         margin: 10,
         width: 200,
     },
+    text: {
+        color: colors.blue,
+        fontFamily: fonts.regular,
+        fontSize: 20,
+    }
 })
 
 const mapState = ({ reviews, user, promos }) => {

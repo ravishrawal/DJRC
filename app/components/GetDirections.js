@@ -28,6 +28,7 @@ export default class gmapsDirections extends Component {
     return (
       <View>
         <Button 
+        fontFamily={fonts.bold}
         buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
         onPress={this.handleGetDirections} title="Get Directions" />
       </View>
