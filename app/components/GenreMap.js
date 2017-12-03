@@ -12,6 +12,7 @@ import GetDirections from './GetDirections.js';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
+import { log } from 'util';
 // import mapStyle from '../helper/mapStyle.js';
 
 let { width, height } = Dimensions.get('window');
@@ -63,9 +64,10 @@ class GenreMap extends Component {
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
         // fixes iOS callout overlay bug by animating the map (hopefully) imperceptibly
+        console.log(ev)
         this.map.animateToCoordinate({
-            latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
-            longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
+            latitude: ev.lat + this.state.regionSize.latitudeDelta * 0.0001,
+            longitude: ev.lon + this.state.regionSize.longitudeDelta * 0.0001,
         }, 0);
     }
     onMapPress() {
