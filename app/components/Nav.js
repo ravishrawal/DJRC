@@ -48,8 +48,7 @@ const Tabs = TabNavigator({
           size={26}
           style={{ color: tintColor }}
         />
-      ),
-      swipeEnabled: false
+      )
     }),
   },
   Map: {
@@ -61,8 +60,7 @@ const Tabs = TabNavigator({
           size={26}
           style={{ color: tintColor }}
         />
-      ),
-      swipeEnabled: false
+      )
     }),
   },
   Login: {
@@ -74,11 +72,11 @@ const Tabs = TabNavigator({
           size={26}
           style={{ color: tintColor }}
         />
-      ),
-      swipeEnabled: false
+      )
     }),
   }
 }, {
+  swipeEnabled: false,
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.redOrange,

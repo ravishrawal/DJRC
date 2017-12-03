@@ -76,7 +76,7 @@ class SignUpOrIn extends Component {
                     <FormLabel
                         labelStyle={styles.formLabel}>Email</FormLabel>
                     <FormInput
-                        autoFocus={true}
+                        autoFocus={false}
                         keyboardType="email-address"
                         inputStyle={styles.formInput}
                         onChangeText={onChangeEmail}
@@ -98,7 +98,7 @@ class SignUpOrIn extends Component {
                         selectionColor={colors.yellow} />
                     <FormValidationMessage
                         labelStyle={styles.formError}>Error!</FormValidationMessage>
-                    
+
                     <CheckBox
                         center
                         title='Check here to claim a bar!'

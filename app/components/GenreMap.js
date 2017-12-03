@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
+import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
+import { Button, SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import { setLocation } from '../redux/location';
 
@@ -12,6 +12,7 @@ import GetDirections from './GetDirections.js';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js'
 import { log } from 'util';
 // import mapStyle from '../helper/mapStyle.js';
 
@@ -109,7 +110,7 @@ class GenreMap extends Component {
 
         return (
             <View style={styles.container}>
-                { currentLocation.latitude &&
+                { viewMode === 'map' && currentLocation.latitude &&
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         style={styles.map}
@@ -167,27 +168,55 @@ class GenreMap extends Component {
                         }
                     </MapView>
                 }
-                {
-                    <View>
-                        <Button onPress={this.toggleView} title={`Toggle View`} />
-                    </View>
-                }
+                <View style={styles.topButtons}>
+                    {
+                        <View>
+                            <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                            onPress={this.toggleView}
+                            title={`Toggle View`}
+                            color="#fff"
+                            fontFamily={fonts.bold}/>
+                        </View>
+                    }
+                    {genre &&
+                        <View style={styles.filterButtonPosition}>
+                            <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                            onPress={() => navigate('Map', { genre: null, selectedGenreName: null })}
+                            title={`${selectedGenreName} X`}
+                            color="#fff"
+                            fontFamily={fonts.bold}/>
+                        </View>
+                    }
+                </View>
                 { viewMode === 'list' &&
                     <BarList bars={bars} navigate={navigate} />
                 }
                 { Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
-                    <View style={styles.polyButton}>
-                        <Button onPress={this.onPolyButtonPress} title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                    <View style={styles.buttonRow}>
+                        <Button
+                            backgroundColor={colors.redOrange}
+                            buttonStyle={[styles.polyButton, commonStyles.roundedCorners, commonStyles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            onPress={this.onPolyButtonPress}
+                            title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'}
+                            iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}/>
                     </View>
                 }
                 { regionChanged && viewMode === 'map' &&
-                    <View>
-                        <Button onPress={this.onRegionButtonPress} title="Search This Area" />
-                    </View>
-                }
-                {genre &&
-                    <View>
-                        <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`} />
+                    <View style={styles.buttonRow}>
+                        <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            iconRight={{ name: 'search', type: 'font-awesome' }}
+                            onPress={this.onRegionButtonPress}
+                            title="Search Area" />
                     </View>
                 }
             </View>
@@ -196,6 +225,10 @@ class GenreMap extends Component {
 }
 
 const styles = StyleSheet.create({
+    buttonRow: {
+        marginBottom: 10,
+        marginTop: height-194
+    },
     callout: {
         alignItems: 'center',
         backgroundColor: colors.blue,
@@ -244,6 +277,8 @@ const styles = StyleSheet.create({
         fontFamily: fonts.bold,
         fontSize: 20,
     },
+    filterButtonPosition: {
+    },
     map: {
         backgroundColor: colors.redOrange,
         bottom: 0,
@@ -253,16 +288,17 @@ const styles = StyleSheet.create({
         top: 0,
     },
     polyButton: {
-        alignItems: 'center',
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
-        borderRadius: 5,
-        borderWidth: 5,
-        marginTop: 25,
-        shadowColor: '#ccc',
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 1,
     },
+    otherButtons: {
+        backgroundColor: colors.redOrangeDark,
+        borderColor: colors.redOrangeDark
+    },
+    topButtons: {
+        marginTop: height/25,
+        flexDirection: 'row'
+    }
 });
 
 const mapState = ({ bars, directions }) => {
