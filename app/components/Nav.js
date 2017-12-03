@@ -44,7 +44,7 @@ const Tabs = TabNavigator({
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor }) => (
         <FontAwesome
-          name={'music'}
+          name={'home'}
           size={26}
           style={{ color: tintColor }}
         />
@@ -96,7 +96,7 @@ const UserTabs = TabNavigator({
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor }) => (
         <FontAwesome
-          name={'music'}
+          name={'home'}
           size={26}
           style={{ color: tintColor }}
         />
