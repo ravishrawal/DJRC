@@ -15,7 +15,6 @@ import BarOwner from './BarOwner';
 import Review from './Review';
 import ClaimBar from './ClaimBar';
 
-
 const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'green',
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     width: 0,
   },
   label: {
-    fontFamily: fonts.zilla,
+    fontFamily: fonts.regular,
   },
   tabBar: {
     backgroundColor: colors.offWhite,
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     shadowColor: '#ccc',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.75,
   },
 });
 
@@ -82,28 +81,63 @@ const Tabs = TabNavigator({
 }, {
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: colors.pink,
+    activeTintColor: colors.redOrange,
     iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
+    showIcon: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
 });
 
 const UserTabs = TabNavigator({
-  Home: { screen: GenreTiles },
-  Map: { screen: GenreMap },
-  Profile: { screen: Profile }
+  Home: {
+    screen: GenreTiles,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'music'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Map: {
+    screen: GenreMap,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'map'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  Profile: {
+    screen: Profile,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'gear'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
 }, {
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: colors.pink,
+    activeTintColor: colors.redOrange,
     iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
+    showIcon: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
@@ -130,8 +164,7 @@ const LoggedOutNav = StackNavigator({
 const LoggedInNav = StackNavigator({
   Home: { screen: UserTabs },
   Map: { screen: GenreMap },
-  SampleProfile: { screen: BarProfile },
-  Review: { screen: Review }
+  SampleProfile: { screen: BarProfile }
 }, {
   headerMode: 'none'
 });
