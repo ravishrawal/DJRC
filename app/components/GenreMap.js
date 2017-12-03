@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
+import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
+import { Button, SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import { setLocation } from '../redux/location';
 
@@ -12,6 +12,7 @@ import GetDirections from './GetDirections.js';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js'
 import { log } from 'util';
 // import mapStyle from '../helper/mapStyle.js';
 
@@ -176,8 +177,15 @@ class GenreMap extends Component {
                     <BarList bars={bars} navigate={navigate} />
                 }
                 { Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
-                    <View style={styles.polyButton}>
-                        <Button onPress={this.onPolyButtonPress} title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                    <View style={styles.buttonRow}>
+                        <Button
+                            backgroundColor={colors.redOrange}
+                            buttonStyle={[styles.polyButton, commonStyles.roundedCorners, commonStyles.shadow]}
+                            color="#fff"
+                            fontFamily={fonts.bold}
+                            onPress={this.onPolyButtonPress}
+                            title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'}
+                            iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}/>
                     </View>
                 }
                 { regionChanged && viewMode === 'map' &&
@@ -196,6 +204,10 @@ class GenreMap extends Component {
 }
 
 const styles = StyleSheet.create({
+    buttonRow: {
+        marginBottom: 10,
+        marginTop: 25,
+    },
     callout: {
         alignItems: 'center',
         backgroundColor: colors.blue,
@@ -253,15 +265,8 @@ const styles = StyleSheet.create({
         top: 0,
     },
     polyButton: {
-        alignItems: 'center',
         backgroundColor: colors.redOrange,
-        borderColor: colors.redOrange,
-        borderRadius: 5,
-        borderWidth: 5,
-        marginTop: 25,
-        shadowColor: '#ccc',
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 1,
+        borderColor: colors.redOrange
     },
 });
 
