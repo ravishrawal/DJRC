@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Icon } from 'react-native-elements'
 import { Button, SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import { setLocation } from '../redux/location';
@@ -39,33 +40,43 @@ class GenreMap extends Component {
             regionChanged: false,
             viewMode: 'map',
         };
-        this.toggleView = this.toggleView.bind(this);
-        this.onMarkerClick = this.onMarkerClick.bind(this);
-        this.onMapPress = this.onMapPress.bind(this);
-        this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
-        this.onRegionButtonPress = this.onRegionButtonPress.bind(this);
-        this.onPolyButtonPress = this.onPolyButtonPress.bind(this);
+        this.toggleView = this.toggleView.bind(this)
+        this.onMarkerClick = this.onMarkerClick.bind(this)
+        this.onMapPress = this.onMapPress.bind(this)
+        this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
+        this.onRegionButtonPress = this.onRegionButtonPress.bind(this)
+        this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
+        this.refreshMap = this.refreshMap.bind(this);
     }
+
+    
     componentDidMount() {
+        const {fetchBars} = this.props;
         navigator.geolocation.getCurrentPosition((res) => {
             this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => {
+                const {currentLocation, regionSize} = this.state;
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
                 this.props.setLocation({ currentLocation: this.state.currentLocation })
             })
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
+                const {currentLocation, regionSize} = this.state;
                 this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
                 this.props.setLocation({ currentLocation: this.state.currentLocation })
             })
         });
     }
+
+    refreshMap() {
+        this.props.fetchBars(this.props.location.currentLocation, this.props.location.radius)
+    }
+
     toggleView() {
         this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
     }
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
         // fixes iOS callout overlay bug by animating the map (hopefully) imperceptibly
-        console.log(ev)
         this.map.animateToCoordinate({
             latitude: ev.lat + this.state.regionSize.latitudeDelta * 0.0001,
             longitude: ev.lon + this.state.regionSize.longitudeDelta * 0.0001,
@@ -181,6 +192,7 @@ class GenreMap extends Component {
                             fontFamily={fonts.bold}/>
                         </View>
                     }
+                   
                     {genre &&
                         <View style={styles.filterButtonPosition}>
                             <Button
@@ -192,6 +204,13 @@ class GenreMap extends Component {
                             fontFamily={fonts.bold}/>
                         </View>
                     }
+                    <Button
+                    backgroundColor={colors.redOrangeDark}
+                    buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow, {paddingRight:0}]}
+                    icon={{ name: 'refresh', type: 'fontawesome' }}
+                    color="#fff"
+                    onPress={this.refreshMap}
+                />
                 </View>
                 { viewMode === 'list' &&
                     <BarList bars={bars} navigate={navigate} />
@@ -220,6 +239,7 @@ class GenreMap extends Component {
                             title="Search Area" />
                     </View>
                 }
+              
             </View>
         );
     }
@@ -302,8 +322,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapState = ({ bars, directions }) => {
-    return { bars, directions };
+const mapState = ({ bars, directions, location }) => {
+    return { bars, directions, location };
 };
 
 const mapDispatch = (dispatch) => {
