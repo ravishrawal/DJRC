@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Dimensions, Text } from 'react-native';
-import { MapView } from 'expo';
-import { Button, Card, ListItem, List } from 'react-native-elements';
+import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
+import { setLocation } from '../redux/location';
 
+import BarList from './BarList';
 import BarProfile from './BarProfile';
 import GetDirections from './GetDirections.js';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
+// import mapStyle from '../helper/mapStyle.js';
 
 let { width, height } = Dimensions.get('window');
-const Icons = require('./Icons');
+const Icons = require('../../assets/Icons');
 const userLocationTitle = 'This is you!'; // changes default: 'My Location'
 
 class GenreMap extends Component {
@@ -24,6 +27,7 @@ class GenreMap extends Component {
                 latitudeDelta: 0.008,
                 longitudeDelta: 0.008,
             },
+            focusArea: {},
             markerSelected: {},
             directions: {
                 coords: [],
@@ -31,7 +35,9 @@ class GenreMap extends Component {
             },
             directionPressed: false,
             regionChanged: false,
+            viewMode: 'map',
         };
+        this.toggleView = this.toggleView.bind(this);
         this.onMarkerClick = this.onMarkerClick.bind(this);
         this.onMapPress = this.onMapPress.bind(this);
         this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
@@ -40,31 +46,43 @@ class GenreMap extends Component {
     }
     componentDidMount() {
         navigator.geolocation.getCurrentPosition((res) => {
-            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => { this.props.fetchBars(this.state.currentLocation); });
+            this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => {
+                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
+                this.props.setLocation({ currentLocation: this.state.currentLocation })
+            })
         }, (rej) => {
-            this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => { this.props.fetchBars(this.state.currentLocation); });
+            this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
+                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
+                this.props.setLocation({ currentLocation: this.state.currentLocation })
+            })
         });
+    }
+    toggleView() {
+        this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
     }
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
-        // fixes callout overlay bug
+        // fixes iOS callout overlay bug by animating the map (hopefully) imperceptibly
         this.map.animateToCoordinate({
             latitude: this.state.currentLocation.latitude + this.state.regionSize.latitudeDelta * 0.001,
             longitude: this.state.currentLocation.longitude + this.state.regionSize.longitudeDelta * 0.001,
         }, 0);
     }
     onMapPress() {
-      if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
-        this.setState({markerSelected: {}});
-      }
+        if (!this.state.directionPressed && Object.keys(this.state.markerSelected).length > 0) {
+            this.setState({ markerSelected: {} });
+        }
     }
     onRegionChangeComplete(region) {
-        const {latitude, longitude} = region;
-        this.setState({currentLocation: {latitude, longitude}, regionChanged: true});
+        const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
+        this.setState({ focusArea: { latitude, longitude }, regionSize: { latitudeDelta, longitudeDelta }, regionChanged: true });
     }
     onRegionButtonPress() {
-        this.setState({regionChanged: false});
-        this.props.fetchBars(this.state.currentLocation);
+        this.setState({ regionChanged: false });
+        const { latitudeDelta, longitudeDelta } = this.state.regionSize;
+        let delta = latitudeDelta > longitudeDelta ? latitudeDelta : longitudeDelta;
+        this.props.fetchBars(this.state.focusArea, delta / 3);
+        this.props.setLocation({ currentLocation: this.state.focusArea, radius: delta / 3 });
     }
     onPolyButtonPress() {
         this.state.directionPressed = !this.state.directionPressed;
@@ -80,17 +98,18 @@ class GenreMap extends Component {
     render() {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
-        let { currentLocation, regionSize, markerSelected, directions, directionPressed, regionChanged } = this.state;
+        let { currentLocation, regionSize, markerSelected, directions, directionPressed, regionChanged, viewMode } = this.state;
         const genre = this.props.navigation.state.params ? this.props.navigation.state.params.genre : undefined;
         const selectedGenreName = this.props.navigation.state.params ? this.props.navigation.state.params.selectedGenreName : undefined;
         bars = genre ? bars.filter(bar => {
-            return bar.genres.indexOf(genre) > 0;
+            return bar.genres.indexOf(genre) >= 0;
         }) : bars;
 
         return (
             <View style={styles.container}>
                 { currentLocation.latitude &&
                     <MapView
+                        provider={PROVIDER_GOOGLE}
                         style={styles.map}
                         color="#fff"
                         showsPointsOfInterest={false}
@@ -124,15 +143,14 @@ class GenreMap extends Component {
                                         <Text style={styles.calloutTextAddress}>
                                             {marker.address}
                                         </Text>
-                                        <Button
-                                            buttonStyle={styles.calloutButton}
-                                            icon={{ name: 'info-circle', type: 'font-awesome' }}
-                                            large={true}
-                                            onPress={() => console.log('GenreMap: onPress()')} />
-                                        <View style={styles.currentPlaying}>
-                                            <Text style={styles.currentPlayingText}>Currently Playing: </Text>
-                                            <Text style={styles.currentPlayingTextSong}>{marker.songs && marker.songs[0].song}</Text>
-                                        </View>
+                                        { marker.songs &&
+                                            <View style={styles.currentPlaying}>
+                                                <Text style={styles.currentPlayingText}>Currently Playing: </Text>
+                                                <Text style={styles.currentPlayingTextSong}>Song: {marker.songs && marker.songs[0].song}</Text>
+                                                <Text style={styles.currentPlayingTextSong}>Artist: {marker.songs && marker.songs[0].artist}</Text>
+                                            </View>
+                                        }
+
                                     </View>
                                 </MapView.Callout>
                             </MapView.Marker>
@@ -140,27 +158,34 @@ class GenreMap extends Component {
                         { directions.time.length > 0 && directionPressed &&
                             <MapView.Polyline
                                 coordinates={directions.coords}
-                                strokeWidth={4}
-                                lineCap="round"
-                                lineJoin="round"
-                                strokeColor="rgba(255,140,0,0.8)" />
+                                strokeWidth={6}
+                                lineCap='round'
+                                lineJoin='round'
+                                strokeColor="#ff6763" />
                         }
                     </MapView>
                 }
-                { Object.keys(markerSelected).length > 0 &&
-                  <View style={styles.polyButton}>
-                    <Button
-                        backgroundColor={colors.redOrange}
-                        color="#fff"
-                        fontFamily={fonts.bold}
-                        iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}
-                        onPress={this.onPolyButtonPress}
-                        title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
-                  </View>
+                {
+                    <View>
+                        <Button onPress={this.toggleView} title={`Toggle View`} />
+                    </View>
                 }
-                { regionChanged &&
+                { viewMode === 'list' &&
+                    <BarList bars={bars} navigate={navigate} />
+                }
+                { Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
+                    <View style={styles.polyButton}>
+                        <Button onPress={this.onPolyButtonPress} title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'} />
+                    </View>
+                }
+                { regionChanged && viewMode === 'map' &&
                     <View>
                         <Button onPress={this.onRegionButtonPress} title="Search This Area" />
+                    </View>
+                }
+                {genre &&
+                    <View>
+                        <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`} />
                     </View>
                 }
             </View>
@@ -185,7 +210,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blue,
     },
     calloutTextName: {
-        color: colors.yellow,
+        color: colors.yellowLight,
         fontFamily: fonts.bold,
         fontSize: 25,
     },
@@ -213,7 +238,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     currentPlayingTextSong: {
-        color: colors.yellow,
+        color: colors.yellowLight,
         fontFamily: fonts.bold,
         fontSize: 20,
     },
@@ -244,13 +269,16 @@ const mapState = ({ bars, directions }) => {
 
 const mapDispatch = (dispatch) => {
     return {
-        fetchBars: (location) => {
-            dispatch(fetchBarsFromServer(location));
+        fetchBars: (location, radius) => {
+            dispatch(fetchBarsFromServer(location, radius));
         },
         getDirections: (start, end) => {
             dispatch(getDirectionsToBar(start, end));
         },
-    };
-};
+        setLocation: (location) => {
+            dispatch(setLocation(location));
+        }
+    }
+}
 
 export default connect(mapState, mapDispatch)(GenreMap);
