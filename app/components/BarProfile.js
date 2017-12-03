@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Dimensions, Button, Text, FlatList } from 'react-native';
-import { Card, ListItem, List } from 'react-native-elements'
+import { StyleSheet, View, Dimensions, Text, FlatList } from 'react-native';
+import { Card, ListItem, List, Button } from 'react-native-elements'
 import { fetchVenueReviews } from '../redux/reviews';
 import { fetchPromos } from '../redux/promos';
 import Modal from 'react-native-modal'
@@ -10,6 +10,10 @@ import Stars from 'react-native-stars';
 import GenreMap from './GenreMap';
 import Review from './Review';
 import GetDirections from './GetDirections';
+
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 
 let { width, height } = Dimensions.get('window')
 
@@ -86,6 +90,7 @@ class BarProfile extends Component {
                     />
                     <View style={{ marginTop: 10 }} >
                         <Button
+                            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                             onPress={this.togglePromoModal}
                             title='See Promos'
                         />
@@ -114,6 +119,7 @@ class BarProfile extends Component {
                             </View>
                         </Modal>
                         <Button
+                            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                             onPress={this._showModalRead}
                             title='Read Reviews' />
                         <Modal isVisible={this.state.isModalVisibleRead}>
@@ -198,7 +204,14 @@ const styles = StyleSheet.create({
     card: {
         // flex: 1,
         width: width
-    }
+    },
+    button: {
+        alignItems: 'center',
+        backgroundColor: colors.redOrange,
+        borderColor: colors.redOrange,
+        margin: 10,
+        width: 200,
+    },
 })
 
 const mapState = ({ reviews, user, promos }) => {
