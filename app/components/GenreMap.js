@@ -14,7 +14,7 @@ import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js'
 import { log } from 'util';
-// import mapStyle from '../helper/mapStyle.js';
+import mapStyle from '../helper/mapStyle.js';
 
 let { width, height } = Dimensions.get('window');
 const Icons = require('../../assets/Icons');
@@ -114,6 +114,7 @@ class GenreMap extends Component {
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         style={styles.map}
+                        customMapStyle={mapStyle}
                         color="#fff"
                         showsPointsOfInterest={false}
                         initialRegion={ Object.assign({}, currentLocation, regionSize) }
