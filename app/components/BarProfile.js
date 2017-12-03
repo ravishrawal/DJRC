@@ -35,7 +35,7 @@ class BarProfile extends Component {
     }
 
     togglePromoModal() {
-        this.setState({promoModalVisible: !this.state.promoModalVisible})
+        this.setState({ promoModalVisible: !this.state.promoModalVisible })
     }
 
     _showModalWrite() {
@@ -69,8 +69,8 @@ class BarProfile extends Component {
 
         return (
             <View style={styles.container}>
-
                 <Card
+                    containerStyle={styles.card}
                     title={`${bar.name} \n ${bar.genreNames} \n`}>
                     <Text>Rating:</Text>
                     <Stars
@@ -81,80 +81,74 @@ class BarProfile extends Component {
                         fullStar={require('../../assets/starFilled.png')}
                         emptyStar={require('../../assets/starEmpty.png')} />
 
-
-
-
                     <GetDirections
                         barLocation={{ latitude: bar.lat, longitude: bar.lon }}
                     />
-                        <View style={{ marginTop: 10 }} >
-                            <Button
-                                onPress = {this.togglePromoModal}
-                                title='See Promos'
-                            />
-                            <Modal isVisible = {this.state.promoModalVisible}>
-                                <View style ={{ flex:1 }}>
-                                    <List containerStyle={{ marginBottom: 20 }}>
-                                        {
+                    <View style={{ marginTop: 10 }} >
+                        <Button
+                            onPress={this.togglePromoModal}
+                            title='See Promos'
+                        />
+                        <Modal isVisible={this.state.promoModalVisible}>
+                            <View style={{ flex: 1 }}>
+                                <List containerStyle={{ marginBottom: 20 }}>
+                                    {
 
-                                            bar.promos && bar.promos.length ? bar.promos.map((promo, i) => (
-                                                <View key = {i}>
-                                                    <ListItem
-                                                        roundAvatar
-                                                        key={i}
-                                                        title={promo}
-                                                    />
-                                                </View>
-                                                    )) :
+                                        bar.promos && bar.promos.length ? bar.promos.map((promo, i) => (
+                                            <View key={i}>
+                                                <ListItem
+                                                    roundAvatar
+                                                    key={i}
+                                                    title={promo}
+                                                />
+                                            </View>
+                                        )) :
 
-                                                <Text>
+                                            <Text>
                                                 Sorry no current promos! </Text>
-                                                }
-                                    </List>
-                                    <Button
-                                        onPress={this.togglePromoModal}
-                                        title='Go Back' />
-                                </View>
-                            </Modal>
+                                    }
+                                </List>
+                                <Button
+                                    onPress={this.togglePromoModal}
+                                    title='Go Back' />
+                            </View>
+                        </Modal>
+                        <Button
+                            onPress={this._showModalRead}
+                            title='Read Reviews' />
+                        <Modal isVisible={this.state.isModalVisibleRead}>
+                            <View style={{ flex: 1 }}>
+                                <List containerStyle={{ marginBottom: 20 }}>
+                                    {
+                                        this.props.reviews && this.props.reviews.length ? this.props.reviews.map((review, i) => (
+                                            <View key={i}>
+                                                <ListItem
+                                                    roundAvatar
+                                                    key={i}
+                                                    title={review.content}
+                                                    avatar={<View style={{ alignItems: 'center' }}>
+                                                        <Stars
+                                                            value={Number(review.rating)}
+                                                            spacing={8}
+                                                            count={5}
+                                                            starSize={10}
+                                                            fullStar={require('../../assets/starFilled.png')}
+                                                            emptyStar={require('../../assets/starEmpty.png')} />
+                                                    </View>}
+                                                />
 
-
-
-                            <Button
-                                onPress={this._showModalRead}
-                                title='Read Reviews' />
-                            <Modal isVisible={this.state.isModalVisibleRead}>
-                                <View style={{ flex: 1 }}>
-                                    <List containerStyle={{ marginBottom: 20 }}>
-                                        {
-                                            this.props.reviews && this.props.reviews.length ? this.props.reviews.map((review, i) => (
-                                                <View key = {i}>
-                                                    <ListItem
-                                                        roundAvatar
-                                                        key={i}
-                                                        title={review.content}
-                                                        avatar={<View style={{ alignItems: 'center' }}>
-                                                            <Stars
-                                                                value={Number(review.rating)}
-                                                                spacing={8}
-                                                                count={5}
-                                                                starSize={10}
-                                                                fullStar={require('../../assets/starFilled.png')}
-                                                                emptyStar={require('../../assets/starEmpty.png')} />
-                                                        </View>}
-                                                    />
-
-                                                </View>
-                                            ))
-                                                :
-                                                null
-                                        }
-                                    </List>
-                                    <Button
-                                        onPress={this._hideModalRead}
-                                        title='Go Back' />
-                                </View>
-                            </Modal>
-                        </View>
+                                            </View>
+                                        ))
+                                            :
+                                            null
+                                    }
+                                </List>
+                                <Button
+                                    onPress={this._hideModalRead}
+                                    title='Go Back' />
+                            </View>
+                        </Modal>
+                    </View>
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
                             songs.map((song, i) => (
@@ -167,7 +161,6 @@ class BarProfile extends Component {
                             ))
                         }
                     </List>
-
                     {this.props.user && this.props.user.id ?
                         <View>
                             <Button
@@ -175,7 +168,7 @@ class BarProfile extends Component {
                                 title='Write a Review' />
                             <Modal isVisible={this.state.isModalVisibleWrite}>
                                 <View style={{ flex: 1 }}>
-                                    <Review bar={bar} _hideModal={this._hideModalWrite} navigate = {this.props.navigation} />
+                                    <Review bar={bar} _hideModal={this._hideModalWrite} navigate={this.props.navigation} />
                                     <Button
                                         onPress={this._hideModalWrite}
                                         title='Cancel' />
@@ -200,6 +193,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
         marginTop: 20,
+        width: width
+    },
+    card: {
+        // flex: 1,
         width: width
     }
 })
