@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
       borderColor: colors.redOrange,
       margin: 10,
       width: 200,
+      marginBottom: 0
   },
 })
 

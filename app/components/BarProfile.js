@@ -67,7 +67,7 @@ class BarProfile extends Component {
 
         const { bar } = this.props.navigation.state.params;
         const { navigate } = this.props.navigation;
-        const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : defaultSongs;
+        const songs = bar.songs && bar.songs.length ? bar.songs.slice(0, 3) : [];
 
         console.log('this.props', this.props)
 
@@ -75,18 +75,24 @@ class BarProfile extends Component {
             <View style={styles.container}>
                 <Card
                     containerStyle={styles.card}
-                    title={`${bar.name} \n ${bar.genreNames} \n`}>
-                    <Text style = {styles.text}>Rating:</Text>
+                    title={`${bar.name} \n ${bar.genreNames} \n`}
+                    titleStyle={{ fontSize: 15 }}
+                    fontFamily={fonts.regular}
+                >
                     {bar.avgRating > 0 ?
-                        <Stars
-                            value={Number(bar.avgRating)}
-                            spacing={8}
-                            count={5}
-                            starSize={20}
-                            fullStar={require('../../assets/starFilled.png')}
-                            emptyStar={require('../../assets/starEmpty.png')} />
+                        <View style={{ marginBottom: 20 }}>
+                            <Stars
+                                value={Number(bar.avgRating)}
+                                spacing={8}
+                                count={5}
+                                starSize={20}
+                                fullStar={require('../../assets/starFilled.png')}
+                                emptyStar={require('../../assets/starEmpty.png')} />
+                        </View>
                         :
-                        <Text>No Reviews</Text>
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.text}>No Reviews</Text>
+                        </View>
                     }
 
                     <GetDirections
@@ -107,6 +113,7 @@ class BarProfile extends Component {
                                         bar.promos && bar.promos.length ? bar.promos.map((promo, i) => (
                                             <View key={i}>
                                                 <ListItem
+                                                    hideChevron = {true}
                                                     roundAvatar
                                                     key={i}
                                                     title={promo}
@@ -125,7 +132,7 @@ class BarProfile extends Component {
                         </Modal>
                         <Button
                             fontFamily={fonts.bold}
-                            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+                            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow, { marginBottom: 15 }]}
                             onPress={this._showModalRead}
                             title='Read Reviews' />
                         <Modal isVisible={this.state.isModalVisibleRead}>
@@ -137,6 +144,7 @@ class BarProfile extends Component {
                                                 <ListItem
                                                     roundAvatar
                                                     key={i}
+                                                    hideChevron = {true}
                                                     title={review.content}
                                                     avatar={<View style={{ alignItems: 'center' }}>
                                                         <Stars
@@ -161,26 +169,45 @@ class BarProfile extends Component {
                             </View>
                         </Modal>
                     </View>
-                    <List containerStyle={{ marginBottom: 20 }}>
-                        {
-                            songs.map((song, i) => (
+                    {songs.length ?
+                        <List containerStyle={{ marginBottom: 20 }}>
+                            {
+                                songs.map((song, i) => (
 
-                                <ListItem
-                                titleStyle={styles.text}
-                                    roundAvatar
-                                    key={i}
-                                    title={song.song}
-                                />
-                            ))
-                        }
-                    </List>
+                                    <ListItem
+                                        titleStyle={[styles.text, {alignSelf: 'center'}]}
+                                        roundAvatar
+                                        hideChevron = {true}
+                                        key={i}
+                                        title={song.song}
+                                    />
+                                ))
+                            }
+                        </List>
+                        :
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={styles.text}>This bar does not share songs</Text>
+                        </View>
+                    }
                     {this.props.user && this.props.user.id ?
                         <View>
-                            <Button
-                                buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
-                                fontFamily={fonts.bold}
-                                onPress={this._showModalWrite}
-                                title='Write a Review' />
+                            <View style={{ flexDirection: 'row' }}>
+                                <Button
+                                    buttonStyle={[commonStyles.roundedCorners, commonStyles.shadow, {
+                                        backgroundColor: colors.redOrange,
+                                        borderColor: colors.redOrange
+                                    }]}
+                                    fontFamily={fonts.bold}
+                                    onPress={this._showModalWrite}
+                                    title='Write a Review' />
+                                <Button
+                                    buttonStyle={[commonStyles.roundedCorners, commonStyles.shadow, {
+                                        backgroundColor: colors.redOrange,
+                                        borderColor: colors.redOrange
+                                    }]}
+                                    onPress={() => this.props.navigation.goBack()}
+                                    title='Back' />
+                            </View>
                             <Modal isVisible={this.state.isModalVisibleWrite}>
                                 <View style={{ flex: 1 }}>
                                     <Review bar={bar} _hideModal={this._hideModalWrite} navigate={this.props.navigation} />
@@ -190,13 +217,12 @@ class BarProfile extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        : <Text style={styles.text}>Log in to write a review!</Text>}
+                        :
+                        <View style={{ alignItems: 'center' }}>
+                            <Text style={[styles.text]}>Log in to write a review!</Text>
+                        </View>}
 
                 </Card>
-
-                <Button
-                    onPress={() => this.props.navigation.goBack()}
-                    title='Back' />
             </View>
         );
     }
