@@ -4,8 +4,8 @@ import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'rea
 import {fetchGenres} from '../redux/genres';
 import {tokenUser} from '../redux/user';
 // import {fetchSpotifyBars} from '../redux/spotifyBars';
-
-const Icons = require('./Icons');
+import fonts from '../helper/fonts.js';
+const Icons = require('../../assets/Icons/tile');
 let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {
@@ -57,11 +57,14 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#00c3e3',
     borderRadius: 2,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 1,
     justifyContent: 'center'
   },
   genreText: {
     alignSelf: 'center',
-    fontFamily: 'zilla-slab-regular',
+    fontFamily: fonts.bold,
     fontSize: 20,
     color: '#f7f7f7',
   }

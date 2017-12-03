@@ -10,7 +10,7 @@ import BarProfile from './BarProfile';
 import BarList from './BarList';
 import mapStyle from '../helper/mapStyle.js';
 let { width, height } = Dimensions.get('window');
-const Icons = require('../../assets/Icons');
+const Icons = require('../../assets/Icons/map');
 
 class GenreMap extends Component {
     constructor(props) {
