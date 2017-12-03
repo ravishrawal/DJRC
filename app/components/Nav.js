@@ -142,8 +142,7 @@ const UserTabs = TabNavigator({
 });
 
 const OwnerTabs = TabNavigator({
-  MyBar: {screen: BarOwner },
-  Map: { screen: GenreMap }
+  MyBar: {screen: BarOwner }
 }, {
   tabBarPosition: 'bottom'
   }
