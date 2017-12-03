@@ -13,18 +13,20 @@ class ClaimBar extends Component {
 
     render() {
         const { user } = this.props;
-        const {navigate} = this.props.navigation.state.params
+        const {navigate} = this.props.navigation.state.params;
+        console.log('nav', navigate);
         return (
             <View style={styles.container}>
                 <TouchableHighlight
                 onPress={
-                    () => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name).')
+                    () => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name). Here is my verification')
                 }>
                 <Text style={[styles.button, styles.redButton]}>Click here to link your bar!</Text>
             </TouchableHighlight>
+            
             <Button
-            onPress={() => navigate.goBack()}
-            title='Back' />
+            onPress={() => navigate.navigate('Home')}
+            title='Go Home' />
             </View>
         )
     }
