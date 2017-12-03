@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
-import { Card, ListItem, List, Icon, FormLabel, FormInput } from 'react-native-elements';
+import { StyleSheet, View, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
+import { Card, ListItem, List, Icon, FormLabel, FormInput, Button } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
@@ -104,6 +104,7 @@ class BarOwner extends Component {
         backgroundColor='transparent'>
 
           <ListItem
+          titleStyle={[styles.text, {alignSelf: 'center'}]}
           roundAvatar
           key={promo.id}
           title={promo.description}
@@ -123,10 +124,14 @@ class BarOwner extends Component {
             <FormInput onChangeText={changePromo} ></FormInput>
 
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => submitPromo()}
               title='Save Promo'
             />
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Go Back' />
         </View>
@@ -134,26 +139,34 @@ class BarOwner extends Component {
         <Card 
         containerStyle={styles.card}
         title = { this.props.owner.name } >
-
+          <View style ={{alignItems: 'center', marginBottom: 10}}>
             <Text style={styles.text}>
               Update Your Genre
             </Text>
+            </View>
+            <View style = {styles.border}>
             <Picker
-            style = {  {color: colors.redOrange}}
+            style = {  {color: colors.blue, marginTop: 10, marginBottom: 10, alignItems: 'center'}}
             selectedValue={genres[0]}
             onValueChange={ updateGenre }>
               {allGenres.length && allGenres.map((gen)=> (
+                
                 <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
+                
                 ))}
             </Picker>
-
+                </View>
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress = { submitGenreUpdate }
               title= 'Submit Genre Changes'
             />
 
 
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Add Promo!'
             />
@@ -181,9 +194,12 @@ class BarOwner extends Component {
 
 
 
-        <TouchableHighlight onPress={this.logout}>
-          <Text style={[styles.button, styles.greenButton]}>Logout</Text>
-        </TouchableHighlight>
+        <Button onPress={this.logout}
+        fontFamily={fonts.bold}
+        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+        title='Logout'
+        >
+        </Button>
         </Card>
         }
       </View>
@@ -193,6 +209,11 @@ class BarOwner extends Component {
 }
 
 const styles = StyleSheet.create({
+  border: {
+    borderRadius: 4,
+    borderWidth: 4,
+    borderColor: '#d6d7da'
+  },
   form: {
     alignItems: 'center',
     width: width
