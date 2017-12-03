@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, TextInput, View, Dimensions, Text, Button } from 'react-native';
-import { MapView } from 'expo';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import GetDirections from './GetDirections.js';
 import { SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements'
 import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
 import { setLocation } from '../redux/location';
 import BarProfile from './BarProfile';
 import BarList from './BarList';
+import mapStyle from '../helper/mapStyle.js';
 let { width, height } = Dimensions.get('window');
-const Icons = require('./Icons');
+const Icons = require('../../assets/Icons');
 
 class GenreMap extends Component {
     constructor(props) {
@@ -94,12 +95,18 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) >= 0;
         }) : bars;
+<<<<<<< HEAD
         return (
+=======
+>>>>>>> master
 
+        return (
             <View style={styles.container}>
                 {viewMode === 'map' && currentLocation.latitude &&
                     <MapView
+                        provider={PROVIDER_GOOGLE}
                         style={styles.map}
+                        customMapStyle={mapStyle}
                         showsPointsOfInterest={false}
                         initialRegion={Object.assign({}, currentLocation, regionSize)}
                         onRegionChangeComplete={this.onRegionChangeComplete}
@@ -150,14 +157,14 @@ class GenreMap extends Component {
                         {directions.time.length > 0 && directionPressed &&
                             <MapView.Polyline
                                 coordinates={directions.coords}
-                                strokeWidth={4}
+                                strokeWidth={6}
                                 lineCap='round'
                                 lineJoin='round'
                                 strokeColor="#ff6763" />
                         }
                     </MapView>
                 }
-              
+
                 {
                     <View>
                         <Button onPress={this.toggleView} title={`Toggle View`} />
