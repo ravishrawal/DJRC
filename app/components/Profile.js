@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
 import { Card, ListItem, List, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { email } from 'react-native-communications';
+import { logoutUser } from '../redux/user';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
@@ -11,7 +11,6 @@ import commonStyles from '../helper/styles.js';
 class Profile extends Component {
     constructor() {
         super()
-
         this.logout = this.logout.bind(this);
     }
 
@@ -69,5 +68,13 @@ const mapState = ({ user }) => {
     return { user };
 }
 
+const mapDispatch = (dispatch) => {
+    return {
+        logoutUser: (navigate) => {
+            dispatch(logoutUser(navigate));
+        }
+    }
+}
 
-export default connect(mapState, null)(Profile);
+
+export default connect(mapState, mapDispatch)(Profile);
