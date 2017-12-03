@@ -220,6 +220,13 @@ class BarProfile extends Component {
                         :
                         <View style={{ alignItems: 'center' }}>
                             <Text style={[styles.text]}>Log in to write a review!</Text>
+                             <Button
+                                    buttonStyle={[commonStyles.roundedCorners, commonStyles.shadow, {
+                                        backgroundColor: colors.redOrange,
+                                        borderColor: colors.redOrange
+                                    }]}
+                                    onPress={() => this.props.navigation.goBack()}
+                                    title='Back' />
                         </View>}
 
                 </Card>
