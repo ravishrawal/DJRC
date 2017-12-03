@@ -3,9 +3,11 @@ const Jazz = require('./Jazz.png');
 const Electronic = require('./Electronic.png');
 const Rap = require('./Rap.png');
 const Pop = require('./Pop.png');
-const Chill = require('./Chill.png');
 const ClassicRock = require('./ClassicRock.png');
 const HeavyMetal = require('./HeavyMetal.png');
+const Seventies = require('./70s.png');
+const Eighties = require('./80s.png');
+const Nineties = require('./90s.png');
 
 module.exports = {
   Country,
@@ -15,5 +17,7 @@ module.exports = {
   Electronic,
   ClassicRock,
   HeavyMetal,
-  Chill
+  Seventies,
+  Eighties,
+  Nineties,
 }
