@@ -7,7 +7,7 @@ import getDirections from 'react-native-google-maps-directions';
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js';
-const Icons = require('../../assets/Icons');
+const Icons = require('../../assets/Icons/tile');
 
 
 export default function BarList(props){

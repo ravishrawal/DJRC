@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Button, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
-import { Card, ListItem, List, Icon, FormLabel, FormInput } from 'react-native-elements';
+import { StyleSheet, View, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
+import { Card, ListItem, List, Icon, FormLabel, FormInput, Button } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
@@ -8,8 +8,10 @@ import { updateGenres, addPromo } from '../redux/bars'
 import { fetchGenres } from '../redux/genres';
 import { fetchPromos, deletePromo } from '../redux/promos';
 
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 
-// import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
 
 class BarOwner extends Component {
@@ -21,7 +23,7 @@ class BarOwner extends Component {
       promoText: ''
 
     }
-    // this.onSubmitHandler = this.onSubmitHandler.bind(this);
+
     this.logout = this.logout.bind(this);
     this.updateGenre = this.updateGenre.bind(this);
     this.submitGenreUpdate = this.submitGenreUpdate.bind(this);
@@ -79,9 +81,6 @@ class BarOwner extends Component {
     this.props.updateGenres(this.props.owner.id, this.state.genreArr)
   }
 
-
-
-
   render() {
 
     const { updateGenre, submitGenreUpdate, changePromo, submitPromo, toggleForm, removePromo } = this;
@@ -105,6 +104,7 @@ class BarOwner extends Component {
         backgroundColor='transparent'>
 
           <ListItem
+          titleStyle={[styles.text, {alignSelf: 'center'}]}
           roundAvatar
           key={promo.id}
           title={promo.description}
@@ -124,47 +124,62 @@ class BarOwner extends Component {
             <FormInput onChangeText={changePromo} ></FormInput>
 
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => submitPromo()}
               title='Save Promo'
             />
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Go Back' />
         </View>
         :
-        <Card title = { this.props.owner.name } >
-          <Text stlye={{ marginBottom: 10}}>
-            This is info about your bar. Maybe Stats?
-          </Text>
-            <Text stlye={{ marginBottom: 10}}>
+        <Card 
+        containerStyle={styles.card}
+        titleStyle ={{fontSize: 20}}
+        fontFamily = {fonts.regular}
+        title = { this.props.owner.name } >
+          <View style ={{alignItems: 'center', marginBottom: 10}}>
+            <Text style={styles.text}>
               Update Your Genre
             </Text>
+            </View>
+            <View style = {styles.border}>
             <Picker
+            style = {  {color: colors.blue, marginTop: 10, marginBottom: 10, alignItems: 'center'}}
             selectedValue={genres[0]}
             onValueChange={ updateGenre }>
               {allGenres.length && allGenres.map((gen)=> (
+                
                 <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
+                
                 ))}
             </Picker>
-
+                </View>
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress = { submitGenreUpdate }
               title= 'Submit Genre Changes'
             />
 
 
             <Button
+            fontFamily={fonts.bold}
+            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Add Promo!'
             />
 
 
-            <Text stlye={{ marginBottom: 10}}>
+            <Text style={[styles.text, {marginTop: 10}]}>
               Current Promos
             </Text>
 
               <View>
-              <List containerStyle={{ marginBottom: 20 }}>
+              <List containerStyle={{ marginBottom: 10 }}>
                 {
                  this.props.owner.promos && this.props.owner.promos.length ? this.props.owner.promos.map((promo) => (
                   <View key = {promo.id}>
@@ -181,9 +196,12 @@ class BarOwner extends Component {
 
 
 
-        <TouchableHighlight onPress={this.logout}>
-          <Text style={[styles.button, styles.greenButton]}>Logout</Text>
-        </TouchableHighlight>
+        <Button onPress={this.logout}
+        fontFamily={fonts.bold}
+        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+        title='Logout'
+        >
+        </Button>
         </Card>
         }
       </View>
@@ -193,28 +211,43 @@ class BarOwner extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#077B89',
-    marginTop: 20,
-    width: width
+  border: {
+    borderRadius: 4,
+    borderWidth: 4,
+    borderColor: '#d6d7da'
   },
   form: {
     alignItems: 'center',
     width: width
   },
-  button: {
-        borderRadius: 4,
-        padding: 20,
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#fff'
-    },
     greenButton: {
         marginTop: 20,
         backgroundColor: '#4CD964'
     },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
+      marginTop: 20,
+      width: width
+  },
+  card: {
+    alignItems: 'center',
+    width: width
+},
+  button: {
+      alignItems: 'center',
+      backgroundColor: colors.redOrange,
+      borderColor: colors.redOrange,
+      margin: 10,
+      width: 200,
+  },
+  text: {
+      color: colors.blue,
+      fontFamily: fonts.regular,
+      fontSize: 20,
+  },
+  
 })
 
 const mapState = ({ genres, user, owner, promos }) => {
