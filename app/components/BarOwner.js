@@ -8,8 +8,10 @@ import { updateGenres, addPromo } from '../redux/bars'
 import { fetchGenres } from '../redux/genres';
 import { fetchPromos, deletePromo } from '../redux/promos';
 
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
 
-// import { fetchOneBar } from '../redux/bars'
 let { width, height } = Dimensions.get('window');
 
 class BarOwner extends Component {
@@ -21,7 +23,7 @@ class BarOwner extends Component {
       promoText: ''
 
     }
-    // this.onSubmitHandler = this.onSubmitHandler.bind(this);
+
     this.logout = this.logout.bind(this);
     this.updateGenre = this.updateGenre.bind(this);
     this.submitGenreUpdate = this.submitGenreUpdate.bind(this);
@@ -79,9 +81,6 @@ class BarOwner extends Component {
     this.props.updateGenres(this.props.owner.id, this.state.genreArr)
   }
 
-
-
-
   render() {
 
     const { updateGenre, submitGenreUpdate, changePromo, submitPromo, toggleForm, removePromo } = this;
@@ -132,14 +131,15 @@ class BarOwner extends Component {
               title='Go Back' />
         </View>
         :
-        <Card title = { this.props.owner.name } >
-          <Text stlye={{ marginBottom: 10}}>
-            This is info about your bar. Maybe Stats?
-          </Text>
-            <Text stlye={{ marginBottom: 10}}>
+        <Card 
+        containerStyle={styles.card}
+        title = { this.props.owner.name } >
+
+            <Text style={styles.text}>
               Update Your Genre
             </Text>
             <Picker
+            style = {  {color: colors.redOrange}}
             selectedValue={genres[0]}
             onValueChange={ updateGenre }>
               {allGenres.map((gen)=> (
@@ -159,7 +159,7 @@ class BarOwner extends Component {
             />
 
 
-            <Text stlye={{ marginBottom: 10}}>
+            <Text style={[styles.text, {marginTop: 10}]}>
               Current Promos
             </Text>
 
@@ -193,28 +193,38 @@ class BarOwner extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#077B89',
-    marginTop: 20,
-    width: width
-  },
   form: {
     alignItems: 'center',
     width: width
   },
-  button: {
-        borderRadius: 4,
-        padding: 20,
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#fff'
-    },
     greenButton: {
         marginTop: 20,
         backgroundColor: '#4CD964'
     },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
+      marginTop: 20,
+      width: width
+  },
+  card: {
+    alignItems: 'center',
+    width: width
+},
+  button: {
+      alignItems: 'center',
+      backgroundColor: colors.redOrange,
+      borderColor: colors.redOrange,
+      margin: 10,
+      width: 200,
+  },
+  text: {
+      color: colors.blue,
+      fontFamily: fonts.regular,
+      fontSize: 20,
+  },
+  
 })
 
 const mapState = ({ genres, user, owner, promos }) => {
