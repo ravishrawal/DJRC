@@ -40,6 +40,7 @@ class Review extends React.Component {
         Promise.all([this.props.postReviewToServer(this.state, bar.id, this.props.user.id, location)])
         .then(() => {
             this.props._hideModal();  
+            navigate.goBack();
         })
     }
 

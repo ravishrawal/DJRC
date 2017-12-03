@@ -79,7 +79,9 @@ export const signUp = (credentials) => {
         axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
             .then((res) => res.data)
             .then(() => {
-                alert('Success! You may now log in.');
+                if (!credentials.isBusiness){
+                    alert('Success! You may now log in.');                    
+                }
             })
             .catch(error => {
                 alert('Email already in use!');
