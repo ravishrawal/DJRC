@@ -19,6 +19,7 @@ const getReviewsForVenue = (reviews) => {
 }
 
 export const postReviewToServer = (review, venueId, userId, location) => {
+    console.log('loc', location)
     return (dispatch) => {
 
         axios.post(`https://djrc-api.herokuapp.com/api/reviews/${venueId}`, { venueId: venueId, rating: review.Rating, content: review.Review, genre: review.Genre, userId: userId })
@@ -40,6 +41,7 @@ export const fetchVenueReviews = (venueId) => {
 
             .then(res => res.data)
             .then(reviews => {
+                console.log('redux', reviews);
                 dispatch(getReviewsForVenue(reviews));
             }).catch(console.log);
 
@@ -53,7 +55,7 @@ export default (state = [], action) => {
             reviews.push(action.review)
             return reviews;
         case GET_REVIEWS_FOR_VENUE:
-
+        console.log('action', action.reviews)
             return action.reviews;
         default:
             return state;

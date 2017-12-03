@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, Button } from 'react-native'
-import { Card, ListItem, List } from 'react-native-elements'
+import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
+import { Card, ListItem, List, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { email } from 'react-native-communications';
 
@@ -13,20 +13,22 @@ class ClaimBar extends Component {
 
     render() {
         const { user } = this.props;
-        const {navigate} = this.props.navigation.state.params;
+        const { navigate } = this.props.navigation.state.params;
 
         return (
             <View style={styles.container}>
                 <TouchableHighlight
-                onPress={
-                    () => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name). Here is my verification')
-                }>
-                <Text style={[styles.button, styles.redButton]}>Click here to link your bar!</Text>
-            </TouchableHighlight>
-            
-            <Button
-            onPress={() => navigate.navigate('Home')}
-            title='Go Home' />
+                    onPress={
+                        () => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name). Here is my verification')
+                    }>
+                    <Text style={[styles.button, styles.redButton]}>Click here to link your bar!</Text>
+                </TouchableHighlight>
+
+                <Button
+                    buttonStyle={[{backgroundColor: colors.redOrange,
+                        borderColor: colors.redOrange}]}
+                    onPress={() => navigate.navigate('Home')}
+                title='Go Home' />
             </View>
         )
     }
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
         margin: 10,
-        fontSize:30
+        fontSize: 30
     },
     centering: {
         alignItems: 'center',
