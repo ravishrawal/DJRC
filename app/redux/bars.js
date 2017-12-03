@@ -18,13 +18,23 @@ export function updateGenres (venueId, genreArr) {
   .then(res => res.data)
 }
 
+export function addPromo (venueId, description) {
+
+
+  return axios.post(`https://djrc-api.herokuapp.com/api/promos/${venueId}`, { description } )
+  .then(res => res.data)
+}
+
+
 
 
 export const fetchBarsFromServer = (location, radius) => {
     const { latitude, longitude } = location;
     return (dispatch) => {
 
+
         axios.get(`https://djrc-api.herokuapp.com/api/venues?latitude=${latitude}&longitude=${longitude}&radius=${radius}`)
+
             .then(res => res.data)
             .then(bars => {
                 console.log('asdf', bars.length)
