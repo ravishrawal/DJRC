@@ -94,7 +94,6 @@ class GenreMap extends Component {
         bars = genre ? bars.filter(bar => {
             return bar.genres.indexOf(genre) >= 0;
         }) : bars;
-        console.log(bars[0]);
         return (
 
             <View style={styles.container}>

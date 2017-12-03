@@ -24,15 +24,18 @@ class Profile extends Component {
             <View style={styles.container}>
                 <Card title={user.email}>
                     <Text style={{ marginBottom: 10 }}>I love music</Text>
-                    <TouchableHighlight 
-                    onPress={() => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name).')}
-                    >
-                        <Text style={[styles.button, styles.greenButton]}>Email</Text>
-                    </TouchableHighlight>
-                </Card>
-                <TouchableHighlight onPress={this.logout}>
+                    <TouchableHighlight onPress={this.logout}>
                     <Text style={[styles.button, styles.greenButton]}>Logout</Text>
                 </TouchableHighlight>
+                   
+                </Card>
+
+                <TouchableHighlight
+                onPress={() => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name).')}
+            >
+                <Text style={[styles.button, styles.greenButton]}>CLick here to link your bar!</Text>
+            </TouchableHighlight>
+               
             </View>
         )
     }
