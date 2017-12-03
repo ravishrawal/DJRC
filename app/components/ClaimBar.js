@@ -14,7 +14,7 @@ class ClaimBar extends Component {
     render() {
         const { user } = this.props;
         const {navigate} = this.props.navigation.state.params;
-        console.log('nav', navigate);
+
         return (
             <View style={styles.container}>
                 <TouchableHighlight
