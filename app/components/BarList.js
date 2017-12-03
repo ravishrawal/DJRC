@@ -4,11 +4,12 @@ import { View, Text, TouchableHighlight, StyleSheet, Dimensions, Image, ScrollVi
 import { List, ListItem, Separator } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import getDirections from 'react-native-google-maps-directions';
-const Icons = require('./Icons');
+const Icons = require('../../assets/Icons');
 
 
 export default function BarList(props){
   function renderRow(bar){
+    if(bar.songs) console.log(bar.songs);
     let swipeoutBtns = [
       {
         text: 'Go',
