@@ -76,7 +76,7 @@ export const spotifyLogin = (token) => {
 
 export const signUp = (credentials) => {
    return () => {
-        axios.post('http://172.16.25.175:3002/passportAuth/signup', credentials)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
             .then((res) => res.data)
             .then(() => {
                 alert('Success! You may now log in.');
@@ -89,7 +89,7 @@ export const signUp = (credentials) => {
 
 export const getUser = (credentials, navigate) => {
     return (dispatch) => {
-        axios.post('http:/172.16.25.175:3002/passportAuth/login', credentials)
+        axios.post('https://djrc-api.herokuapp.com/passportAuth/login', credentials)
             .then((res) => res.data)
             .then((res) => {
                 if (res.error) {

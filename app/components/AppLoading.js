@@ -1,6 +1,8 @@
 import React from 'react';
+import { Image, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { AppLoading, Font } from 'expo';
+import { fetchBarsFromServer } from '../redux/bars';
 
 import Nav from './Nav';
 
