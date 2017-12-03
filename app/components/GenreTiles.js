@@ -5,7 +5,7 @@ import {fetchGenres} from '../redux/genres';
 import {tokenUser} from '../redux/user';
 // import {fetchSpotifyBars} from '../redux/spotifyBars';
 
-const Icons = require('./Icons');
+const Icons = require('../../assets/Icons');
 let { width, height } = Dimensions.get('window');
 
 class GenreTiles extends React.Component {

@@ -110,7 +110,7 @@ class GenreMap extends Component {
 
         return (
             <View style={styles.container}>
-                { currentLocation.latitude &&
+                { viewMode === 'map' && currentLocation.latitude &&
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         style={styles.map}
@@ -168,11 +168,30 @@ class GenreMap extends Component {
                         }
                     </MapView>
                 }
-                {
-                    <View>
-                        <Button onPress={this.toggleView} title={`Toggle View`} />
-                    </View>
-                }
+                <View style={styles.topButtons}>
+                    {
+                        <View>
+                            <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                            onPress={this.toggleView}
+                            title={`Toggle View`}
+                            color="#fff"
+                            fontFamily={fonts.bold}/>
+                        </View>
+                    }
+                    {genre &&
+                        <View style={styles.filterButtonPosition}>
+                            <Button
+                            backgroundColor={colors.redOrangeDark}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                            onPress={() => navigate('Map', { genre: null, selectedGenreName: null })}
+                            title={`${selectedGenreName} X`}
+                            color="#fff"
+                            fontFamily={fonts.bold}/>
+                        </View>
+                    }
+                </View>
                 { viewMode === 'list' &&
                     <BarList bars={bars} navigate={navigate} />
                 }
@@ -192,17 +211,12 @@ class GenreMap extends Component {
                     <View style={styles.buttonRow}>
                         <Button
                             backgroundColor={colors.redOrangeDark}
-                            buttonStyle={[styles.searchRegionButton, commonStyles.roundedCorners, commonStyles.shadow]}
+                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
                             color="#fff"
                             fontFamily={fonts.bold}
                             iconRight={{ name: 'search', type: 'font-awesome' }}
                             onPress={this.onRegionButtonPress}
                             title="Search Area" />
-                    </View>
-                }
-                {genre &&
-                    <View>
-                        <Button onPress={() => navigate('Map', { genre: null, selectedGenreName: null })} title={`${selectedGenreName}\nxRemove Filter`} />
                     </View>
                 }
             </View>
@@ -213,7 +227,7 @@ class GenreMap extends Component {
 const styles = StyleSheet.create({
     buttonRow: {
         marginBottom: 10,
-        marginTop: 25,
+        marginTop: height-194
     },
     callout: {
         alignItems: 'center',
@@ -263,6 +277,8 @@ const styles = StyleSheet.create({
         fontFamily: fonts.bold,
         fontSize: 20,
     },
+    filterButtonPosition: {
+    },
     map: {
         backgroundColor: colors.redOrange,
         bottom: 0,
@@ -273,11 +289,15 @@ const styles = StyleSheet.create({
     },
     polyButton: {
         backgroundColor: colors.redOrange,
-        borderColor: colors.redOrange
+        borderColor: colors.redOrange,
     },
-    searchRegionButton: {
+    otherButtons: {
         backgroundColor: colors.redOrangeDark,
-        borderColor: colors.redOrangeDark,
+        borderColor: colors.redOrangeDark
+    },
+    topButtons: {
+        marginTop: height/25,
+        flexDirection: 'row'
     }
 });
 
