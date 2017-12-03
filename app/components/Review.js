@@ -1,8 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import {Button} from 'react-native-elements';
 import t from 'tcomb-form-native';
 import { postReviewToServer } from '../redux/reviews';
+
+import colors from '../helper/colors.js';
+import fonts from '../helper/fonts.js';
+import commonStyles from '../helper/styles.js';
+
 var _ = require('lodash');
 
 // clone the default stylesheet
@@ -80,10 +86,13 @@ class Review extends React.Component {
                     options={options}
                     value={this.state}
                 />
+                <View style = {{alignItems: 'center'}}>
                 <Button
+                buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                     title="Leave Review"
                     onPress={this.handleSubmit}
                 />
+                </View>
             </View>
         );
     }
@@ -94,8 +103,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 50,
         padding: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F5FCFF',
     },
+    button: {
+        alignItems: 'center',
+        backgroundColor: colors.redOrange,
+        borderColor: colors.redOrange,
+        margin: 10,
+        width: 200,
+    },
+    text: {
+        color: colors.blue,
+        fontFamily: fonts.regular,
+        fontSize: 20,
+    }
 });
 
 

@@ -76,7 +76,7 @@ class BarProfile extends Component {
                 <Card
                     containerStyle={styles.card}
                     title={`${bar.name} \n ${bar.genreNames} \n`}
-                    titleStyle={{ fontSize: 15 }}
+                    titleStyle={{ fontSize: 20 }}
                     fontFamily={fonts.regular}
                 >
                     {bar.avgRating > 0 ?
@@ -163,9 +163,12 @@ class BarProfile extends Component {
                                             null
                                     }
                                 </List>
+                                <View style = {{alignItems: 'center'}}>
                                 <Button
+                                buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow, { marginBottom: 15 }]}
                                     onPress={this._hideModalRead}
                                     title='Go Back' />
+                                    </View>
                             </View>
                         </Modal>
                     </View>
@@ -211,9 +214,12 @@ class BarProfile extends Component {
                             <Modal isVisible={this.state.isModalVisibleWrite}>
                                 <View style={{ flex: 1 }}>
                                     <Review bar={bar} _hideModal={this._hideModalWrite} navigate={this.props.navigation} />
+                                    <View style = {{alignItems: 'center'}}>
                                     <Button
+                                    buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                                         onPress={this._hideModalWrite}
                                         title='Cancel' />
+                                        </View>
                                 </View>
                             </Modal>
                         </View>
