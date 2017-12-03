@@ -182,7 +182,7 @@ class BarProfile extends Component {
                                         roundAvatar
                                         hideChevron = {true}
                                         key={i}
-                                        title={song.song}
+                                        title={`${song.artist}`}
                                     />
                                 ))
                             }
