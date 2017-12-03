@@ -113,6 +113,7 @@ class BarProfile extends Component {
                                         bar.promos && bar.promos.length ? bar.promos.map((promo, i) => (
                                             <View key={i}>
                                                 <ListItem
+                                                    titleStyle={[styles.text, {alignSelf: 'center'}]}
                                                     hideChevron = {true}
                                                     roundAvatar
                                                     key={i}
@@ -125,9 +126,13 @@ class BarProfile extends Component {
                                                 Sorry no current promos! </Text>
                                     }
                                 </List>
+                            <View style={{alignItems: 'center'}}>
                                 <Button
+                                    fontFamily={fonts.bold}
+                                    buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
                                     onPress={this.togglePromoModal}
                                     title='Go Back' />
+                            </View>
                             </View>
                         </Modal>
                         <Button
