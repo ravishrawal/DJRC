@@ -83,8 +83,6 @@ class SignUpOrIn extends Component {
                         placeholder="..."
                         placeholderTextColor={colors.yellow}
                         selectionColor={colors.yellow} />
-                    <FormValidationMessage
-                        labelStyle={styles.formError}>Error!</FormValidationMessage>
 
                     <FormLabel
                         labelStyle={styles.formLabel}>Password</FormLabel>
@@ -96,8 +94,6 @@ class SignUpOrIn extends Component {
                         placeholderTextColor={colors.yellow}
                         secureTextEntry={true}
                         selectionColor={colors.yellow} />
-                    <FormValidationMessage
-                        labelStyle={styles.formError}>Error!</FormValidationMessage>
 
                     <CheckBox
                         center

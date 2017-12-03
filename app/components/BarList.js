@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   iconSection: {
     justifyContent: 'center',
     alignItems: 'flex-end',
-    marginRight: 10
+    marginRight: 10,
+    padding: 10
   }
 });
