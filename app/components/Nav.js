@@ -17,7 +17,6 @@ import ClaimBar from './ClaimBar';
 
 const styles = StyleSheet.create({
   icon: {
-    backgroundColor: 'green',
     height: 20,
     width: 20,
   },
