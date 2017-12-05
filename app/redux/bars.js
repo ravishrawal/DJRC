@@ -12,6 +12,9 @@ const getBars = (bars) => {
 export function updateGenres (venueId, genreArr) {
   return axios.put(`https://djrc-api.herokuapp.com/api/venues/${venueId}`, genreArr)
   .then(res => res.data)
+  .then(() => {
+      alert('Genre updated!');
+  })
 }
 
 export function addPromo (venueId, description) {
