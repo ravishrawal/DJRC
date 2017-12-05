@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
 import { Card, ListItem, List, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user';
+import { email } from 'react-native-communications';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
@@ -26,6 +27,13 @@ class Profile extends Component {
                 <Text style={[styles.button, styles.name]}>User: {this.props.user.email}</Text>
                 <TouchableHighlight onPress={this.logout}>
                     <Text style={[styles.button, styles.redButton]}>Logout</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    onPress={
+                        () => email(['barcastnyc@gmail.com'], null, null, 'Sign me up as a bar owner!', 'I own (fill in bars name). Here is my verification')
+                    }>
+                    <Text style={[styles.button, styles.redButton, {fontSize: 20}]}>Click here to link your bar!</Text>
                 </TouchableHighlight>
             </View>
         )
