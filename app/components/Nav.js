@@ -17,7 +17,6 @@ import ClaimBar from './ClaimBar';
 
 const styles = StyleSheet.create({
   icon: {
-    backgroundColor: 'green',
     height: 20,
     width: 20,
   },
@@ -80,11 +79,11 @@ const Tabs = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.redOrange,
-    // iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
     showIcon: true,
+    showLabel: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
@@ -131,22 +130,54 @@ const UserTabs = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.redOrange,
-    // iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
     showIcon: true,
+    showLabel: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
 });
 
 const OwnerTabs = TabNavigator({
-  MyBar: {screen: BarOwner }
+  Home: {
+    screen: GenreTiles,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'home'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  MyBar: {
+    screen: BarOwner,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'beer'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
 }, {
+  animationEnabled: false,
+  tabBarOptions: {
+    activeTintColor: colors.redOrange,
+    inactiveTintColor: colors.gray,
+    indicatorStyle: styles.indicator,
+    labelStyle: styles.label,
+    showIcon: true,
+    showLabel: false,
+    style: styles.tabBar,
+  },
   tabBarPosition: 'bottom'
-  }
-)
+});
 
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
