@@ -7,7 +7,6 @@ import { fetchPromos } from '../redux/promos';
 import Modal from 'react-native-modal'
 import Stars from 'react-native-stars';
 
-import GenreMap from './GenreMap';
 import Review from './Review';
 import GetDirections from './GetDirections';
 

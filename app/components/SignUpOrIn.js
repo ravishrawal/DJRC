@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Linking } from 'react-native';
+import { View, StyleSheet, Linking, Dimensions } from 'react-native';
 // import axios from 'axios';
-import { Button, FormInput, FormLabel, FormValidationMessage, CheckBox } from 'react-native-elements';
+import { Button, FormInput, Card, FormLabel, Text, FormValidationMessage, CheckBox } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { WebBrowser} from 'expo';
+import { WebBrowser } from 'expo';
+import Modal from 'react-native-modal'
 
 import { getUser, spotifyLogin, signUp } from '../redux/user';
 
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js';
+
+let { width, height } = Dimensions.get('window')
 
 class SignUpOrIn extends Component {
     constructor() {
@@ -18,7 +21,8 @@ class SignUpOrIn extends Component {
             email: '',
             password: '',
             token: '',
-            checked: false
+            checked: false,
+            modalVisible: false
         };
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
@@ -26,18 +30,24 @@ class SignUpOrIn extends Component {
         this.login = this.login.bind(this);
         this.handleRedirect = this.handleRedirect.bind(this);
         this.onCheck = this.onCheck.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
     componentDidMount() {
         Linking.addEventListener('url', this.handleRedirect);
     }
+
+    toggleModal() {
+        this.setState({ modalVisible: !this.state.modalVisible })
+    }
+
     onChangeEmail(email) {
         this.setState({ email: email });
     }
     onChangePassword(password) {
         this.setState({ password: password });
     }
-    onCheck(){
-        this.setState({checked:!this.state.checked})
+    onCheck() {
+        this.setState({ checked: !this.state.checked })
     }
     handleAdd() {
         const credentials = {
@@ -45,9 +55,9 @@ class SignUpOrIn extends Component {
             password: this.state.password,
             isBusiness: this.state.checked
         };
-        const {navigate} = this.props.navigation;
+        const { navigate } = this.props.navigation;
         this.props.signUp(credentials)
-        if (this.state.checked) navigate('ClaimBar', {navigate: this.props.navigation});
+        if (this.state.checked) navigate('ClaimBar', { navigate: this.props.navigation });
     }
     login() {
         const { navigate } = this.props.navigation;
@@ -95,13 +105,37 @@ class SignUpOrIn extends Component {
                         secureTextEntry={true}
                         selectionColor={colors.yellow} />
 
-                    <CheckBox
-                        center
-                        title='Check here to claim a bar!'
-                        checked={this.state.checked}
-                        onPress={this.onCheck}
-                        textStyle = {styles.formLabel}
-                      />
+                    <Button
+                        buttonStyle={[commonStyles.roundedCorners, commonStyles.shadow, {
+                            backgroundColor: colors.redOrange,
+                            borderColor: colors.redOrange,
+                            marginTop: 10
+                        }]}
+                        fontFamily={fonts.bold}
+                        onPress={this.toggleModal}
+                        title='Bar Signup Information' />
+
+                    <Modal isVisible={this.state.modalVisible}>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            <Card
+                                containerStyle={styles.card}
+                                title={`Bar Signup Information`}
+                                titleStyle={{ fontSize: 20 }}
+                                fontFamily={fonts.regular}
+                            >
+                                <Text style={styles.formLabel}>Login with your Spotify account to share your music with customers</Text>
+                                <Text></Text>
+                                <Text style={styles.formLabel}>Go into the settings tab to link your bar </Text>
+                            </Card>
+                            <View style={{ alignItems: 'center' }}>
+                                <Button
+                                    buttonStyle={[styles.button, commonStyles.roundedCorners]}
+                                    onPress={this.toggleModal}
+                                    title='Go back' />
+                            </View>
+                        </View>
+                    </Modal>
+
 
                 </View>
 
@@ -174,6 +208,17 @@ const styles = StyleSheet.create({
         color: colors.blue,
         fontFamily: fonts.regular,
         fontSize: 20,
+    }, card: {
+        alignItems: 'center',
+        width: width,
+        backgroundColor: '#F5FCFF',
+    },
+    cardContainer: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+        marginTop: 20,
+        width: width
     },
 });
 
@@ -198,3 +243,12 @@ const mapDispatch = (dispatch) => {
 };
 
 export default connect(mapState, mapDispatch)(SignUpOrIn);
+
+
+// <CheckBox
+// center
+// title='Check here to claim a bar!'
+// checked={this.state.checked}
+// onPress={this.onCheck}
+// textStyle = {styles.formLabel}
+// />
