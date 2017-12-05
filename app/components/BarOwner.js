@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Picker, FlatList, TouchableHighlight } from 'react-native';
 import { Card, ListItem, List, Icon, FormLabel, FormInput, Button } from 'react-native-elements';
+import t from 'tcomb-form-native';
 import Swipeout from 'react-native-swipeout';
+
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/user'
 import { updateGenres, addPromo } from '../redux/bars'
@@ -12,15 +14,17 @@ import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js';
 
+const Form = t.form.Form;
 let { width, height } = Dimensions.get('window');
 
 class BarOwner extends Component {
-  constructor(){
+  constructor() {
     super()
     this.state = {
       formVisible: false,
       genreArr: [1],
-      promoText: ''
+      promoText: '',
+      Genre: []
 
     }
 
@@ -31,28 +35,32 @@ class BarOwner extends Component {
     this.submitPromo = this.submitPromo.bind(this);
     this.toggleForm = this.toggleForm.bind(this);
     this.removePromo = this.removePromo.bind(this)
+    this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
     this.props.fetchGenres();
-
   }
 
+  onChange(value) {
+    console.log(value);
+
+    this.setState({Genre: [value.Genre]});
+  }
   logout() {
     const { navigate } = this.props.navigation;
     this.props.logoutUser(navigate);
   }
 
-  changePromo(promoText){
-    this.setState({promoText: promoText})
+  changePromo(promoText) {
+    this.setState({ promoText: promoText })
   }
 
-  removePromo(promoId){
+  removePromo(promoId) {
     this.props.deletePromo(promoId);
   }
 
-  submitPromo(){
+  submitPromo() {
     this.props.addPromo(this.props.owner.id, this.state.promoText)
     this.setState({
       promoText: ''
@@ -62,7 +70,7 @@ class BarOwner extends Component {
     alert('Promo added!');
   }
 
-  toggleForm(){
+  toggleForm() {
     this.setState({
       formVisible: !this.state.formVisible
     })
@@ -77,8 +85,8 @@ class BarOwner extends Component {
   }
 
 
-  submitGenreUpdate(){
-    this.props.updateGenres(this.props.owner.id, this.state.genreArr)
+  submitGenreUpdate() {
+    this.props.updateGenres(this.props.owner.id, this.state.Genre)
   }
 
   render() {
@@ -87,28 +95,41 @@ class BarOwner extends Component {
 
     const genres = this.state.genreArr
 
-    const allGenres = this.props.genres.length && this.props.genres;
+    const Genres = this.props.genres.reduce((memo, next) => {
+      memo[next.key] = next.name
+      return memo;
+    }, {})
 
-    function renderRow(promo){
+    const GenreEnums = t.enums(Genres)
 
-     const swipeBtns = [{
+    const GenreForm = t.struct({
+      Genre: GenreEnums,
+    })
+
+    var options = {
+      auto: 'none'
+    };
+
+    function renderRow(promo) {
+
+      const swipeBtns = [{
         text: 'Delete',
         backgroundColor: 'red',
         underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
-        onPress: () => {deletePromo(promo.id)}
+        onPress: () => { deletePromo(promo.id) }
       }]
       return (
         <Swipeout
-        right={swipeBtns}
-        autoclose='true'
-        backgroundColor='transparent'>
+          right={swipeBtns}
+          autoclose='true'
+          backgroundColor='transparent'>
 
           <ListItem
-          titleStyle={[styles.text, {alignSelf: 'center'}]}
-          roundAvatar
-          key={promo.id}
-          title={promo.description}
-        />
+            titleStyle={[styles.text, { alignSelf: 'center' }]}
+            roundAvatar
+            key={promo.id}
+            title={promo.description}
+          />
         </Swipeout>
       )
     }
@@ -118,91 +139,88 @@ class BarOwner extends Component {
     return (
 
       <View style={styles.container}>
-        { this.state.formVisible ?
+        {this.state.formVisible ?
           <View style={styles.form}>
             <FormLabel> Promo Description </FormLabel>
             <FormInput onChangeText={changePromo} ></FormInput>
 
             <Button
-            fontFamily={fonts.bold}
-            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+              fontFamily={fonts.bold}
+              buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => submitPromo()}
               title='Save Promo'
             />
             <Button
-            fontFamily={fonts.bold}
-            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+              fontFamily={fonts.bold}
+              buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Go Back' />
-        </View>
-        :
-        <Card 
-        containerStyle={styles.card}
-        titleStyle ={{fontSize: 20}}
-        fontFamily = {fonts.regular}
-        title = { this.props.owner.name } >
-          <View style ={{alignItems: 'center', marginBottom: 10}}>
-            <Text style={styles.text}>
-              Update Your Genre
+          </View>
+          :
+          <Card
+            containerStyle={styles.card}
+            titleStyle={{ fontSize: 20 }}
+            fontFamily={fonts.regular}
+            title={this.props.owner.name} >
+            <View style={{ alignItems: 'center', marginBottom: 10 }}>
+              <Text style={styles.text}>
+                Update Your Genre
             </Text>
             </View>
-            <View style = {styles.border}>
-            <Picker
-            style = {  {color: colors.blue, marginTop: 10, marginBottom: 10, alignItems: 'center'}}
-            selectedValue={genres[0]}
-            onValueChange={ updateGenre }>
-              {allGenres.length && allGenres.map((gen)=> (
-                
-                <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
-                
-                ))}
-            </Picker>
-                </View>
+
+            <View>
+              <Form
+                type={GenreForm}
+                options={options}
+                onChange={this.onChange}
+                value={this.state}
+              />
+            </View>
             <Button
-            fontFamily={fonts.bold}
-            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
-              onPress = { submitGenreUpdate }
-              title= 'Submit Genre Changes'
+              fontFamily={fonts.bold}
+              buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+              onPress={submitGenreUpdate}
+              title='Submit Genre Changes'
             />
 
 
             <Button
-            fontFamily={fonts.bold}
-            buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+              fontFamily={fonts.bold}
+              buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
               onPress={() => toggleForm()}
               title='Add Promo!'
             />
 
 
-            <Text style={[styles.text, {marginTop: 10}]}>
+            <Text style={[styles.text, { marginTop: 10 }]}>
               Current Promos
             </Text>
 
-              <View>
+            <View>
               <List containerStyle={{ marginBottom: 10 }}>
                 {
-                 this.props.owner.promos && this.props.owner.promos.length ? this.props.owner.promos.map((promo) => (
-                  <View key = {promo.id}>
-                    {renderRow(promo)}
+                  this.props.owner.promos && this.props.owner.promos.length ? this.props.owner.promos.map((promo) => (
+                    <View key={promo.id}>
+                      {renderRow(promo)}
                     </View>
-                    )) :
+                  )) :
 
-                          <Text>
-                           </Text>
-                          }
+                    <Text>
+                    </Text>
+                }
               </List>
 
             </View>
 
 
 
-        <Button onPress={this.logout}
-        fontFamily={fonts.bold}
-        buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
-        title='Logout'
-        >
-        </Button>
-        </Card>
+            <Button onPress={this.logout}
+              fontFamily={fonts.bold}
+              buttonStyle={[styles.button, commonStyles.roundedCorners, commonStyles.shadow]}
+              title='Logout'
+            >
+            </Button>
+          </Card>
         }
       </View>
     )
@@ -212,68 +230,76 @@ class BarOwner extends Component {
 
 const styles = StyleSheet.create({
   border: {
-    borderRadius: 4,
-    borderWidth: 4,
     borderColor: '#d6d7da'
   },
   form: {
     alignItems: 'center',
     width: width
   },
-    greenButton: {
-        marginTop: 20,
-        backgroundColor: '#4CD964'
-    },
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
-      marginTop: 20,
-      width: width
+  greenButton: {
+    marginTop: 20,
+    backgroundColor: '#4CD964'
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    marginTop: 20,
+    width: width
   },
   card: {
     alignItems: 'center',
     width: width
-},
+  },
   button: {
-      alignItems: 'center',
-      backgroundColor: colors.redOrange,
-      borderColor: colors.redOrange,
-      margin: 10,
-      width: 200,
+    alignItems: 'center',
+    backgroundColor: colors.redOrange,
+    borderColor: colors.redOrange,
+    margin: 10,
+    width: 200,
   },
   text: {
-      color: colors.blue,
-      fontFamily: fonts.regular,
-      fontSize: 20,
+    color: colors.blue,
+    fontFamily: fonts.regular,
+    fontSize: 20,
   },
-  
+
 })
 
 const mapState = ({ genres, user, owner, promos }) => {
-    return {
-        user,
-        genres,
-        owner,
-        promos
-    }
+  return {
+    user,
+    genres,
+    owner,
+    promos
+  }
 }
 
 const mapDispatch = (dispatch) => {
-    return {
-        logoutUser: (navigate) => {
-            dispatch(logoutUser(navigate));
-        },
-        fetchGenres: () => {
-          dispatch(fetchGenres());
-        },
-        fetchPromos: (venueId) => {
-          dispatch(fetchPromos(venueId))
-        },
-        updateGenres,
-        addPromo,
-        deletePromo
-    }
+  return {
+    logoutUser: (navigate) => {
+      dispatch(logoutUser(navigate));
+    },
+    fetchGenres: () => {
+      dispatch(fetchGenres());
+    },
+    fetchPromos: (venueId) => {
+      dispatch(fetchPromos(venueId))
+    },
+    updateGenres,
+    addPromo,
+    deletePromo
+  }
 }
 
 export default connect(mapState, mapDispatch)(BarOwner);
+
+// <Picker
+// style={{ height: 50 }}
+// selectedValue={genres[0]}
+// onValueChange={updateGenre}>
+// {allGenres.length && allGenres.map((gen) => (
+
+//   <Picker.Item label={gen.name} value={gen.key} key={gen.key} />
+// ))}
+// </Picker>
