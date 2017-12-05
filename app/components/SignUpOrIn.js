@@ -116,7 +116,7 @@ class SignUpOrIn extends Component {
                         title='Bar Signup Information' />
 
                     <Modal isVisible={this.state.modalVisible}>
-                        <View style={{ flex: 1, alignItems: 'center' }}>
+                        <View style={{ flex: 1, alignItems: 'center', width: width }}>
                             <Card
                                 containerStyle={styles.card}
                                 title={`Bar Signup Information`}
@@ -211,14 +211,7 @@ const styles = StyleSheet.create({
     }, card: {
         alignItems: 'center',
         width: width,
-        backgroundColor: '#F5FCFF',
-    },
-    cardContainer: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-        marginTop: 20,
-        width: width
+        backgroundColor: '#F5FCFF'
     },
 });
 
