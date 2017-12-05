@@ -141,12 +141,24 @@ const UserTabs = TabNavigator({
 });
 
 const OwnerTabs = TabNavigator({
-  MyBar: {
-    screen: Profile,
+  Home: {
+    screen: GenreTiles,
     navigationOptions: () => ({
       tabBarIcon: ({ tintColor }) => (
         <FontAwesome
-          name={'gear'}
+          name={'home'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
+  MyBar: {
+    screen: BarOwner,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'beer'}
           size={26}
           style={{ color: tintColor }}
         />
