@@ -7,6 +7,7 @@ import getDirections from 'react-native-google-maps-directions';
 import colors from '../helper/colors.js';
 import fonts from '../helper/fonts.js';
 import commonStyles from '../helper/styles.js';
+import SearchBar from './SearchBar.js'
 const Icons = require('../../assets/Icons/tile');
 
 
@@ -64,21 +65,24 @@ export default function BarList(props){
 
   const { bars, navigate } = props;
   return (
-    <ScrollView>
-      { bars.length <= 0 ? <Text>No Bars To Show</Text> :
-          <List>
-            {
-              bars.map(bar => {
-                return (
-                  <View key={bar.id}>
-                    {renderRow(bar)}
-                  </View>
-                )
-              })
-            }
-          </List>
-      }
-    </ScrollView>
+    <View>
+      <SearchBar />
+      <ScrollView>
+        { bars.length <= 0 ? <Text>No Bars To Show</Text> :
+            <List>
+              {
+                bars.map(bar => {
+                  return (
+                    <View key={bar.id}>
+                      {renderRow(bar)}
+                    </View>
+                  )
+                })
+              }
+            </List>
+        }
+      </ScrollView>
+    </View>
   )
 }
 
