@@ -80,11 +80,11 @@ const Tabs = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.redOrange,
-    // iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
     showIcon: true,
+    showLabel: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
@@ -131,22 +131,42 @@ const UserTabs = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: colors.redOrange,
-    // iconStyle: styles.icon,
     inactiveTintColor: colors.gray,
     indicatorStyle: styles.indicator,
     labelStyle: styles.label,
     showIcon: true,
+    showLabel: false,
     style: styles.tabBar,
   },
   tabBarPosition: 'bottom',
 });
 
 const OwnerTabs = TabNavigator({
-  MyBar: {screen: BarOwner }
+  MyBar: {
+    screen: Profile,
+    navigationOptions: () => ({
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesome
+          name={'gear'}
+          size={26}
+          style={{ color: tintColor }}
+        />
+      ),
+    }),
+  },
 }, {
+  animationEnabled: false,
+  tabBarOptions: {
+    activeTintColor: colors.redOrange,
+    inactiveTintColor: colors.gray,
+    indicatorStyle: styles.indicator,
+    labelStyle: styles.label,
+    showIcon: true,
+    showLabel: false,
+    style: styles.tabBar,
+  },
   tabBarPosition: 'bottom'
-  }
-)
+});
 
 const LoggedOutNav = StackNavigator({
   Home: { screen: Tabs },
