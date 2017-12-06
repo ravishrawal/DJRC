@@ -16,6 +16,12 @@ A curated suggestion app for finding bars near you playing the genre of music yo
 
 ---
 
+### Try the app on Expo!
+
+[https://expo.io/@jdb409/Capstone](https://expo.io/@jdb409/Capstone)
+
+---
+
 ### The Stack
 
 - Node.js
