@@ -1,13 +1,13 @@
 {
-  "expo": {
-    "name": "DJRC",
-    "slug": "Capstone",
-    "sdkVersion": "22.0.0",
-    "splash": {
-      "image": "./assets/splash.png",
-      "backgroundColor": "#F7F7F7",
-      "resizeMode": "contain"
-    },
-    "orientation": "portrait",
-  }
+    "expo": {
+        "name": "DJRC",
+        "slug": "Capstone",
+        "sdkVersion": "22.0.0",
+        "splash": {
+            "image": "./assets/splash.png",
+            "backgroundColor": "#F7F7F7",
+            "resizeMode": "contain"
+        },
+        "orientation": "portrait",
+    }
 }
