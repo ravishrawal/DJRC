@@ -1,17 +1,16 @@
-//approot
+// approot
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from '../redux';
+import store from '../store';
 
 import App from './AppLoading';
-import Nav from './Nav';
 
 const AppRoot = () => {
-  return (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
 };
 
 export default AppRoot;

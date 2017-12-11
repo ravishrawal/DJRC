@@ -1,51 +1,47 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, TouchableHighlight, Text } from 'react-native'
-import { Card, ListItem, List, Button } from 'react-native-elements'
+import { View, StyleSheet, Text } from 'react-native';
+// import { Card, ListItem, List, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { email } from 'react-native-communications';
+// import { email } from 'react-native-communications';
 
 import colors from '../helper/colors.js';
-import fonts from '../helper/fonts.js';
-import commonStyles from '../helper/styles.js';
+// import commonStyles from '../helper/styles.js';
+// import fonts from '../helper/fonts.js';
 
 class BarInfo extends Component {
-
-
     render() {
-
         return (
             <View style={styles.container}>
-                <Text> Log in </Text>
+                <Text>Log in</Text>
             </View>
-        )
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: 'white',
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white'
     },
     button: {
         borderRadius: 4,
+        color: '#fff',
+        marginBottom: 20,
         padding: 20,
         textAlign: 'center',
-        marginBottom: 20,
-        color: '#fff'
     },
     redButton: {
         alignItems: 'center',
         backgroundColor: colors.redOrange,
         borderColor: colors.redOrange,
+        fontSize: 30,
         margin: 10,
-        fontSize: 30
     },
     centering: {
         alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
-
+        justifyContent: 'center',
+    },
+});
 
 export default connect(null, null)(BarInfo);

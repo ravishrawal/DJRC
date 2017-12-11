@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, TextInput, View, Dimensions, Text } from 'react-native';
+import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { Icon } from 'react-native-elements'
-import { Button, SearchBar, Card, ListItem, List, FlatList } from 'react-native-elements';
-import { getDirectionsToBar, fetchBarsFromServer } from '../redux';
-import { setLocation } from '../redux/location';
+// import { Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements';
+
+import { getDirectionsToBar, fetchBarsFromServer } from '../store';
+import { setLocation } from '../store/location';
 
 import BarList from './BarList';
-import BarProfile from './BarProfile';
-import GetDirections from './GetDirections.js';
+// import BarProfile from './BarProfile';
+// import GetDirections from './GetDirections.js';
 
 import colors from '../helper/colors.js';
+import commonStyles from '../helper/styles.js';
 import fonts from '../helper/fonts.js';
-import commonStyles from '../helper/styles.js'
-import { log } from 'util';
 import mapStyle from '../helper/mapStyle.js';
+// import { log } from 'util';
 
-let { width, height } = Dimensions.get('window');
 const Icons = require('../../assets/Icons/map');
+let { height, width } = Dimensions.get('window');
 const userLocationTitle = 'This is you!'; // changes default: 'My Location'
 
 class GenreMap extends Component {
@@ -40,39 +41,29 @@ class GenreMap extends Component {
             regionChanged: false,
             viewMode: 'map',
         };
-        this.toggleView = this.toggleView.bind(this)
-        this.onMarkerClick = this.onMarkerClick.bind(this)
-        this.onMapPress = this.onMapPress.bind(this)
-        this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this)
-        this.onRegionButtonPress = this.onRegionButtonPress.bind(this)
-        this.onPolyButtonPress = this.onPolyButtonPress.bind(this)
+        this.toggleView = this.toggleView.bind(this);
+        this.onMarkerClick = this.onMarkerClick.bind(this);
+        this.onMapPress = this.onMapPress.bind(this);
+        this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
+        this.onRegionButtonPress = this.onRegionButtonPress.bind(this);
+        this.onPolyButtonPress = this.onPolyButtonPress.bind(this);
         this.refreshMap = this.refreshMap.bind(this);
     }
-
-
     componentDidMount() {
-        const {fetchBars} = this.props;
+        const { fetchBars } = this.props;
         navigator.geolocation.getCurrentPosition((res) => {
             this.setState({ currentLocation: { latitude: res.coords.latitude, longitude: res.coords.longitude } }, () => {
-                const {currentLocation, regionSize} = this.state;
-                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
-                this.props.setLocation({ currentLocation: this.state.currentLocation })
-            })
+                const { currentLocation, regionSize } = this.state;
+                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta);
+                this.props.setLocation({ currentLocation: this.state.currentLocation });
+            });
         }, (rej) => {
             this.setState({ currentLocation: { latitude: 40.74441723, longitude: -73.99442301 } }, () => {
-                const {currentLocation, regionSize} = this.state;
-                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta)
-                this.props.setLocation({ currentLocation: this.state.currentLocation })
-            })
+                const { currentLocation, regionSize } = this.state;
+                this.props.fetchBars(this.state.currentLocation, this.state.regionSize.latitudeDelta);
+                this.props.setLocation({ currentLocation: this.state.currentLocation });
+            });
         });
-    }
-
-    refreshMap() {
-        this.props.fetchBars(this.props.location.currentLocation, this.props.location.radius)
-    }
-
-    toggleView() {
-        this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
     }
     onMarkerClick(ev) {
         this.setState({ markerSelected: ev });
@@ -109,6 +100,12 @@ class GenreMap extends Component {
             this.setState({ directions: { coords: [], time: '' } });
         }
     }
+    refreshMap() {
+        this.props.fetchBars(this.props.location.currentLocation, this.props.location.radius);
+    }
+    toggleView() {
+        this.state.viewMode === 'map' ? this.setState({ viewMode: 'list' }) : this.setState({ viewMode: 'map' });
+    }
     render() {
         const { navigate } = this.props.navigation;
         let { bars } = this.props;
@@ -121,125 +118,132 @@ class GenreMap extends Component {
 
         return (
             <View style={styles.container}>
-                { viewMode === 'map' && currentLocation.latitude &&
-                    <MapView
-                        provider={PROVIDER_GOOGLE}
-                        style={styles.map}
-                        customMapStyle={mapStyle}
-                        color="#fff"
-                        showsPointsOfInterest={false}
-                        initialRegion={ Object.assign({}, currentLocation, regionSize) }
-                        onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
-                        showsCompass={false}
-                        showsUserLocation={true}
-                        showsMyLocationButton={true}
-                        userLocationAnnotationTitle={userLocationTitle}
-                        ref={ref => { this.map = ref; }}
-                        onPress={this.onMapPress}>
-                        { bars.map(marker => {
-                            let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')] : Icons[ marker.genreNames[0].replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')];
-                            return (
-                            <MapView.Marker
-                                coordinate={{
-                                    latitude: marker.lat,
-                                    longitude: marker.lon
-                                }}
-                                key={marker.id}
-                                onPress={this.onMarkerClick.bind(this, marker)}
-                                image={icon}>
-                                <MapView.Callout
-                                    style={styles.callout}
-                                    tooltip={true}
-                                    onPress={() => navigate('SampleProfile', { bar: marker })}>
-                                    <View style={styles.card}>
-                                        <Text style={styles.calloutTextName}>
-                                            {marker.name}
-                                        </Text>
-                                        <Text style={styles.calloutTextAddress}>
-                                            {marker.address}
-                                        </Text>
-                                        { marker.songs &&
-                                            <View style={styles.currentPlaying}>
-                                                <Text style={styles.currentPlayingText}>Currently Playing: </Text>
-                                                <Text style={styles.currentPlayingTextSong}>Song: {marker.songs && marker.songs[0].song}</Text>
-                                                <Text style={styles.currentPlayingTextSong}>Artist: {marker.songs && marker.songs[0].artist}</Text>
-                                            </View>
-                                        }
+                {
+                    viewMode === 'map' && currentLocation.latitude &&
+                        <MapView
+                            provider={PROVIDER_GOOGLE}
+                            style={styles.map}
+                            customMapStyle={mapStyle}
+                            color="#fff"
+                            showsPointsOfInterest={false}
+                            initialRegion={ Object.assign({}, currentLocation, regionSize) }
+                            onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
+                            showsCompass={false}
+                            showsUserLocation={true}
+                            showsMyLocationButton={true}
+                            userLocationAnnotationTitle={userLocationTitle}
+                            ref={ref => { this.map = ref; }}
+                            onPress={this.onMapPress}>
+                            {
+                                bars.map(marker => {
+                                    let icon = genre ? Icons[marker.genreNames.find(genreName => { return genreName === selectedGenreName; }).replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')] : Icons[ marker.genreNames[0].replace(/\s+/, '').replace('70\'s', 'Seventies').replace('80\'s', 'Eighties').replace('90\'s', 'Nineties')];
 
-                                    </View>
-                                </MapView.Callout>
-                            </MapView.Marker>
-                        );})}
-                        { directions.time.length > 0 && directionPressed &&
-                            <MapView.Polyline
-                                coordinates={directions.coords}
-                                strokeWidth={6}
-                                lineCap='round'
-                                lineJoin='round'
-                                strokeColor="#ff6763" />
-                        }
-                    </MapView>
+                                    return (
+                                        <MapView.Marker
+                                            coordinate={{
+                                                latitude: marker.lat,
+                                                longitude: marker.lon
+                                            }}
+                                            key={marker.id}
+                                            onPress={this.onMarkerClick.bind(this, marker)}
+                                            image={icon}>
+                                            <MapView.Callout
+                                                style={styles.callout}
+                                                tooltip={true}
+                                                onPress={() => navigate('SampleProfile', { bar: marker })}>
+                                                <View style={styles.card}>
+                                                    <Text style={styles.calloutTextName}>
+                                                        {marker.name}
+                                                    </Text>
+                                                    <Text style={styles.calloutTextAddress}>
+                                                        {marker.address}
+                                                    </Text>
+                                                    {
+                                                        marker.songs &&
+                                                            <View style={styles.currentPlaying}>
+                                                                <Text style={styles.currentPlayingText}>Currently Playing: </Text>
+                                                                <Text style={styles.currentPlayingTextSong}>Song: {marker.songs && marker.songs[0].song}</Text>
+                                                                <Text style={styles.currentPlayingTextSong}>Artist: {marker.songs && marker.songs[0].artist}</Text>
+                                                            </View>
+                                                    }
+                                                </View>
+                                            </MapView.Callout>
+                                        </MapView.Marker>
+                                    );
+                                })
+                            }
+                            {
+                                directions.time.length > 0 && directionPressed &&
+                                    <MapView.Polyline
+                                        coordinates={directions.coords}
+                                        lineCap="round"
+                                        lineJoin="round"
+                                        strokeColor="#ff6763"
+                                        strokeWidth={6} />
+                            }
+                        </MapView>
                 }
                 <View style={styles.topButtons}>
                     {
                         <View>
                             <Button
-                            backgroundColor={colors.redOrangeDark}
-                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
-                            onPress={this.toggleView}
-                            title={`Toggle View`}
-                            color="#fff"
-                            fontFamily={fonts.bold}/>
+                                backgroundColor={colors.redOrangeDark}
+                                buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                                color="#fff"
+                                fontFamily={fonts.bold}
+                                onPress={this.toggleView}
+                                title={`Toggle View`} />
                         </View>
                     }
-
-                    {genre &&
-                        <View style={styles.filterButtonPosition}>
-                            <Button
-                            backgroundColor={colors.redOrangeDark}
-                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
-                            onPress={() => navigate('Map', { genre: null, selectedGenreName: null })}
-                            title={`${selectedGenreName} X`}
-                            color="#fff"
-                            fontFamily={fonts.bold}/>
-                        </View>
+                    {
+                        genre &&
+                            <View style={styles.filterButtonPosition}>
+                                <Button
+                                    backgroundColor={colors.redOrangeDark}
+                                    buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                                    color="#fff"
+                                    fontFamily={fonts.bold}
+                                    onPress={() => navigate('Map', { genre: null, selectedGenreName: null })}
+                                    title={`${selectedGenreName} X`} />
+                            </View>
                     }
                     <Button
-                    backgroundColor={colors.redOrangeDark}
-                    buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow, {paddingRight:0}]}
-                    icon={{ name: 'refresh', type: 'fontawesome' }}
-                    color="#fff"
-                    onPress={this.refreshMap}
-                />
+                        backgroundColor={colors.redOrangeDark}
+                        buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow, {paddingRight: 0}]}
+                        color="#fff"
+                        icon={{ name: 'refresh', type: 'fontawesome' }}
+                        onPress={this.refreshMap} />
                 </View>
-                { viewMode === 'list' &&
-                    <BarList bars={bars} navigate={navigate} />
+                {
+                    viewMode === 'list' &&
+                        <BarList bars={bars} navigate={navigate} />
                 }
-                { Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
-                    <View style={styles.buttonRow}>
-                        <Button
-                            backgroundColor={colors.redOrange}
-                            buttonStyle={[styles.polyButton, commonStyles.roundedCorners, commonStyles.shadow]}
-                            color="#fff"
-                            fontFamily={fonts.bold}
-                            onPress={this.onPolyButtonPress}
-                            title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'}
-                            iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}/>
-                    </View>
+                {
+                    Object.keys(markerSelected).length > 0 && viewMode === 'map' &&
+                        <View style={styles.buttonRow}>
+                            <Button
+                                backgroundColor={colors.redOrange}
+                                buttonStyle={[styles.polyButton, commonStyles.roundedCorners, commonStyles.shadow]}
+                                color="#fff"
+                                fontFamily={fonts.bold}
+                                onPress={this.onPolyButtonPress}
+                                title={directionPressed ? `${directions.time} Away!` : 'Let\'s Go!'}
+                                iconRight={directionPressed ? { name: 'stop', type: 'font-awesome' } : { name: 'forward', type: 'font-awesome' }}/>
+                        </View>
                 }
-                { regionChanged && viewMode === 'map' &&
-                    <View style={styles.buttonRow}>
-                        <Button
-                            backgroundColor={colors.redOrangeDark}
-                            buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
-                            color="#fff"
-                            fontFamily={fonts.bold}
-                            iconRight={{ name: 'search', type: 'font-awesome' }}
-                            onPress={this.onRegionButtonPress}
-                            title="Search Area" />
-                    </View>
+                {
+                    regionChanged && viewMode === 'map' &&
+                        <View style={styles.buttonRow}>
+                            <Button
+                                backgroundColor={colors.redOrangeDark}
+                                buttonStyle={[styles.otherButtons, commonStyles.roundedCorners, commonStyles.shadow]}
+                                color="#fff"
+                                fontFamily={fonts.bold}
+                                iconRight={{ name: 'search', type: 'font-awesome' }}
+                                onPress={this.onRegionButtonPress}
+                                title="Search Area" />
+                        </View>
                 }
-
             </View>
         );
     }
@@ -248,7 +252,7 @@ class GenreMap extends Component {
 const styles = StyleSheet.create({
     buttonRow: {
         marginBottom: 10,
-        marginTop: height-194
+        marginTop: height - 194,
     },
     callout: {
         alignItems: 'center',
@@ -298,8 +302,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.bold,
         fontSize: 20,
     },
-    filterButtonPosition: {
-    },
     map: {
         backgroundColor: colors.redOrange,
         bottom: 0,
@@ -314,11 +316,11 @@ const styles = StyleSheet.create({
     },
     otherButtons: {
         backgroundColor: colors.redOrangeDark,
-        borderColor: colors.redOrangeDark
+        borderColor: colors.redOrangeDark,
     },
     topButtons: {
-        marginTop: height/25,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: height / 25,
     }
 });
 
@@ -337,7 +339,7 @@ const mapDispatch = (dispatch) => {
         setLocation: (location) => {
             dispatch(setLocation(location));
         }
-    }
-}
+    };
+};
 
 export default connect(mapState, mapDispatch)(GenreMap);
