@@ -23,18 +23,11 @@ const removeUser = () => {
 };
 
 // THUNK CREATOR(s)
-export const logoutUser = (navigate) => {
-    return (dispatch) => {
-        AsyncStorage.removeItem('jwt')
-            .then(() => {
-                dispatch(removeUser());
-            });
-        navigate('Home');
-    };
-};
 
 export const tokenUser = () => {
     return (dispatch) => {
+
+        //Persist a user if a jsonwebtoken is found
         AsyncStorage.getItem('jwt', (err, token) => {
                 if (err) return err;
                 if (!token) return {};
@@ -46,6 +39,7 @@ export const tokenUser = () => {
                     })
                     .then(res => res.data)
                     .then(user => {
+                        //Check to see if the user owns a bar
                         if (user.isBusiness) {
                             axios.get(`https://djrc-api.herokuapp.com/api/venues/owner/${user.id}`)
                                 .then(res => res.data)
@@ -65,6 +59,7 @@ export const tokenUser = () => {
 
 export const spotifyLogin = (token) => {
     return (dispatch) => {
+        //Store jsonwebtoken received from server
         AsyncStorage.setItem('jwt', token)
             .then(() => {
                 dispatch(tokenUser());
@@ -80,12 +75,11 @@ export const signUp = (credentials) => {
         axios.post('https://djrc-api.herokuapp.com/passportAuth/signup', credentials)
             .then(res => res.data)
             .then(() => {
-                if (!credentials.isBusiness) {
                     alert('Success! You may now log in.');
-                }
             })
             .catch(err => {
                 console.log(err);
+                //Validation error from model definition
                 alert('Email already in use!');
             });
     };
@@ -99,6 +93,7 @@ export const getUser = (credentials, navigate) => {
                 if (res.error) {
                     alert(res.error);
                 } else {
+                    //Store jsonwebtoken received from server
                     AsyncStorage.setItem('jwt', res.token)
                         .then(() => {
                             dispatch(tokenUser(navigate));
@@ -109,6 +104,16 @@ export const getUser = (credentials, navigate) => {
                 console.log(err);
                 alert('There was an error logging in.');
             });
+    };
+};
+
+export const logoutUser = (navigate) => {
+    return (dispatch) => {
+        AsyncStorage.removeItem('jwt')
+            .then(() => {
+                dispatch(removeUser());
+            });
+        navigate('Home');
     };
 };
 
