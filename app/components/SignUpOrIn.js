@@ -11,7 +11,7 @@ import colors from '../helper/colors.js';
 import commonStyles from '../helper/styles.js';
 import fonts from '../helper/fonts.js';
 
-let { height, width } = Dimensions.get('window');
+let { width } = Dimensions.get('window');
 
 class SignUpOrIn extends Component {
     constructor() {
@@ -20,7 +20,6 @@ class SignUpOrIn extends Component {
             email: '',
             password: '',
             token: '',
-            checked: false,
             modalVisible: false,
         };
         this.onChangeEmail = this.onChangeEmail.bind(this);
@@ -28,22 +27,24 @@ class SignUpOrIn extends Component {
         this.handleAdd = this.handleAdd.bind(this);
         this.login = this.login.bind(this);
         this.handleRedirect = this.handleRedirect.bind(this);
-        this.onCheck = this.onCheck.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
     }
+
+    //Add event listener for asyncBrowser
     componentDidMount() {
         Linking.addEventListener('url', this.handleRedirect);
     }
+
+    //Create a new user
     handleAdd() {
         const credentials = {
             email: this.state.email,
             password: this.state.password,
-            isBusiness: this.state.checked
         };
-        const { navigate } = this.props.navigation;
         this.props.signUp(credentials);
-        if (this.state.checked) navigate('ClaimBar', { navigate: this.props.navigation });
     }
+
+    //Receive jsonwebtoken from server after login in with oAuth
     handleRedirect(event) {
         WebBrowser.dismissBrowser();
         let ev = event.url.split('=');
@@ -64,9 +65,8 @@ class SignUpOrIn extends Component {
     onChangePassword(password) {
         this.setState({ password: password });
     }
-    onCheck() {
-        this.setState({ checked: !this.state.checked });
-    }
+    
+    //Open browser to authenticate with Spotify
     spotLogin() {
         Linking.addEventListener('url', this.handleRedirect);
         WebBrowser.openBrowserAsync(`https://djrc-api.herokuapp.com/passportAuth/spotify`);
@@ -77,9 +77,12 @@ class SignUpOrIn extends Component {
     }
     render() {
         const { handleAdd, onChangeEmail, onChangePassword, login } = this;
+
+        //Render a form for signing up or logging in.
         return (
             <View style={styles.container}>
                 <View style={styles.formContainer}>
+
                     <FormLabel
                         labelStyle={styles.formLabel}>Email</FormLabel>
                     <FormInput
@@ -90,6 +93,7 @@ class SignUpOrIn extends Component {
                         placeholder="..."
                         placeholderTextColor={colors.yellow}
                         selectionColor={colors.yellow} />
+
                     <FormLabel
                         labelStyle={styles.formLabel}>Password</FormLabel>
                     <FormInput
@@ -100,6 +104,7 @@ class SignUpOrIn extends Component {
                         placeholderTextColor={colors.yellow}
                         secureTextEntry={true}
                         selectionColor={colors.yellow} />
+
                     <Button
                         buttonStyle={[commonStyles.roundedCorners, commonStyles.shadow, {
                             backgroundColor: colors.redOrange,
@@ -109,6 +114,7 @@ class SignUpOrIn extends Component {
                         fontFamily={fonts.bold}
                         onPress={this.toggleModal}
                         title="Bar Signup Information" />
+
                     <Modal isVisible={this.state.modalVisible}>
                         <View style={{ flex: 1, alignItems: 'center', width: width }}>
                             <Card
@@ -128,6 +134,7 @@ class SignUpOrIn extends Component {
                             </View>
                         </View>
                     </Modal>
+
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
